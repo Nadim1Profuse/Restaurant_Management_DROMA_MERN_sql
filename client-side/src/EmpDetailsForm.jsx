@@ -1,9 +1,11 @@
+
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
 
 
-function EmpDetailsForm() {
+function EmpDetailsForm(props) {
   const [empPersonalDetails,setEmpPersonalDetails]=useState({
     fName:"",
     mName:"",
@@ -16,6 +18,7 @@ function EmpDetailsForm() {
     pancardNumber:"",
     drivingLicenseNumber:""
   });
+  const [isAlert,setAlert]=useState(false);
 
   function handleChange(e){
     const {name,value}=e.target;
@@ -30,18 +33,24 @@ function EmpDetailsForm() {
   function handleSubmit(e){
     e.preventDefault();
     console.log(empPersonalDetails);
+    props.empPrsnlDetails(empPersonalDetails);
+    setAlert(true);
+    
+  }
+  function handleClear(){
     setEmpPersonalDetails({
-    fName:"",
-    mName:"",
-    lName:"",
-    age:"",
-    gender:"",
-    bloodGroup:"",
-    pwdStatus:"",
-    adharNumber:"",
-    pancardNumber:"",
-    drivingLicenseNumber:""
-    })
+      fName:"",
+      mName:"",
+      lName:"",
+      age:"",
+      gender:"",
+      bloodGroup:"",
+      pwdStatus:"",
+      adharNumber:"",
+      pancardNumber:"",
+      drivingLicenseNumber:""
+      })
+      setAlert(false);
   }
   const inputs=[
     {name:"fName",type:"text",placeholder:"First Name",value:empPersonalDetails.fName},
@@ -56,14 +65,18 @@ function EmpDetailsForm() {
     {name:"drivingLicenseNumber",type:"text",placeholder:"Driving License Number",value:empPersonalDetails.drivingLicenseNumber}
   ]
   return (
+    
     <Form onSubmit={handleSubmit}>
+    {isAlert ? <Alert key={'success'} variant={'success'} > 
+      Successfully Saved Employee Presonal Details Please Click On Address/Contact Details</Alert> : null
+      }
     <div style={{display:"flex"}} >
       <div style={{flex: "0 0 calc(50% - .50rem)"}}>
       {
         inputs.map((input,index)=>{
           if(index<5){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           } 
         })
@@ -74,7 +87,7 @@ function EmpDetailsForm() {
         inputs.map((input,index)=>{
           if(index>4){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           }
         })
@@ -82,11 +95,12 @@ function EmpDetailsForm() {
       </div>
 
     </div>  
+      
       <span>
-      <Button variant="outline-success" type="submit" onClick={handleSubmit}>Submit</Button>
+      <Button variant="outline-success" type="submit" >Save and Next</Button>
       </span>
       <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={handleSubmit}>Clear All</Button>
+      <Button variant="outline-warning" type="button" onClick={handleClear}>Clear All</Button>
       </span>
     </Form>
   );

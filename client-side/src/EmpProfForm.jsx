@@ -26,8 +26,12 @@ function handleChange(e){
 
 function handleSubmit(e){
     e.preventDefault();
-    console.log(empProf);
-    setEmpProf({
+    // console.log(empProf);
+    props.empProfFormData(empProf)
+    
+}
+function handleClear(){
+  setEmpProf({
     company_Name:"",
     designation:"",
     joining_Date:"",
@@ -53,7 +57,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index<3){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           } 
         })
@@ -64,7 +68,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index>2){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           }
         })
@@ -73,10 +77,10 @@ const inputs=[
 
     </div>  
       <span>
-      <Button variant="outline-success" type="submit" onClick={handleSubmit}>Submit</Button>
+      <Button variant="outline-success" type="submit" >Save And Next</Button>
       </span>
       <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={handleSubmit}>Clear All</Button>
+      <Button variant="outline-warning" type="submit" onClick={handleClear}>Clear All</Button>
       </span>
     </Form>
   );

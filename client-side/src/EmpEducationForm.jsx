@@ -31,19 +31,25 @@ function handleChange(e){
 
 function handleSubmit(e){
     e.preventDefault();
-    console.log(empEdu);
-    setEmpEdu({
-        ssc_percentage:"",
-        hsc_percentage:"",
-        graduation_Stream:"",
-        year_of_Graduation:"",
-        post_Graduation_Stream:"",
-        year_of_pg:"",
-        any_diploma:"",
-        any_Certification:"",
-        college_name:"",
-        university_name:"",
-    })
+    // console.log(empEdu);
+    props.empEducationData(empEdu);
+
+    
+}
+
+function handleClear(){
+  setEmpEdu({
+    ssc_percentage:"",
+    hsc_percentage:"",
+    graduation_Stream:"",
+    year_of_Graduation:"",
+    post_Graduation_Stream:"",
+    year_of_pg:"",
+    any_diploma:"",
+    any_Certification:"",
+    college_name:"",
+    university_name:"",
+})
 }
 
 const inputs=[
@@ -67,7 +73,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index<5){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           } 
         })
@@ -78,7 +84,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index>4){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
                   </Form.Group>
           }
         })
@@ -87,10 +93,10 @@ const inputs=[
 
     </div>  
       <span>
-      <Button variant="outline-success" type="submit" onClick={handleSubmit}>Submit</Button>
+      <Button variant="outline-success" type="submit" >Save And Next</Button>
       </span>
       <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={handleSubmit}>Clear All</Button>
+      <Button variant="outline-warning" type="submit" onClick={handleClear}>Clear All</Button>
       </span>
     </Form>
   );
