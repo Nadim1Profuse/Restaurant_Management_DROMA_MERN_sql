@@ -25,29 +25,17 @@ function handleChange(e){
 }
 
 function handleSubmit(e){
-    e.preventDefault();
-    // console.log(empProf);
-    props.empProfFormData(empProf)
-    
-}
-function handleClear(){
-  setEmpProf({
-    company_Name:"",
-    designation:"",
-    joining_Date:"",
-    ending_Date:"",
-    reasonOfResign:"",
-    salary:""
-    })
+  e.preventDefault();
+  props.submitNext();
 }
 
 const inputs=[
-    {name:"company_Name",type:"text",placeholder:"Previous Company Name",value:empProf.company_Name},
-    {name:"designation",type:"text",placeholder:"Designation",value:empProf.designation},
-    {name:"joining_Date",type:"date",placeholder:"Joining Date",value:empProf.joining_Date},
-    {name:"ending_Date",type:"date",placeholder:"Date of Resign",value:empProf.ending_Date},
-    {name:"reasonOfResign",type:"text",placeholder:"Reason Of Resignation",value:empProf.reasonOfResign},
-    {name:"salary",type:"number",placeholder:"Salary",value:empProf.salary},   
+    {name:"company_Name",type:"text",placeholder:"Previous Company Name",value:props.company_Name},
+    {name:"designation",type:"text",placeholder:"Designation",value:props.designation},
+    {name:"joining_Date",type:"date",placeholder:"Joining Date",value:props.joining_Date},
+    {name:"ending_Date",type:"date",placeholder:"Date of Resign",value:props.ending_Date},
+    {name:"reasonOfResign",type:"text",placeholder:"Reason Of Resignation",value:props.reasonOfResign},
+    {name:"salary",type:"number",placeholder:"Salary",value:props.salary},   
 ]
   return (
     <Form onSubmit={handleSubmit}>
@@ -57,7 +45,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index<3){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
                   </Form.Group>
           } 
         })
@@ -68,7 +56,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index>2){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
                   </Form.Group>
           }
         })
@@ -80,7 +68,7 @@ const inputs=[
       <Button variant="outline-success" type="submit" >Save And Next</Button>
       </span>
       <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={handleClear}>Clear All</Button>
+      <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
       </span>
     </Form>
   );

@@ -1,48 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 
 export default function EmpSalOvrTimeForm(props){
-   
-   const[empSalOvrTime,setEmpSalOvrTime]=useState({
-    empId:"",
-    date_ot:"",
-    reason_ot:"",
-    ot_amount_perDay:"",
-    });
-
-
-function handleChange(e){
-    const {name,value}=e.target;
-    setEmpSalOvrTime(prev=>{
-       return{
-        ...prev,
-        [name]:value
-       } 
-    })
-}
 
 function handleSubmit(e){
-    e.preventDefault();
-    // console.log(empSalOvrTime);
-    props.empSalOvrTmData(empSalOvrTime);
-    
-}
-function handleClear(){
-  setEmpSalOvrTime({
-    empId:"",
-    date_ot:"",
-    reason_ot:"",
-    ot_amount_perDay:"",
-})
-
+  e.preventDefault();
+  props.submitNext();
 }
 
 const inputs=[
-    {name:"empId",type:"number",placeholder:"Employee Id",value:empSalOvrTime.empId},
-    {name:"date_ot",type:"date",placeholder:"Date Of OverTime",value:empSalOvrTime.date_ot},
-    {name:"reason_ot",type:"text",placeholder:"Reason Of OverTime",value:empSalOvrTime.reason_ot},
-    {name:"ot_amount_perDay",type:"number",placeholder:"Over Time Amount PerDay",value:empSalOvrTime.ot_amount_perDay},
+    {name:"empId",type:"number",placeholder:"Employee Id",value:props.empId},
+    {name:"date_ot",type:"date",placeholder:"Date Of OverTime",value:props.date_ot},
+    {name:"reason_ot",type:"text",placeholder:"Reason Of OverTime",value:props.reason_ot},
+    {name:"ot_amount_perDay",type:"number",placeholder:"Over Time Amount PerDay",value:props.ot_amount_perDay},
     ]
   return (
     <Form onSubmit={handleSubmit}>
@@ -52,7 +23,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index<2){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
                   </Form.Group>
           } 
         })
@@ -63,7 +34,7 @@ const inputs=[
         inputs.map((input,index)=>{
           if(index>1){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={handleChange} />
+                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
                   </Form.Group>
           }
         })
@@ -75,7 +46,7 @@ const inputs=[
       <Button variant="outline-success" type="submit" >Submit</Button>
       </span>
       <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={handleClear}>Clear All</Button>
+      <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
       </span>
     </Form>
   );
