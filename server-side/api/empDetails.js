@@ -37,8 +37,17 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
 // function to send data in db by using sqlQuery,PostEmp and handling error
     db.query(sqlQuery,postEmp,err=>{
         if(!err){
-            res.send("succesfully added employee details");
-            console.log("succesfully added employee details")
+            // res.send("succesfully added employee details");
+            // console.log("succesfully added employee details")
+            const sql="SELECT * FROM employeedetails"
+            db.query(sql,(err,emp)=>{
+              if(!err){
+              res.send(emp);
+              }else{
+              res.send(err)
+              }
+    })
+
             
         }else{
             console.log(err);

@@ -15,11 +15,14 @@ const body=app.use(bodyParser.json());
    //***************INSERTING/Adding details TO emp_education_details TABLE**************//
 
 routerEmpEdu.post("/empEduApi/add",body,(req,res)=>{
-    const emp=req.body;
+    const {empEducationDetails,lastAddedEmpId}=req.body;
+    const emp=empEducationDetails;
+    console.log("empProfApi is called with id="+lastAddedEmpId)
+    console.log(emp);
     
 //creating a Object and putting all details in it to send it into database
     const post={
-        empId:emp.empId,
+        empId:lastAddedEmpId,
         ssc_percentage:emp.ssc_percentage,
         hsc_percentage:emp.hsc_percentage,
         graduation_Stream:emp.graduation_Stream,

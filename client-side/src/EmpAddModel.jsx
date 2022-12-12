@@ -14,6 +14,8 @@ import EmpSalOvrTimeForm from './EmpSalaryOverTimeForm';
 import EmpSalAdvPenaltyForm from './EmpSalAdvPenaltyForm';
 import EmpSalaryMasterForm from './EmpSalaryMasterForm';
 import EmpFullFormDetails from './EmpFullFormDetails';
+import Axios from "axios"
+
 
 
 export default function EmpAddModel(props) {
@@ -273,6 +275,52 @@ export default function EmpAddModel(props) {
     })
   }
 
+//********************************Final Submission*************************************//
+function finalFullFormDetails(){
+  var lastAddedEmpId;
+  console.log("clicked on full foem details")
+  console.log(empCompleteDetails);
+  //Sending Data To EMployeeDetails Api
+  Axios.post("http://localhost:3001/empDetailsApi/add",empPersonalDetails).then(res=>{
+  if(res.status===200){
+    const lengthOfDataArr=(res.data).length;
+    lastAddedEmpId=res.data[lengthOfDataArr-1].empId;
+    console.log("successfully Added EMployeePersonal Details with empId="+lastAddedEmpId)
+  
+  //Sending Data To empAddContApi Api   
+  Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added EmployeeAddcONT DETAILS")
+    console.log(res.data)
+
+  //Sending Data To empAddContApi Api
+  Axios.post("http://localhost:3001/empProfApi/add",({empProfDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added EmpProfessional DETAILS")
+    console.log(res.data);
+  
+  Axios.post("http://localhost:3001/empEduApi/add",({empEducationDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added EmpEducation DETAILS")
+    console.log(res.data)
+
+  }
+  })
+
+  }
+  })
+          
+
+  }
+  })
+  }
+
+
+
+  })
+  
+}
+
     
   return ( 
     <>
@@ -458,7 +506,7 @@ export default function EmpAddModel(props) {
                 radioValue==="completed" ? 
                 <EmpFullFormDetails 
                 reviewIt={()=>setRadioValue('personalDetailsClicked')}
-                finalSubmit={()=>{console.log("Final Submition Done all details=");console.log(empCompleteDetails)}}
+                finalSubmit={finalFullFormDetails}
                 /> : null
               }
             </Card.Text>

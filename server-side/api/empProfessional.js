@@ -12,13 +12,14 @@ const body=app.use(bodyParser.json());
 
 //**********************INSERTING details TO TABLE EmployeeDetails*********************//
 routerEmpProf.post("/empProfApi/add",body,(req,res)=>{
-    const emp=req.body;
-    console.log("`empProfApi/add` path from empProfApi.js")
+    const {empProfDetails,lastAddedEmpId}=req.body;
+    const emp=empProfDetails
+    console.log("empProfApi is caleed with id="+lastAddedEmpId)
     console.log(emp);
 
 //creating a varriabile and putting all details in it to send it into database
     const post={
-        empId:emp.empId,
+        empId:lastAddedEmpId,
         company_Name:emp.company_Name,
         designation:emp.designation,
         joining_Date:emp.joining_Date,

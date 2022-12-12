@@ -14,19 +14,21 @@ const routerAdd=Router();
 //**********************INSERTING details TO TABLE EmployeeDetails*********************//
 routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
     console.log("`/empAddContApi/Add` path called" );
-    const emp=req.body;
+    const {empAddContDetails,lastAddedEmpId}=req.body;
+    const emp=empAddContDetails
     console.log(emp);
+    console.log("employee Id latest="+lastAddedEmpId);
 //creating a varriabile and putting all details in it to send it into database    
     const empPost={
-        empId: emp.empId,
+        empId: lastAddedEmpId,
         address1: emp.address1,
         landMark: emp.landMark,
         city: emp.city,
         state: emp.state,
-        pincode: emp.pincode,
-        mobileNumber: emp.mobileNumber,
-        alternateMobileNumber: emp.alternateMobileNumber,
-        landlineNumber: emp.landlineNumber
+        pincode: 440018,
+        mobileNumber: emp.phone1,
+        alternateMobileNumber: emp.phone2,
+        landlineNumber: emp.phone3
     }
 //query of sql to to insert data into "empaddcontact"
     const sql=("INSERT INTO empaddcontact SET ?");
