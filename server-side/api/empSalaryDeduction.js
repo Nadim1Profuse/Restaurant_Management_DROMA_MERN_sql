@@ -13,11 +13,14 @@ const body=app.use(bodyParser.json());
    //***************INSERTING/Adding details TO sal_adv_penalty TABLE**************//
 
 routerSalAdvPenlty.post("/salAdvPenlty/add",body,(req,res)=>{
-    const emp=req.body;
+    const {empSalAdvPenaltyDetails,lastAddedEmpId}=req.body;
+    const emp=empSalAdvPenaltyDetails
+    console.log("salAdvPenlty is caleed with id="+lastAddedEmpId)
+    console.log(emp);
 
     //creating a Object and putting all details in it to send it into database
     const post={
-        empId:emp.empId,
+        empId:lastAddedEmpId,
         date_:emp.date_,
         reason:emp.reason,
         amount_perDay:emp.amount_perDay,

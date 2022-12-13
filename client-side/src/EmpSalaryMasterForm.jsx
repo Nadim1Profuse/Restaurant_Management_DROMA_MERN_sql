@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import react from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 
 export default function EmpSalaryMasterForm(props){
-   
-   const[empSalaryMaster,setEmpSalaryMaster]=useState({
-    empId:"",
-    crnt_month:"",
-    total_gross_sal:"",
-    total_overTime:"",
-    total_deduction:"",
-    net_sal:"",
-    paid_amnt:"",
-    bal_amnt:""
-    });
-
-    function handleSubmit(e){
-      e.preventDefault();
-      props.submitNext();
-    }
+  
+  function handleSubmit(e){
+    e.preventDefault();
+    props.submitNext();
+  }
 
 const inputs=[
     {name:"empId",type:"number",placeholder:"Employee Id",value:props.empId},

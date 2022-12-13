@@ -13,11 +13,14 @@ app.use(bodyParser.json());
     //***************INSERTING/Adding details TO sal_master TABLE**************//
   
 routerSalMaster.post("/salMasterApi/add",(req,res)=>{
-    const emp=req.body;
+    const {empSalaryMasterDetails,lastAddedEmpId}=req.body;
+    const emp=empSalaryMasterDetails
+    console.log("salMasterApi is caleed with id="+lastAddedEmpId)
+    console.log(emp);
 
     //creating a Object and putting all details in it to send it into database
     const post={
-        empId:emp.empId,
+        empId:lastAddedEmpId,
         crnt_month:emp.crnt_month,
         total_gross_sal:emp.total_gross_sal,
         total_adv_ot:emp.total_adv_ot,

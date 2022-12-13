@@ -47,7 +47,7 @@ export default function EmpAddModel(props) {
     any_diploma:"",any_Certification:"",college_name:"",university_name:"",
     });
 
-  const[EmpRefrenceDetails,setEmpRefrenceDetails]=useState({
+  const[empRefrenceDetails,setEmpRefrenceDetails]=useState({
     referenceName:"",  relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     }); 
@@ -74,7 +74,7 @@ export default function EmpAddModel(props) {
     empAddContDetails,
     empProfDetails,
     empEducationDetails,
-    EmpRefrenceDetails,
+    empRefrenceDetails,
     empSalOvrTimeDetails,
     empSalAdvPenaltyDetails,
     empSalaryMasterDetails
@@ -199,7 +199,7 @@ export default function EmpAddModel(props) {
         [name]:value
       }
     })
-    console.log(EmpRefrenceDetails);
+    console.log(empRefrenceDetails);
   }
 
   //Clearing EmployeeRefrence Form Feild On clicking Clear Button
@@ -287,38 +287,58 @@ function finalFullFormDetails(){
     lastAddedEmpId=res.data[lengthOfDataArr-1].empId;
     console.log("successfully Added EMployeePersonal Details with empId="+lastAddedEmpId)
   
-  //Sending Data To empAddContApi Api   
+  //Sending Data To empAddCont Api   
   Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContDetails,...{lastAddedEmpId}})).then(res=>{
   if(res.status===200){
     console.log("Successfully added EmployeeAddcONT DETAILS")
     console.log(res.data)
+  }})
 
-  //Sending Data To empAddContApi Api
+  //Sending Data To empAddCont Api
   Axios.post("http://localhost:3001/empProfApi/add",({empProfDetails,...{lastAddedEmpId}})).then(res=>{
   if(res.status===200){
     console.log("Successfully added EmpProfessional DETAILS")
     console.log(res.data);
+  }});
   
+  //Sending Data To empEducation Api
   Axios.post("http://localhost:3001/empEduApi/add",({empEducationDetails,...{lastAddedEmpId}})).then(res=>{
   if(res.status===200){
     console.log("Successfully added EmpEducation DETAILS")
     console.log(res.data)
+  }});
 
-  }
-  })
+  //Sending Data To empRefrerence Api
+  Axios.post("http://localhost:3001/empReferApi/add",({empRefrenceDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added empRefrenceDetails DETAILS")
+    console.log(res.data)
+  }});
 
-  }
-  })
-          
+  //Sending Data To empSalaryOvertime Api
+  Axios.post("http://localhost:3001/empSalOvrTmApi/add",({empSalOvrTimeDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added empSalOvrTimeDetails DETAILS")
+    console.log(res.data)
+  }});
 
-  }
-  })
-  }
+  //Sending Data To empSalaryAdvPenalty Api
+  Axios.post("http://localhost:3001/salAdvPenlty/add",({empSalAdvPenaltyDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added empSalAdvPenaltyDetails DETAILS")
+    console.log(res.data)
+  }});
+
+  //Sending Data To empSalaryMaster Api
+  Axios.post("http://localhost:3001/salMasterApi/add",({empSalaryMasterDetails,...{lastAddedEmpId}})).then(res=>{
+  if(res.status===200){
+    console.log("Successfully added empSalaryMasterDetails")
+    console.log(res.data)
+  }});
 
 
-
-  })
-  
+}}); 
+console.log("Full Data of employee is Compltely Saved In Data BAse")
 }
 
     
@@ -453,12 +473,12 @@ function finalFullFormDetails(){
                 submitNext={()=>setRadioValue('salOverTimeClicked')}
                 handleChange={handleChangeEmpReferenceForm}
                 handleClear={clearEmpReferenceForm} 
-                referenceName={EmpRefrenceDetails.referenceName}  
-                relation={EmpRefrenceDetails.relation}
-                address={EmpRefrenceDetails.address}
-                city={EmpRefrenceDetails.city}
-                phone1={EmpRefrenceDetails.phone1}
-                phone2={EmpRefrenceDetails.phone2}
+                referenceName={empRefrenceDetails.referenceName}  
+                relation={empRefrenceDetails.relation}
+                address={empRefrenceDetails.address}
+                city={empRefrenceDetails.city}
+                phone1={empRefrenceDetails.phone1}
+                phone2={empRefrenceDetails.phone2}
                 /> :null
               }
               {

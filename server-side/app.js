@@ -8,6 +8,7 @@ import routerEmpProf from "./api/empProfessional.js";
 import routerSalOvrtm from "./api/empSalaryOvertime.js";
 import routerSalAdvPenlty from "./api/empSalaryDeduction.js";
 import routerSalMaster from "./api/empSalMaster.js";
+import routerEmpRefer from "./api/empReference.js";
 
 
 const app=express();
@@ -30,6 +31,8 @@ app.use("/",routerSalOvrtm);
 app.use("/",routerSalAdvPenlty);
 // declaring a default path for router from salMasterApi.js
 app.use("/",routerSalMaster);
+// declaring a default path for router from empReference.js
+app.use("/",routerEmpRefer);
 
 
 app.listen(3001,()=>{

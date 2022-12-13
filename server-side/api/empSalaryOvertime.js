@@ -13,10 +13,13 @@ const body=app.use(bodyParser.json());
 
 routerSalOvrtm.post("/empSalOvrTmApi/add",body,(req,res)=>{
     console.log(".post method from empSalOvrTmApi.js")
-    const emp=req.body;
+    const {empSalOvrTimeDetails,lastAddedEmpId}=req.body;
+    const emp=empSalOvrTimeDetails
+    console.log("empSalOvrTmApi is caleed with id="+lastAddedEmpId)
+    console.log(emp);
 //creating a Objecte and putting all details in it to send it into database   
     const post={
-        empId:emp.empId,
+        empId:lastAddedEmpId,
         date_ot:emp.date_ot,
         reason_ot:emp.reason_ot,
         ot_amount_perDay:emp.ot_amount_perDay
