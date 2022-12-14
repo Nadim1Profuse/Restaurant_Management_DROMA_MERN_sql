@@ -20,7 +20,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import HomeIcon from '@mui/icons-material/Home';
 import EmployeeSummery from './EmployeeSummery';
 import Home from './Home'; 
-import EmpAddModel from './EmpAddModel';
+
 
 const drawerWidth = 200;
 
@@ -72,7 +72,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function NavbarSidebar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [isHomeRender,setIsHomeRender]=React.useState(true)
+  const [isHomeRender,setIsHomeRender]=React.useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true);

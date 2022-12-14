@@ -17,9 +17,9 @@ function EmpDetailsForm(props) {
     {name:"mName",type:"text",placeholder:"Middle Name",value:props.mName},
     {name:"lName",type:"text",placeholder:"Last Name",value:props.lName},
     {name:"age",type:"number",placeholder:"Age",value:props.age},
-    {name:"gender",type:"text",placeholder:"Gender",value:props.gender},
     {name:"bloodGroup",type:"text",placeholder:"Blood Group",value:props.bloodGroup},
-    {name:"pwdStatus",type:"text",placeholder:"PWD Status",value:props.pwdStatus},
+    {name:"department",type:"text",placeholder:"Department",value:props.department},
+    {name:"designation",type:"text",placeholder:"Designation",value:props.designation},
     {name:"adharNumber",type:"number",placeholder:"Adhar Number",value:props.adharNumber},
     {name:"pancardNumber",type:"text",placeholder:"PanCard Number",value:props.pancardNumber},
     {name:"drivingLicenseNumber",type:"text",placeholder:"Driving License Number",value:props.drivingLicenseNumber}
@@ -31,6 +31,7 @@ function EmpDetailsForm(props) {
     <div style={{display:"flex"}} >
       <div style={{flex: "0 0 calc(50% - .50rem)"}}>
       {
+        // eslint-disable-next-line array-callback-return
         inputs.map((input,index)=>{
           if(index<5){
             return<Form.Group className="mb-3" controlId="formBasicEmail">
@@ -39,9 +40,24 @@ function EmpDetailsForm(props) {
           } 
         })
       }
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Select required name="gender" onChange={props.handleChange} aria-label="Default select example">
+          <option selected  disabled>Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </Form.Select>
+      </Form.Group>
       </div>
       <div style={{flex: "0 0 calc(50% - .50rem)",marginLeft:"8px"}}>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Select required name="pwdStatus" onChange={props.handleChange} aria-label="Default select example">
+          <option selected disabled>PWD Status</option>
+          <option value="Yss">Yes</option>
+          <option value="No">No</option>
+        </Form.Select>
+      </Form.Group>
       {
+        // eslint-disable-next-line array-callback-return
         inputs.map((input,index)=>{
           if(index>4){
             return<Form.Group className="mb-3" controlId="formBasicEmail">

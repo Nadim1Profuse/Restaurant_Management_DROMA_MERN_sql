@@ -45,7 +45,7 @@ const inputs=[
     </div>  
     <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Select required name="advOrPenalty" onChange={props.handleChange} aria-label="Default select example">
-        <option defaultValue value="" disabled>Select Advance/Penalty</option>
+        <option selected value="" disabled>Select Advance/Penalty</option>
         <option value="Advance">Advance</option>
         <option value="Penalty">Penalty</option>
       </Form.Select>

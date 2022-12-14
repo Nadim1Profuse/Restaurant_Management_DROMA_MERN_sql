@@ -14,21 +14,33 @@ import EmpSalOvrTimeForm from './EmpSalaryOverTimeForm';
 import EmpSalAdvPenaltyForm from './EmpSalAdvPenaltyForm';
 import EmpSalaryMasterForm from './EmpSalaryMasterForm';
 import EmpFullFormDetails from './EmpFullFormDetails';
-import Axios from "axios"
+import CloseAddModel from './CloseAddModel';
+import Axios from "axios";
 
 
 
 export default function EmpAddModel(props) {
   const [isEmpAddOpen,setEmpAddOpen]=useState(false);
   const [isFirstLoad,setFirstLoad]=useState(true);
-  // const [checked, setChecked] = useState(false);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
-  
+  const [sectionDisabled,setSectionDisabled]=useState({
+    personalDetails:false,
+    addContDetails:true,
+    professionalDetails:true,
+    educationDetails:true,
+    referenceDetails:true,
+    salOverTimeDetails:true,
+    salAdvPenalty:true,
+    salMaster:true,
+    finalSubmit:true
+  });
+  const [modalShow, setModalShow] = useState(false);
+  const [submitAllStage,setSubmitAllStage]=useState(false);
 
 //******************Initailasing The State Of Every Form SecTion******************//
   const [empPersonalDetails,setEmpPersonalDetails]=useState({
-    fName:"",    mName:"",      lName:"",age:"", gender:"",bloodGroup:"",
-    pwdStatus:"",adharNumber:"",pancardNumber:"",drivingLicenseNumber:""
+    fName:"",    mName:"",      lName:"",age:"", gender:"",bloodGroup:"",department:"",
+    pwdStatus:"",adharNumber:"",pancardNumber:"",drivingLicenseNumber:"",designation:""
   });
 
   const[empAddContDetails,setEmpAddContDetails]=useState({
@@ -91,14 +103,14 @@ export default function EmpAddModel(props) {
   },[props.empAddModelOpen]);
 
   const radios = [
-    { name: 'Personal Details', value: 'personalDetailsClicked' },
-    { name: 'Address/Contact Details', value: 'addContClicked' },
-    { name: 'Professonal Details', value: 'profClicked' },
-    { name: 'Education Details', value: 'educationClicked' },
-    { name: 'Reference Details', value: 'referenceClicked'},
-    { name: 'Salary OverTime', value: 'salOverTimeClicked' },
-    { name: 'Salary Advance/Penalty', value: 'salaAdvPnltClicked' },
-    { name: 'Salary Master', value: 'salMasterClicked' }
+    { name: 'Personal Details', value: 'personalDetailsClicked', isDisabled:sectionDisabled.personalDetails},
+    { name: 'Address/Contact Details', value: 'addContClicked', isDisabled:sectionDisabled.addContDetails },
+    { name: 'Professonal Details', value: 'profClicked', isDisabled:sectionDisabled.professionalDetails },
+    { name: 'Education Details', value: 'educationClicked', isDisabled:sectionDisabled.educationDetails },
+    { name: 'Reference Details', value: 'referenceClicked', isDisabled:sectionDisabled.referenceDetails},
+    { name: 'Salary OverTime', value: 'salOverTimeClicked', isDisabled:sectionDisabled.salOverTimeDetails },
+    { name: 'Salary Advance/Penalty', value: 'salaAdvPnltClicked', isDisabled:sectionDisabled.salAdvPenalty },
+    { name: 'Salary Master', value: 'salMasterClicked', isDisabled:sectionDisabled.salMaster }
     
   ];
 
@@ -277,6 +289,7 @@ export default function EmpAddModel(props) {
 
 //********************************Final Submission*************************************//
 function finalFullFormDetails(){
+  setSubmitAllStage(true);
   var lastAddedEmpId;
   console.log("clicked on full foem details")
   console.log(empCompleteDetails);
@@ -344,8 +357,11 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
     
   return ( 
     <>
-    <div style={{ display: isEmpAddOpen ? "block" : "none", marginBottom: "26rem", marginTop: "1rem" }}>
-
+    <div style={{ display: isEmpAddOpen ? "block" : "none", marginBottom: "26rem", marginTop: "0%" }}>
+    <CloseAddModel
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     <ButtonGroup>
         <ToggleButton
             key={122}
@@ -389,6 +405,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 value={"completed"}
                 checked={radioValue === "completed"}    
                 onChange={(e) => setRadioValue(e.currentTarget.value)}
+                disabled={sectionDisabled.finalSubmit}
                 >
                <div >Final Submition</div>
                <VerifiedIcon/> 
@@ -397,11 +414,14 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
         </Card.Header>
         <Card.Body>
             <Card.Title></Card.Title>
-            <Card.Text>
+            
+            <Card.Text style={{marginBottom:"0%"}} >
               {
                 radioValue==="personalDetailsClicked" ? 
                 <EmpDetailsForm 
-                  submitNext={()=>setRadioValue('addContClicked')}
+                  submitNext={()=>{setRadioValue('addContClicked');
+                  setSectionDisabled(prev=>{return{...prev,addContDetails:false}})}
+                  }
                   handleChange={handleChangeEmpDetailsForm}
                   handleClear={clearEmpDetailsForm}
                   fName={empPersonalDetails.fName}
@@ -411,6 +431,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                   gender={empPersonalDetails.gender}
                   bloodGroup={empPersonalDetails.bloodGroup}
                   pwdStatus={empPersonalDetails.pwdStatus}
+                  department={empPersonalDetails.department}
+                  designation={empPersonalDetails.designation}
                   adharNumber={empPersonalDetails.adharNumber}
                   pancardNumber={empPersonalDetails.pancardNumber}
                   drivingLicenseNumber={empPersonalDetails.drivingLicenseNumber}
@@ -419,7 +441,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="addContClicked" ? 
                 <EmpAddContForm
-                  submitNext={()=>setRadioValue('profClicked')}
+                  submitNext={()=>{setRadioValue('profClicked');
+                  setSectionDisabled(prev=>{return{...prev,professionalDetails:false}})}
+                  }
                   handleChange={handleChangeEmpAddContForm}
                   handleClear={clearEmpAddContForm} 
                   add1={empAddContDetails.add1}
@@ -438,7 +462,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="profClicked" ? 
                 <EmpProfDetails
-                 submitNext={()=>setRadioValue(`educationClicked`)}
+                 submitNext={()=>{setRadioValue(`educationClicked`);
+                 setSectionDisabled(prev=>{return{...prev,educationDetails:false}})}
+                 }
                  handleChange={handleChangeEmpProfessionalForm}
                  handleClear={clearEmpProfessionalForm}
                  company_Name={empProfDetails.company_Name}
@@ -452,7 +478,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="educationClicked" ? 
                 <EmpEducationDetails
-                submitNext={()=>setRadioValue('referenceClicked')}
+                submitNext={()=>{setRadioValue('referenceClicked');
+                setSectionDisabled(prev=>{return{...prev,referenceDetails:false}})}
+                }
                 handleChange={handleChangeEmpEducationForm}
                 handleClear={clearEmpEducationForm}
                 ssc_percentage={empEducationDetails.ssc_percentage}
@@ -470,7 +498,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="referenceClicked" ? 
                 <EmpRefrenceForm
-                submitNext={()=>setRadioValue('salOverTimeClicked')}
+                submitNext={()=>{setRadioValue('salOverTimeClicked');
+                setSectionDisabled(prev=>{return{...prev,salOverTimeDetails:false}})}
+                }
                 handleChange={handleChangeEmpReferenceForm}
                 handleClear={clearEmpReferenceForm} 
                 referenceName={empRefrenceDetails.referenceName}  
@@ -484,7 +514,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="salOverTimeClicked" ? 
                 <EmpSalOvrTimeForm
-                submitNext={()=>setRadioValue('salaAdvPnltClicked')}
+                submitNext={()=>{setRadioValue('salaAdvPnltClicked');
+                setSectionDisabled(prev=>{return{...prev,salAdvPenalty:false}})}
+                }
                 handleChange={handleChangeEmpSalOverTimeForm}
                 handleClear={clearSalOverTimeForm}
                 empId={empSalOvrTimeDetails.empId}    
@@ -496,7 +528,9 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="salaAdvPnltClicked" ? 
                 <EmpSalAdvPenaltyForm 
-                submitNext={()=>setRadioValue('salMasterClicked')}
+                submitNext={()=>{setRadioValue('salMasterClicked');
+                setSectionDisabled(prev=>{return{...prev,salMaster:false}})}
+                }
                 handleChange={handleChangeEmpSalAdvPenaltyForm}
                 handleClear={clearSalAdvPenaltyForm}
                 empId={empSalAdvPenaltyDetails.empId}
@@ -509,7 +543,10 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="salMasterClicked" ? 
                 <EmpSalaryMasterForm
-                submitNext={()=>{setRadioValue('completed'); console.log(empCompleteDetails)}}
+                submitNext={()=>{setRadioValue('completed');
+                setSectionDisabled(prev=>{return{...prev,finalSubmit:false}});
+                console.log(empCompleteDetails)}
+                }
                 handleChange={handleChangeEmpSalMasterForm}
                 handleClear={clearSalaryMasterForm}
                 empId={empSalaryMasterDetails.empId}
@@ -530,7 +567,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 /> : null
               }
             </Card.Text>
-            <Button style={{position: "relative",float: "right"}} onClick={() => setEmpAddOpen(false)} variant="outline-danger">Close Add Employee</Button>
+            
+            <Button style={{position: "relative",float: "right"}} onClick={() =>{if(submitAllStage){window.location.reload()}else{setModalShow(true)}}} variant="outline-danger">Close Add Employee</Button>
         </Card.Body>
     </Card>
 

@@ -4,7 +4,8 @@ import Axios from "axios";
 import ThEmpSumm from "./ThEmpSumm";
 import TrEmpSumm from "./TrEmpSumm";
 import Button from "react-bootstrap/esm/Button";
-import EmpAddModel from "./EmpAddModel";
+import EmpAddModel from "./Add Module/EmpAddModel";
+
 
 export default function EmployeeSummery(props){
 
@@ -14,7 +15,7 @@ export default function EmployeeSummery(props){
     useEffect(()=>{
     console.log("use Effect is executed");
     Axios.get("http://localhost:3001/empDetailsApi/get").then((res)=>{
-      setEmployees(res.data);
+      setEmployees(res.data.reverse());
     })
     },[]);
     console.log(employees);
@@ -36,7 +37,15 @@ export default function EmployeeSummery(props){
     }
 
     function handleDelte(e){
+      
       console.log("handle delete executed and id is= "+e.target.value)
+      Axios.delete(`http://localhost:3001/delete/${e.target.value}`).then(res=>{
+        if(res.status===200){
+          console.log(res.data);
+          window.location.reload();
+        }
+      })
+
 
     }
 
@@ -64,8 +73,8 @@ export default function EmployeeSummery(props){
                        fName={emp.fName}
                        mName={emp.mName}
                        lName={emp.lName}
-                       designation={"Developer"}
-                       department={"I.T"}
+                       designation={emp.designation}
+                       department={emp.department}
                        phone={"989890880"}
                        empView={handleVeiw}
                        empUpdate={handleUpdate}

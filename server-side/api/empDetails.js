@@ -28,6 +28,8 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
         pwdStatus:emp.pwdStatus,
         adharNumber:emp.adharNumber,
         panCardNumber:emp.panCardNumber,
+        department:emp.department,
+        designation:emp.designation,
         voterIdNumber:emp.voterIdNumber,
         drivingLicenseNumber:emp.drivingLicenseNumber
     };
@@ -83,8 +85,9 @@ router.delete("/delete/:id",(req,res)=>{
     db.query(sqlQuery,err=>{
         if(!err){
             console.log("Succsefully deleted from parent");
+            res.send("successfully deleted employee empId="+idForDelete)
         }else{
-            console.log(err);
+            res.send(err);
         }
     });
 

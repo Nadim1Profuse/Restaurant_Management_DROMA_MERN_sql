@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 
@@ -10,12 +10,12 @@ function handleSubmit(e){
 }
 
 const inputs=[
-    {name:"ssc_percentage",type:"text",placeholder:"SSC Percentage/CGPA Score",value:props.ssc_percentage},
-    {name:"hsc_percentage",type:"text",placeholder:"HSC Percentage/CGPA Score",value:props.hsc_percentage},
+    {name:"ssc_percentage",type:"number",placeholder:"SSC Percentage/CGPA Score",value:props.ssc_percentage},
+    {name:"hsc_percentage",type:"number",placeholder:"HSC Percentage/CGPA Score",value:props.hsc_percentage},
     {name:"graduation_Stream",type:"text",placeholder:"Graduation Stream",value:props.graduation_Stream},
-    {name:"year_of_Graduation",type:"text",placeholder:"Pasing Year Of Graduation",value:props.year_of_Graduation},
+    {name:"year_of_Graduation",type:"number",placeholder:"Pasing Year Of Graduation",value:props.year_of_Graduation},
     {name:"post_Graduation_Stream",type:"text",placeholder:"Post Graduation Stream",value:props.post_Graduation_Stream},
-    {name:"year_of_pg",type:"text",placeholder:"Pasing Year Of Post Graduation",value:props.year_of_pg},
+    {name:"year_of_pg",type:"number",placeholder:"Pasing Year Of Post Graduation",value:props.year_of_pg},
     {name:"college_name",type:"text",placeholder:"Name of College",value:props.college_name},
     {name:"university_name",type:"text",placeholder:"Name of University",value:props.university_name},
     {name:"any_diploma",type:"text",placeholder:"Any Diploma",value:props.any_diploma},
