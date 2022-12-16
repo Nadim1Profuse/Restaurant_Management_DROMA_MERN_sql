@@ -27,7 +27,7 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
         bloodGroup:emp.bloodGroup,
         pwdStatus:emp.pwdStatus,
         adharNumber:emp.adharNumber,
-        panCardNumber:emp.panCardNumber,
+        pancardNumber:emp.panCardNumber,
         department:emp.department,
         designation:emp.designation,
         voterIdNumber:emp.voterIdNumber,
@@ -44,7 +44,7 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
             const sql="SELECT * FROM employeedetails"
             db.query(sql,(err,emp)=>{
               if(!err){
-              res.send(emp);
+              res.send(postEmp);
               }else{
               res.send(err)
               }

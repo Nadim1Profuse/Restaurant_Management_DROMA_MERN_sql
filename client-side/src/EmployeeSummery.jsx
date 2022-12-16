@@ -5,12 +5,17 @@ import ThEmpSumm from "./ThEmpSumm";
 import TrEmpSumm from "./TrEmpSumm";
 import Button from "react-bootstrap/esm/Button";
 import EmpAddModel from "./Add Module/EmpAddModel";
+import EmpViewModel from "./View Module/EmpViewModel";
 
 
 export default function EmployeeSummery(props){
 
   const [employees,setEmployees]=useState([]);
-  const [isAddEmp,setAddEmp]=useState(false)
+  const [isAddEmpRender,setAddEmpRender]=useState(false)
+  const [isAddEmpOpen,setAddEmpOpen]=useState(false);
+  const [isViewEmpOpen,setViewEmpOpen]=useState(false);
+  const [isViewEmpRender,setViewEmpRender]=useState(false)
+  const [clickedViewId,setClickViewId]=useState();
 
     useEffect(()=>{
     console.log("use Effect is executed");
@@ -22,12 +27,15 @@ export default function EmployeeSummery(props){
 
     function addEmployee(){
       console.log("addEmployee Clicked")
-      
-      setAddEmp(prv=>!prv);
+      setAddEmpRender(true);
+      setAddEmpOpen(prv=>!prv);
     }
 
     function handleVeiw(e){
+      setClickViewId(e.target.value);
       console.log("handle view executed and id is= "+e.target.value)
+      setViewEmpRender(true)
+      setViewEmpOpen(prev=>!prev);
 
     }
 
@@ -52,9 +60,16 @@ export default function EmployeeSummery(props){
     return(
         
     <>
-    <EmpAddModel
-      empAddModelOpen={isAddEmp}
-    />
+    {
+      isAddEmpRender ? <EmpAddModel empAddModelOpen={isAddEmpOpen}  /> :null
+    }
+    {
+      isViewEmpRender ? <EmpViewModel 
+                        empViewModelStatus={isViewEmpOpen}
+                        viewEmpId={clickedViewId}
+                        closeViewModule={()=>setViewEmpRender(false)}
+                        /> : null
+    }
     <div style={{display:"flex",justifyContent:"space-between"}}>
       <div ><h1>Employee Summery</h1></div>
       <div>

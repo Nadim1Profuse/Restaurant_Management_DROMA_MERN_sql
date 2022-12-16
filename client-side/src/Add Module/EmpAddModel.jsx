@@ -20,8 +20,7 @@ import Axios from "axios";
 
 
 export default function EmpAddModel(props) {
-  const [isEmpAddOpen,setEmpAddOpen]=useState(false);
-  const [isFirstLoad,setFirstLoad]=useState(true);
+  const [isEmpAddOpen,setEmpAddOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
   const [sectionDisabled,setSectionDisabled]=useState({
     personalDetails:false,
@@ -94,12 +93,7 @@ export default function EmpAddModel(props) {
   
 
   useEffect(()=>{
-    if(isFirstLoad){
-        setFirstLoad(false)
-    }else{
-        setEmpAddOpen(true);
-    }
-
+    setEmpAddOpen(true);
   },[props.empAddModelOpen]);
 
   const radios = [
