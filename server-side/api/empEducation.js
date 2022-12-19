@@ -54,7 +54,7 @@ routerEmpEdu.post("/empEduApi/add",body,(req,res)=>{
 //{2}*************************get request from FrontEnd**********************
 //geting data from `emp_education_details` Table in DB  And Sending back to ClientSide
 
-routerEmpEdu.get("/getempEdu",(req,res)=>{
+routerEmpEdu.get("/empEduApi/get",(req,res)=>{
     const sql="SELECT * FROM emp_Education_Details"
     db.query(sql,(err,emp)=>{
         if(!err){

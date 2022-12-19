@@ -46,10 +46,11 @@ routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
 //*************************get request from FrontEnd**********************
 //geting data from `empaddcontact` Table in DB  And Sending back to ClientSide
 
-routerAdd.get("/getEmpAddCont",(req,res)=>{
+routerAdd.get("/empAddContApi/get",(req,res)=>{
     const sql="SELECT * FROM empaddcontact"
     db.query(sql,(err,emp)=>{
         if(!err){
+            console.log(emp)
             res.send(emp);
         }else{
             console.log(err)

@@ -19,18 +19,19 @@ export default function EmpPersonalDetails(props) {
 
   React.useEffect(()=>{
     Axios.get("http://localhost:3001/empDetailsApi/get").then((res)=>{
-      setEmployees(res.data.reverse());
+      setEmployees(res.data);
     })
     },[]);
 
     
-    const selectedViewEmp=props.empIdView;
-    console.log("clicked employee id from EmpPersonalDetails="+selectedViewEmp);
+    const selectedViewEmpId=props.empIdView;
+    console.log("clicked employee id from EmpPersonalDetails="+selectedViewEmpId);
 
-    const sordtedEmp=employees.filter((emp)=>{
-        return emp.empId==selectedViewEmp
+    const sortedEmp=employees.filter((emp)=>{
+        // eslint-disable-next-line eqeqeq
+        return emp.empId==selectedViewEmpId
     });
-    console.log(sordtedEmp);
+    console.log(sortedEmp);
    
     const columns = [
     { id: 'empId', label: 'Employee Id', minWidth: 10 },
@@ -54,7 +55,7 @@ export default function EmpPersonalDetails(props) {
   
   const rows = [];
 
-  sordtedEmp.map(emp=>
+  sortedEmp.map(emp=>
     rows.push(createData(emp.empId, emp.fName, emp.mName, emp.lName,
                          emp.age,emp.gender,emp.bloodGroup,emp.pwdStatus,
                          emp.department,emp.designation,emp.adharNumber,emp.pancardNumber,

@@ -5,6 +5,13 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import EmpPersonalDetails from './EmpPersonalDetails';
+import EmpAddContDetails from './EmpAddContDetails';
+import EmpProfessionalDetails from './EmpProfessionalDetails';
+import EmpEducationDetails from './EmpEducationDetails';
+import EmpReferenceDetails from './EmpReferenceDetails';
+import EmpSalOverTimeDetails from './EmpSalaryOverTime';
+import EmpSalAdvPenaltyDetails from './EmpSalAdvPenaltyDetails';
+import EmpSalMasterDetails from './EmpSalMaster';
 
 
 export default function EmpViewModel(props){
@@ -24,7 +31,7 @@ export default function EmpViewModel(props){
         { name: 'Education Detail', value: 'education' },
         { name: 'Reference Detail', value: 'reference'},
         { name: 'Salary OverTime Details', value: 'salOverTime' },
-        { name: 'Salary Advance/Penalty Details', value: 'salaAdv' },
+        { name: 'Salary Advance/Penalty Details', value: 'salaAdvPnlt' },
         { name: 'Salary Master Details', value: 'salMaster' }
         
       ];
@@ -36,6 +43,20 @@ export default function EmpViewModel(props){
         <>
     <div style={{ display: isViewModelOpen ? "block" : "none", marginBottom: "26rem", marginTop: "0%" }}>
     
+    <ButtonGroup>
+        <ToggleButton
+            key={122}
+            id={`22`}
+            type="radio"
+            variant={'outline-dark'}
+            name="Add Employee Details"
+            value={"personalDetailsClicked"}
+            onChange={(e) => setRadioValue(e.currentTarget.value)}
+            disabled
+        >
+           Complete Details of Selected Employee 
+        </ToggleButton>
+    </ButtonGroup>
     
     <Card >
         <Card.Header>    
@@ -50,7 +71,7 @@ export default function EmpViewModel(props){
                 value={vRadio.value}
                 checked={ViewRadioValue === vRadio.value}    
                 onChange={(e) => setRadioValue(e.currentTarget.value)}
-                // disabled={radio.isDisabled ? true : false}
+                
                 >
                <div >{vRadio.name }</div> 
                 <DoubleArrowIcon />
@@ -68,30 +89,30 @@ export default function EmpViewModel(props){
                 ViewRadioValue==="personalDetails" ? <EmpPersonalDetails empIdView={empIdView}/>  :null
               }
               {
-                ViewRadioValue==="addCont" ? <h1>Address Contact</h1> : null
+                ViewRadioValue==="addCont" ? <EmpAddContDetails empIdView={empIdView} /> : null
               }
               {
-                ViewRadioValue==="prof" ? <h1>Professional</h1> :null
+                ViewRadioValue==="prof" ? <EmpProfessionalDetails empIdView={empIdView} /> :null
               }
               {
-                ViewRadioValue==="education" ? <h1>Education</h1> :null
+                ViewRadioValue==="education" ? <EmpEducationDetails empIdView={empIdView} /> :null
               }
               {
-                ViewRadioValue==="reference" ? <h1>Reference</h1> :null
+                ViewRadioValue==="reference" ? <EmpReferenceDetails empIdView={empIdView} /> :null
               }
               {
-                ViewRadioValue==="salOverTime" ? <h1>Salary OverTime</h1> :null
+                ViewRadioValue==="salOverTime" ? <EmpSalOverTimeDetails empIdView={empIdView} /> :null
               }
               {
-                ViewRadioValue==="salaAdvPnlt" ? <h1>Salary Advance Penalty</h1> : null
+                ViewRadioValue==="salaAdvPnlt" ? <EmpSalAdvPenaltyDetails empIdView={empIdView}/> : null
               }
               {
-                ViewRadioValue==="salMaster" ? <h1>Salary Master</h1> : null
+                ViewRadioValue==="salMaster" ? <EmpSalMasterDetails empIdView={empIdView} /> : null
               }
               
             </Card.Text>
             
-            <Button style={{position: "relative", float: "right", marginTop:"5px" }} onClick={() =>{setViewModelOpen(false); props.closeViewModule()}} variant="outline-danger">Close it!</Button>
+            <Button style={{position: "relative", float: "right", marginTop:"15px" }} onClick={() =>{setViewModelOpen(false); props.closeViewModule()}} variant="outline-danger">Close it!</Button>
         </Card.Body>
     </Card>
 

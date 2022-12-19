@@ -46,7 +46,7 @@ routerEmpRefer.post("/empReferApi/add",body,(req,res)=>{
 //{2}*************************get request from FrontEnd**********************{2}//
 //geting data from `emp_reference_details` Table in DB  And Sending back to ClientSide
 
-routerEmpRefer.get("/getEmpReferApi",(req,res)=>{
+routerEmpRefer.get("/empReferApi/get",(req,res)=>{
     const sql="SELECT * FROM emp_reference_details";
     db.query(sql,(err,emp)=>{
         if(!err){

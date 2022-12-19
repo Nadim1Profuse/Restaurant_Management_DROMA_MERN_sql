@@ -46,7 +46,7 @@ routerEmpProf.post("/empProfApi/add",body,(req,res)=>{
 //{2}*************************get request from FrontEnd**********************{2}//
 //geting data from `employeement_professional_details` Table in DB  And Sending back to ClientSide
 
-routerEmpProf.get("/getEmpProf",(req,res)=>{
+routerEmpProf.get("/empProfApi/get",(req,res)=>{
     const sql="SELECT * FROM employeement_professional_details";
     db.query(sql,(err,emp)=>{
         if(!err){
