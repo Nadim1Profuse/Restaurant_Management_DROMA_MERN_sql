@@ -10,9 +10,6 @@ import EmpAddContForm from './EmpAddContForm';
 import EmpProfDetails from './EmpProfForm';
 import EmpEducationDetails from './EmpEducationForm';
 import EmpRefrenceForm from './EmpReferenceForm';
-import EmpSalOvrTimeForm from './EmpSalaryOverTimeForm';
-import EmpSalAdvPenaltyForm from './EmpSalAdvPenaltyForm';
-import EmpSalaryMasterForm from './EmpSalaryMasterForm';
 import EmpFullFormDetails from './EmpFullFormDetails';
 import CloseAddModel from './CloseAddModel';
 import Axios from "axios";
@@ -28,9 +25,6 @@ export default function EmpAddModel(props) {
     professionalDetails:true,
     educationDetails:true,
     referenceDetails:true,
-    salOverTimeDetails:true,
-    salAdvPenalty:true,
-    salMaster:true,
     finalSubmit:true
   });
   const [modalShow, setModalShow] = useState(false);
@@ -43,9 +37,11 @@ export default function EmpAddModel(props) {
   });
 
   const[empAddContDetails,setEmpAddContDetails]=useState({
-    add1:"",add2:"", add3:"",add4:"",landMark:"", pincode:"",
-    city:"",state:"", phone1:"",phone2:"",phone3:"",phone4:""
+    add1:"", apartment:"", landMark:"", city:"",
+    state:"", pincode:"", mobNum:"", altMobNum:""
   });
+
+  const [empAddContObj,setEmpAddContObj]=useState([]);
 
   const[empProfDetails,setEmpProfDetails]=useState({
     company_Name:"",designation:"",   joining_Date:"",
@@ -62,21 +58,6 @@ export default function EmpAddModel(props) {
     referenceName:"",  relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     }); 
-    
-  const[empSalOvrTimeDetails,setEmpSalOvrTimeDetails]=useState({
-    empId:"",    date_ot:"",
-    reason_ot:"",ot_amount_perDay:"",
-    });
-
-  const[empSalAdvPenaltyDetails,setEmpSalAdvPenaltyDetails]=useState({
-    empId:"",date_:"",reason:"",
-    amount:"", advOrPenalty:""
-    });
-
-  const[empSalaryMasterDetails,setEmpSalaryMasterDetails]=useState({
-    empId:"",crnt_month:"",total_gross_sal:"",total_overTime:"",
-    total_deduction:"",net_sal:"",paid_amnt:"",bal_amnt:""
-    });
 
 
 //Complte Form Details From All Section TO Sinlge Object
@@ -85,10 +66,7 @@ export default function EmpAddModel(props) {
     empAddContDetails,
     empProfDetails,
     empEducationDetails,
-    empRefrenceDetails,
-    empSalOvrTimeDetails,
-    empSalAdvPenaltyDetails,
-    empSalaryMasterDetails
+    empRefrenceDetails
   }
   
 
@@ -101,11 +79,7 @@ export default function EmpAddModel(props) {
     { name: 'Address/Contact Details', value: 'addContClicked', isDisabled:sectionDisabled.addContDetails },
     { name: 'Professonal Details', value: 'profClicked', isDisabled:sectionDisabled.professionalDetails },
     { name: 'Education Details', value: 'educationClicked', isDisabled:sectionDisabled.educationDetails },
-    { name: 'Reference Details', value: 'referenceClicked', isDisabled:sectionDisabled.referenceDetails},
-    { name: 'Salary OverTime', value: 'salOverTimeClicked', isDisabled:sectionDisabled.salOverTimeDetails },
-    { name: 'Salary Advance/Penalty', value: 'salaAdvPnltClicked', isDisabled:sectionDisabled.salAdvPenalty },
-    { name: 'Salary Master', value: 'salMasterClicked', isDisabled:sectionDisabled.salMaster }
-    
+    { name: 'Reference Details', value: 'referenceClicked', isDisabled:sectionDisabled.referenceDetails} 
   ];
 
   //*************Handling 1st Section(Personal Details)***********
@@ -147,9 +121,17 @@ export default function EmpAddModel(props) {
   //Clearing EmployeeAddressContact Form Feild On clicking Clear Button 
   function clearEmpAddContForm(){
     setEmpAddContDetails({
-      add1:"",add2:"", add3:"",add4:"",landMark:"", pincode:"",
-      city:"",state:"", phone1:"",phone2:"",phone3:"",phone4:""
+      add1:"", apartment:"", landMark:"", city:"",
+      state:"", pincode:"", mobNum:"", altMobNum:""
     })
+  }
+
+  function addDetailsToArray(){
+    
+    setEmpAddContObj(prev=>{
+      return [...prev,empAddContDetails]
+    });
+    clearEmpAddContForm();
   }
 //******************Handling 3rd Section(Professional details)*****************
 
@@ -216,70 +198,7 @@ export default function EmpAddModel(props) {
     })
   }
 
-//******************Handling 6th Section(Salary Over Time Details)*****************
 
-  // handling and saving Changes in EmployeeSalaryOverTime Details Form Data 
-  function handleChangeEmpSalOverTimeForm(e){
-    const {name,value}=e.target
-    setEmpSalOvrTimeDetails(prev=>{
-      return{
-        ...prev,
-        [name]:value
-      }
-    })
-    console.log(empSalOvrTimeDetails);
-  }
-
-  //Clearing EmployeeRefrence Form Feild On clicking Clear Button
-  function clearSalOverTimeForm(){
-    setEmpSalOvrTimeDetails({
-    empId:"",    date_ot:"",
-    reason_ot:"",ot_amount_perDay:"",
-    })
-  }
-
-//******************Handling 7th Section(Salary Advance/Penalty Details)*****************
-
-  // handling and saving Changes in EmployeeSalaryAdvance/Penalty Details Form Data 
-  function handleChangeEmpSalAdvPenaltyForm(e){
-    const {name,value}=e.target;
-    setEmpSalAdvPenaltyDetails(prev=>{
-      return{
-        ...prev,
-        [name]:value
-      }
-    })
-    console.log(empSalAdvPenaltyDetails)
-  }
-
-  //Clearing EmployeeAdvPenaltyForm Form Feild On clicking Clear Button
-  function clearSalAdvPenaltyForm(){
-    setEmpSalAdvPenaltyDetails({
-      empId:"",date_:"",reason:"",
-      amount:"", advOrPenalty:""
-    })
-  }
-  
-//******************Handling 8th Section(Salary Master Details)*****************
-
-  // handling and saving Changes in EmployeeSalaryMAster Details Form Data 
-  function handleChangeEmpSalMasterForm(e){
-    const {name,value}=e.target;
-    setEmpSalaryMasterDetails(prev=>{
-      return{
-        ...prev,
-        [name]:value
-      }
-    })
-    console.log(empSalaryMasterDetails);
-  }
- //Clearing EmployeeMaster Form Feild On clicking Clear Button
-  function clearSalaryMasterForm(){
-    setEmpSalaryMasterDetails({
-    empId:"",crnt_month:"",total_gross_sal:"",total_overTime:"",
-    total_deduction:"",net_sal:"",paid_amnt:"",bal_amnt:""
-    })
-  }
 
 //********************************Final Submission*************************************//
 function finalFullFormDetails(){
@@ -322,27 +241,7 @@ function finalFullFormDetails(){
     console.log(res.data)
   }});
 
-  //Sending Data To empSalaryOvertime Api
-  Axios.post("http://localhost:3001/empSalOvrTmApi/add",({empSalOvrTimeDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added empSalOvrTimeDetails DETAILS")
-    console.log(res.data)
-  }});
-
-  //Sending Data To empSalaryAdvPenalty Api
-  Axios.post("http://localhost:3001/salAdvPenlty/add",({empSalAdvPenaltyDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added empSalAdvPenaltyDetails DETAILS")
-    console.log(res.data)
-  }});
-
-  //Sending Data To empSalaryMaster Api
-  Axios.post("http://localhost:3001/salMasterApi/add",({empSalaryMasterDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added empSalaryMasterDetails")
-    console.log(res.data)
-  }});
-
+ 
 
 }}); 
 console.log("Full Data of employee is Compltely Saved In Data BAse")
@@ -371,7 +270,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
         </ToggleButton>
     </ButtonGroup>
     <Card >
-        <Card.Header>    
+        <Card.Header style={{textAlign:"center",padding:"10px"}}>    
           <ButtonGroup>
             {radios.map((radio, idx) => (
               <><ToggleButton
@@ -438,18 +337,18 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                   submitNext={()=>{setRadioValue('profClicked');
                   setSectionDisabled(prev=>{return{...prev,professionalDetails:false}})}
                   }
+                  empAddObj={empAddContObj}
+                  addDetailsToList={addDetailsToArray}
                   handleChange={handleChangeEmpAddContForm}
                   handleClear={clearEmpAddContForm} 
                   add1={empAddContDetails.add1}
-                  add2={empAddContDetails.add2}
-                  add3={empAddContDetails.add3}
-                  add4={empAddContDetails.add4}
+                  apartment={empAddContDetails.apartment}
                   landMark={empAddContDetails.landMark}
                   city={empAddContDetails.city}
                   state={empAddContDetails.state}
-                  phone1={empAddContDetails.phone1}
-                  phone2={empAddContDetails.phone2}
-                  phone3={empAddContDetails.phone3}
+                  pincode={empAddContDetails.pincode}
+                  mobNum={empAddContDetails.mobNum}
+                  altMobNum={empAddContDetails.altMobNum}
 
                 /> : null
               }
@@ -492,8 +391,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               {
                 radioValue==="referenceClicked" ? 
                 <EmpRefrenceForm
-                submitNext={()=>{setRadioValue('salOverTimeClicked');
-                setSectionDisabled(prev=>{return{...prev,salOverTimeDetails:false}})}
+                submitNext={()=>{setRadioValue('completed');
+                setSectionDisabled(prev=>{return{...prev,finalSubmit:false}})}
                 }
                 handleChange={handleChangeEmpReferenceForm}
                 handleClear={clearEmpReferenceForm} 
@@ -505,54 +404,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 phone2={empRefrenceDetails.phone2}
                 /> :null
               }
-              {
-                radioValue==="salOverTimeClicked" ? 
-                <EmpSalOvrTimeForm
-                submitNext={()=>{setRadioValue('salaAdvPnltClicked');
-                setSectionDisabled(prev=>{return{...prev,salAdvPenalty:false}})}
-                }
-                handleChange={handleChangeEmpSalOverTimeForm}
-                handleClear={clearSalOverTimeForm}
-                empId={empSalOvrTimeDetails.empId}    
-                date_ot={empSalOvrTimeDetails.date_ot}
-                reason_ot={empSalOvrTimeDetails.reason_ot}
-                ot_amount_perDay={empSalOvrTimeDetails.ot_amount_perDay}
-                /> :null
-              }
-              {
-                radioValue==="salaAdvPnltClicked" ? 
-                <EmpSalAdvPenaltyForm 
-                submitNext={()=>{setRadioValue('salMasterClicked');
-                setSectionDisabled(prev=>{return{...prev,salMaster:false}})}
-                }
-                handleChange={handleChangeEmpSalAdvPenaltyForm}
-                handleClear={clearSalAdvPenaltyForm}
-                empId={empSalAdvPenaltyDetails.empId}
-                date_={empSalAdvPenaltyDetails.date_}
-                reason={empSalAdvPenaltyDetails.reason}
-                amount={empSalAdvPenaltyDetails.amount}
-                advOrPenalty={empSalAdvPenaltyDetails.advOrPenalty}
-                /> : null
-              }
-              {
-                radioValue==="salMasterClicked" ? 
-                <EmpSalaryMasterForm
-                submitNext={()=>{setRadioValue('completed');
-                setSectionDisabled(prev=>{return{...prev,finalSubmit:false}});
-                console.log(empCompleteDetails)}
-                }
-                handleChange={handleChangeEmpSalMasterForm}
-                handleClear={clearSalaryMasterForm}
-                empId={empSalaryMasterDetails.empId}
-                crnt_month={empSalaryMasterDetails.crnt_month}
-                total_gross_sal={empSalaryMasterDetails.total_gross_sal}
-                total_overTime={empSalaryMasterDetails.total_overTime}
-                total_deduction={empSalaryMasterDetails.total_deduction}
-                net_sal={empSalaryMasterDetails.net_sal}
-                paid_amnt={empSalaryMasterDetails.paid_amnt}
-                bal_amnt={empSalaryMasterDetails.bal_amnt}
-                /> : null
-              }
+             
               {
                 radioValue==="completed" ? 
                 <EmpFullFormDetails 

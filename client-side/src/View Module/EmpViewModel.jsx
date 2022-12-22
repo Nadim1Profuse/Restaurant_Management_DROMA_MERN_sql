@@ -9,9 +9,6 @@ import EmpAddContDetails from './EmpAddContDetails';
 import EmpProfessionalDetails from './EmpProfessionalDetails';
 import EmpEducationDetails from './EmpEducationDetails';
 import EmpReferenceDetails from './EmpReferenceDetails';
-import EmpSalOverTimeDetails from './EmpSalaryOverTime';
-import EmpSalAdvPenaltyDetails from './EmpSalAdvPenaltyDetails';
-import EmpSalMasterDetails from './EmpSalMaster';
 
 
 export default function EmpViewModel(props){
@@ -30,9 +27,6 @@ export default function EmpViewModel(props){
         { name: 'Professonal Detail', value: 'prof' },
         { name: 'Education Detail', value: 'education' },
         { name: 'Reference Detail', value: 'reference'},
-        { name: 'Salary OverTime Details', value: 'salOverTime' },
-        { name: 'Salary Advance/Penalty Details', value: 'salaAdvPnlt' },
-        { name: 'Salary Master Details', value: 'salMaster' }
         
       ];
 
@@ -43,7 +37,7 @@ export default function EmpViewModel(props){
         <>
     <div style={{ display: isViewModelOpen ? "block" : "none", marginBottom: "26rem", marginTop: "0%" }}>
     
-    <ButtonGroup>
+    <ButtonGroup style={{marginBottom:".5rem"}}>
         <ToggleButton
             key={122}
             id={`22`}
@@ -59,7 +53,7 @@ export default function EmpViewModel(props){
     </ButtonGroup>
     
     <Card >
-        <Card.Header>    
+        <Card.Header style={{textAlign:"center",padding:"10px"}}>    
           <ButtonGroup>
             {viewRadios.map((vRadio, idx) => (
               <><ToggleButton
@@ -100,15 +94,7 @@ export default function EmpViewModel(props){
               {
                 ViewRadioValue==="reference" ? <EmpReferenceDetails empIdView={empIdView} /> :null
               }
-              {
-                ViewRadioValue==="salOverTime" ? <EmpSalOverTimeDetails empIdView={empIdView} /> :null
-              }
-              {
-                ViewRadioValue==="salaAdvPnlt" ? <EmpSalAdvPenaltyDetails empIdView={empIdView}/> : null
-              }
-              {
-                ViewRadioValue==="salMaster" ? <EmpSalMasterDetails empIdView={empIdView} /> : null
-              }
+              
               
             </Card.Text>
             

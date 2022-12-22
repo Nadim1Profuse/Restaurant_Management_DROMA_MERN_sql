@@ -4,6 +4,7 @@ import Axios from "axios";
 import ThEmpSumm from "./ThEmpSumm";
 import TrEmpSumm from "./TrEmpSumm";
 import Button from "react-bootstrap/esm/Button";
+import EmpDelteAlert from "./DeleteAlertModel";
 import EmpAddModel from "./Add Module/EmpAddModel";
 import EmpViewModel from "./View Module/EmpViewModel";
 
@@ -11,11 +12,14 @@ import EmpViewModel from "./View Module/EmpViewModel";
 export default function EmployeeSummery(props){
 
   const [employees,setEmployees]=useState([]);
-  const [isAddEmpRender,setAddEmpRender]=useState(false)
+  const [isDeleteConfirmed,setDeleteConfirmed]=useState(false)
+  const [isAddEmpRender,setAddEmpRender]=useState(false);
   const [isAddEmpOpen,setAddEmpOpen]=useState(false);
   const [isViewEmpOpen,setViewEmpOpen]=useState(false);
   const [isViewEmpRender,setViewEmpRender]=useState(false)
   const [clickedViewId,setClickViewId]=useState();
+  const [modalShow, setModalShow] = useState(false);
+  const [empIdForDelete,setEmpIdForDelete]=useState();
 
     useEffect(()=>{
     console.log("use Effect is executed");
@@ -45,21 +49,38 @@ export default function EmployeeSummery(props){
     }
 
     function handleDelte(e){
+      setModalShow(true);
+      setEmpIdForDelete(e.target.value);
+
+     
       
-      console.log("handle delete executed and id is= "+e.target.value)
-      Axios.delete(`http://localhost:3001/delete/${e.target.value}`).then(res=>{
+      // console.log("handle delete executed and id is= "+e.target.value)
+      // Axios.delete(`http://localhost:3001/delete/${e.target.value}`).then(res=>{
+      //   if(res.status===200){
+      //     console.log(res.data);
+      //     window.location.reload();
+      //   }
+      // })
+    }
+
+    function confirmDelte(){
+      Axios.delete(`http://localhost:3001/delete/${empIdForDelete}`).then(res=>{
         if(res.status===200){
           console.log(res.data);
           window.location.reload();
         }
-      })
-
+      });
 
     }
 
     return(
         
     <>
+    <EmpDelteAlert
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      yesDelete={confirmDelte}
+    />
     {
       isAddEmpRender ? <EmpAddModel empAddModelOpen={isAddEmpOpen}  /> :null
     }
@@ -70,6 +91,9 @@ export default function EmployeeSummery(props){
                         closeViewModule={()=>setViewEmpRender(false)}
                         /> : null
     }
+      
+
+    
     <div style={{display:"flex",justifyContent:"space-between"}}>
       <div ><h1>Employee Summery</h1></div>
       <div>

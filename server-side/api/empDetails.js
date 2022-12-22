@@ -44,7 +44,7 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
             const sql="SELECT * FROM employeedetails"
             db.query(sql,(err,emp)=>{
               if(!err){
-              res.send(postEmp);
+              res.send(emp);
               }else{
               res.send(err)
               }

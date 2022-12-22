@@ -1,126 +1,65 @@
 import * as React from 'react';
+import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Axios from "axios";
+import Axios from "axios"
 
 
-
-
-export default function EmpPersonalDetails(props) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+ export default function EmpPersonalDetails(props){
+    
   const [employees, setEmployees]=React.useState([])
 
   React.useEffect(()=>{
     Axios.get("http://localhost:3001/empDetailsApi/get").then((res)=>{
       setEmployees(res.data);
+      console.log("useEffect executed from EmpPersonalDetails")
     })
     },[]);
 
     
     const selectedViewEmpId=props.empIdView;
-    console.log("clicked employee id from EmpPersonalDetails="+selectedViewEmpId);
+    console.log("clicked employee id fromEmpPersonalDetails="+selectedViewEmpId);
 
     const sortedEmp=employees.filter((emp)=>{
         // eslint-disable-next-line eqeqeq
         return emp.empId==selectedViewEmpId
     });
     console.log(sortedEmp);
-   
-    const columns = [
-    { id: 'empId', label: 'Employee Id', minWidth: 10 },
-    { id: 'fName', label: 'First Name', minWidth: 10 },
-    { id: 'mName', label: 'Middle Name', minWidth: 10 },
-    { id: 'lName', label: 'Last Name', minWidth: 10 },
-    { id: 'age',   label: 'Age', minWidth: 10 },
-    { id: 'gender', label: 'Gender', minWidth: 10 },
-    { id: 'bloodGroup', label: 'Blood Group', minWidth: 10 },
-    { id: 'pwdStatus', label: 'PWD Status', minWidth: 10 },
-    { id: 'department',   label: 'Department', minWidth: 10 },
-    { id: 'designation', label: 'Designation', minWidth: 10 },
-    { id: 'adharNumber', label: 'Adhar Number', minWidth: 10 },
-    { id: 'pancardNumber', label: 'PanCard Number', minWidth: 10 },
-   
-  ];
-  
-  function createData(empId, fName, mName, lName,age,gender,bloodGroup,pwdStatus,department,designation,adharNumber,pancardNumber) {
-    return { empId, fName, mName, lName, age ,gender,bloodGroup,pwdStatus,department,designation,adharNumber,pancardNumber};
-  }
-  
-  const rows = [];
 
-  sortedEmp.map(emp=>
-    rows.push(createData(emp.empId, emp.fName, emp.mName, emp.lName,
-                         emp.age,emp.gender,emp.bloodGroup,emp.pwdStatus,
-                         emp.department,emp.designation,emp.adharNumber,emp.pancardNumber,
-                        )
-  ));
-  
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  return (
+    return(
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead >
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth, fontSize:"15px",  backgroundColor:"#f7f7f7", fontWeight: "bold" }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5,10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+    <Table striped bordered hover style={{border:"2px solid #198754",borderRadius:"2rem",textAlign:"center"}}>
+      <thead style={{backgroundColor:"#1976d2",color:"whitesmoke",borderRadius:"1rem"}}>
+        <tr>
+          <th>Employee Id</th> <th>First Name</th> <th>Middle Name</th> <th>Last Name</th>
+          <th>Age </th> <th>Gender</th> <th>Blood Group</th> <th>PWD Status</th><th>Department</th> 
+          <th>Designation</th> <th>Adhar Number</th> <th>PanCard Number</th> <th>Driving License Number</th>
+        </tr>
+      </thead>
+      <tbody >
+        {
+          sortedEmp.map(emp=>{
+            return <tr>
+                    <td>{emp.empId}</td>
+                    <td>{emp.fName}</td>
+                    <td>{emp.mName}</td>
+                    <td>{emp.lName}</td>
+                    <td>{emp.age}</td>
+                    <td>{emp.gender}</td>
+                    <td>{emp.bloodGroup}</td>
+                    <td>{emp.pwdStatus}</td>
+                    <td>{emp.department}</td>
+                    <td>{emp.designation}</td>
+                    <td>{emp.adharNumber}</td>
+                    <td>{emp.pancardNumber}</td>
+                    <td>{emp.drivingLicenseNumber}</td>
+                   </tr>
+          })
+          }
+      </tbody>
+    </Table>
     </Paper>
-  );
-}
+    )
+
+
+} 
+
