@@ -16,6 +16,7 @@ import Axios from "axios";
 
 
 
+
 export default function EmpAddModel(props) {
   const [isEmpAddOpen,setEmpAddOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
@@ -36,28 +37,40 @@ export default function EmpAddModel(props) {
     pwdStatus:"",adharNumber:"",pancardNumber:"",drivingLicenseNumber:"",designation:""
   });
 
+  //------------------States Fro Employee Address/Contact Section----------//
   const[empAddContDetails,setEmpAddContDetails]=useState({
     add1:"", apartment:"", landMark:"", city:"",
     state:"", pincode:"", mobNum:"", altMobNum:""
   });
 
-  const [empAddContObj,setEmpAddContObj]=useState([]);
+  const [empAddContArray,setEmpAddContArray]=useState([]);
+
+  //------------------States Fro Employee Professional Section----------//
 
   const[empProfDetails,setEmpProfDetails]=useState({
-    company_Name:"",designation:"",   joining_Date:"",
+    company_Name:"", isCurrent:"",designation:"", joining_Date:"",
     ending_Date:"", reasonOfResign:"",salary:""
     });
 
+  const [empProfArray,setEmpProfArray]= useState([]);
+
+  //------------------States Fro Employee Education Section----------//  
+
   const[empEducationDetails,setEmpEducationDetails]=useState({
-    ssc_percentage:"",hsc_percentage:"",graduation_Stream:"", 
-    year_of_Graduation:"",post_Graduation_Stream:"",year_of_pg:"",
-    any_diploma:"",any_Certification:"",college_name:"",university_name:"",
+    education:"", percentage:"", yearOfPassing:"",
+    instituteName:"", place:"",
     });
+
+  const [empEducationArray,setEmpEducationArray]=useState([]);
+  
+  //------------------States Fro Employee Reference Section----------//
 
   const[empRefrenceDetails,setEmpRefrenceDetails]=useState({
     referenceName:"",  relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     }); 
+
+  const [empReferenceArray,setEmpReferenceArray]=useState([])
 
 
 //Complte Form Details From All Section TO Sinlge Object
@@ -126,9 +139,11 @@ export default function EmpAddModel(props) {
     })
   }
 
+  //Adding Address/contact details In Table List 
+
   function addDetailsToArray(){
     
-    setEmpAddContObj(prev=>{
+    setEmpAddContArray(prev=>{
       return [...prev,empAddContDetails]
     });
     clearEmpAddContForm();
@@ -154,6 +169,14 @@ export default function EmpAddModel(props) {
     })
   }
 
+  //Adding Professional details In Table List 
+  function addProfDetailsToArray(){
+    setEmpProfArray(prev=>{
+      return[...prev,empProfDetails]
+    });
+    clearEmpProfessionalForm();
+  }
+
 //******************Handling 4th Section(Education details)*****************
 
   // handling and saving Changes in EmployeeEducation Details Form Data
@@ -170,10 +193,16 @@ export default function EmpAddModel(props) {
   //Clearing EmployeeProfessional Form Feild On clicking Clear Button
   function clearEmpEducationForm(){
     setEmpEducationDetails({
-    ssc_percentage:"",hsc_percentage:"",graduation_Stream:"", 
-    year_of_Graduation:"",post_Graduation_Stream:"",year_of_pg:"",
-    any_diploma:"",any_Certification:"",college_name:"",university_name:"",
+      education:"", percentage:"", yearOfPassing:"",
+      instituteName:"", place:""
     })
+  }
+
+  function addEducationDetailToArray(){
+    setEmpEducationArray(prev=>{
+      return[...prev,empEducationDetails]
+    })
+    clearEmpEducationForm();
   }
 //******************Handling 5th Section(Reference Details)*****************
 
@@ -196,6 +225,13 @@ export default function EmpAddModel(props) {
     referenceName:"",relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     })
+  }
+
+  function addReferenceDetailsToArray(){
+    setEmpReferenceArray(prev=>{
+      return[...prev,empRefrenceDetails]
+    })
+    clearEmpReferenceForm();
   }
 
 
@@ -250,7 +286,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
     
   return ( 
     <>
-    <div style={{ display: isEmpAddOpen ? "block" : "none", marginBottom: "26rem", marginTop: "0%" }}>
+    <div style={{ display: isEmpAddOpen ? "block" : "none" }}>
     <CloseAddModel
         show={modalShow}
         onHide={() => setModalShow(false)}
@@ -337,7 +373,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                   submitNext={()=>{setRadioValue('profClicked');
                   setSectionDisabled(prev=>{return{...prev,professionalDetails:false}})}
                   }
-                  empAddObj={empAddContObj}
+                  empAddArray={empAddContArray}
                   addDetailsToList={addDetailsToArray}
                   handleChange={handleChangeEmpAddContForm}
                   handleClear={clearEmpAddContForm} 
@@ -358,9 +394,12 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                  submitNext={()=>{setRadioValue(`educationClicked`);
                  setSectionDisabled(prev=>{return{...prev,educationDetails:false}})}
                  }
+                 empProfArray={empProfArray}
+                 addProfDetailsToList={addProfDetailsToArray}
                  handleChange={handleChangeEmpProfessionalForm}
                  handleClear={clearEmpProfessionalForm}
                  company_Name={empProfDetails.company_Name}
+                 isCurrent={empProfDetails.isCurrent}
                  designation={empProfDetails.designation}
                  joining_Date={empProfDetails.joining_Date}
                  ending_Date={empProfDetails.ending_Date}
@@ -374,18 +413,15 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 submitNext={()=>{setRadioValue('referenceClicked');
                 setSectionDisabled(prev=>{return{...prev,referenceDetails:false}})}
                 }
+                empEducationArray={empEducationArray}
+                addEducationDetailsToList={addEducationDetailToArray}
                 handleChange={handleChangeEmpEducationForm}
                 handleClear={clearEmpEducationForm}
-                ssc_percentage={empEducationDetails.ssc_percentage}
-                hsc_percentage={empEducationDetails.hsc_percentage}
-                graduation_Stream={empEducationDetails.graduation_Stream}
-                year_of_Graduation={empEducationDetails.year_of_Graduation}
-                post_Graduation_Stream={empEducationDetails.post_Graduation_Stream}
-                year_of_pg={empEducationDetails.year_of_pg}
-                any_diploma={empEducationDetails.any_diploma}
-                any_Certification={empEducationDetails.any_Certification}
-                college_name={empEducationDetails.college_name}
-                university_name={empEducationDetails.university_name}
+                education={empEducationDetails.education}
+                percentage={empEducationDetails.percentage}
+                yearOfPassing={empEducationDetails.yearOfPassing}
+                instituteName={empEducationDetails.instituteName}
+                place={empEducationDetails.place}
                 /> :null
               }
               {
@@ -394,6 +430,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 submitNext={()=>{setRadioValue('completed');
                 setSectionDisabled(prev=>{return{...prev,finalSubmit:false}})}
                 }
+                emRefrnceArray={empReferenceArray}
+                addRefrnceDetailsToList={addReferenceDetailsToArray}
                 handleChange={handleChangeEmpReferenceForm}
                 handleClear={clearEmpReferenceForm} 
                 referenceName={empRefrenceDetails.referenceName}  

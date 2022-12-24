@@ -35,7 +35,7 @@ export default function EmpViewModel(props){
 
     return(
         <>
-    <div style={{ display: isViewModelOpen ? "block" : "none", marginBottom: "26rem", marginTop: "0%" }}>
+    <div style={{ display: isViewModelOpen ? "block" : "none" }}>
     
     <ButtonGroup style={{marginBottom:".5rem"}}>
         <ToggleButton
@@ -98,7 +98,7 @@ export default function EmpViewModel(props){
               
             </Card.Text>
             
-            <Button style={{position: "relative", float: "right", marginTop:"15px" }} onClick={() =>{setViewModelOpen(false); props.closeViewModule()}} variant="outline-danger">Close it!</Button>
+            <Button style={{position: "relative", float: "right", marginTop:"15px" }} onClick={() =>{setViewModelOpen(false); props.closeViewModule(); window.location.reload()}} variant="outline-danger">Close it!</Button>
         </Card.Body>
     </Card>
 

@@ -1,75 +1,126 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import Paper from '@mui/material/Paper';
+import EmptyListWarning from "./EmptyListWarning";
 
 export default function EmpProfDetails(props){
-   
-   const[empProf,setEmpProf]=useState({
-    company_Name:"",
-    designation:"",
-    joining_Date:"",
-    ending_Date:"",
-    reasonOfResign:"",
-    salary:""
-    });
+
+const [empProfessionalList,setEmpProfessionalList]=useState([]);
+const [modalShow, setModalShow] =useState(false);
 
 
-function handleChange(e){
-    const {name,value}=e.target;
-    setEmpProf(prev=>{
-       return{
-        ...prev,
-        [name]:value
-       } 
-    })
-}
+useEffect(()=>{
+  setEmpProfessionalList((props.empProfArray.reverse()))
+},[props.empProfArray]);
 
 function handleSubmit(e){
   e.preventDefault();
-  props.submitNext();
+  if((empProfessionalList.length) !==0){
+    props.submitNext();
+  }else{
+    setModalShow(true);
+  }  
 }
 
-const inputs=[
-    {name:"company_Name",type:"text",placeholder:"Previous Company Name",value:props.company_Name},
-    {name:"designation",type:"text",placeholder:"Designation",value:props.designation},
-    {name:"joining_Date",type:"date",placeholder:"Joining Date",value:props.joining_Date},
-    {name:"ending_Date",type:"date",placeholder:"Date of Resign",value:props.ending_Date},
-    {name:"reasonOfResign",type:"text",placeholder:"Reason Of Resignation",value:props.reasonOfResign},
-    {name:"salary",type:"number",placeholder:"Salary",value:props.salary},   
-]
+function addToArray(e){
+  e.preventDefault();
+  props.addProfDetailsToList();
+  console.log(empProfessionalList);
+}
+
+
   return (
-    <Form onSubmit={handleSubmit}>
+  <>  
+    <EmptyListWarning
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      heading="Professional List Can't be Empty!!" 
+      body="Please Add atleast one Entry in Professional Details List. 
+            It can't be Empty "
+    />
+
+    <Form onSubmit={addToArray}>
     <div style={{display:"flex"}} >
       <div style={{flex: "0 0 calc(50% - .50rem)"}}>
-      {
-        inputs.map((input,index)=>{
-          if(index<3){
-            return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
-                  </Form.Group>
-          } 
-        })
-      }
-      </div>
-      <div style={{flex: "0 0 calc(50% - .50rem)",marginLeft:"8px"}}>
-      {
-        inputs.map((input,index)=>{
-          if(index>2){
-            return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
-                  </Form.Group>
-          }
-        })
-      }
+      
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Control required name="company_Name" type="text" placeholder="Company Name" value={props.company_Name} onChange={props.handleChange} />
+      </Form.Group>
+      
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Select required name="isCurrent" value={props.isCurrent} onChange={props.handleChange} aria-label="Default select example">
+        <option selected value="" disabled>Is it Your Current Company?</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </Form.Select>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Control required name="designation" type="text" placeholder="Designation" value={props.designation} onChange={props.handleChange} />
+      </Form.Group>
+
+      
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Joininig Date</Form.Label>
+        <Form.Control required name="joining_Date" type="date" placeholder="Joining Date" value={props.joining_Date} onChange={props.handleChange} />
+      </Form.Group>
+
+      
       </div>
 
-    </div>  
-      <span>
-      <Button variant="outline-success" type="submit" >Save And Next</Button>
-      </span>
-      <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
-      </span>
+      <div style={{flex: "0 0 calc(50% - .50rem)",marginLeft:"8px"}}>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Date of Resign</Form.Label>
+        <Form.Control required name="ending_Date" type="date" placeholder="Date of Resign" value={props.ending_Date} onChange={props.handleChange} />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Control required name="reasonOfResign" type="text" placeholder="Reason Of Resignation" value={props.reasonOfResign} onChange={props.handleChange} />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Control required name="salary" type="number" placeholder="Salary" value={props.salary} onChange={props.handleChange} />
+      </Form.Group>
+
+      <div style={{ textAlign: "end" }}>
+              <Button style={{ margin: "3px", marginRight:"5px" }} variant="outline-success" type="submit">Add Details to list</Button>
+              <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
+      </div>
+      
+      </div>
+
+    </div>
+
+    <Button variant="outline-success" type="button" onClick={handleSubmit}>Save And Next</Button>
     </Form>
+
+
+    <div className="addressList">
+      <Paper style={{ textAlign: "center", margin: "14px" }}>
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>#</th> <th>Company Name</th> <th>Is It Current Company</th><th>Designation</th>
+              <th>Joininig Date</th> <th>Date Of Resign</th> <th>Reason Of Resignation</th> <th>Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {empProfessionalList.map((emp, index) => {
+              return <tr>
+                <td>{(empProfessionalList.length) - index}</td><td>{emp.company_Name}</td> <td>{emp.isCurrent}</td>
+                <td>{emp.designation}</td>  <td>{emp.joining_Date}</td> <td>{emp.ending_Date}</td> 
+                <td>{emp.reasonOfResign}</td> <td>{emp.salary}</td>
+              </tr>;
+            })}
+          </tbody>
+        </Table>
+      </Paper>
+    </div>
+    
+  
+  </>  
   );
 }

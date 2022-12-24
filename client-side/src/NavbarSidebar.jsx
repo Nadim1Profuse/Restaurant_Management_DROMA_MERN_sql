@@ -146,7 +146,7 @@ export default function NavbarSidebar() {
               </ListItemButton>
           </ListItem>
           <ListItem key="Employee Management" disablePadding>
-              <ListItemButton onClick={()=>setIsHomeRender(false)}>
+              <ListItemButton onClick={()=>{setIsHomeRender(false); window.location.reload() }}>
                 <ListItemIcon>
                 <GroupsIcon />
                 </ListItemIcon>

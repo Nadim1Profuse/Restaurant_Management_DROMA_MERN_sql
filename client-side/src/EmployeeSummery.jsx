@@ -12,6 +12,7 @@ import EmpViewModel from "./View Module/EmpViewModel";
 export default function EmployeeSummery(props){
 
   const [employees,setEmployees]=useState([]);
+  const [isEmpSummryShow,setEmpSummeryShow]=useState(true)
   const [isDeleteConfirmed,setDeleteConfirmed]=useState(false)
   const [isAddEmpRender,setAddEmpRender]=useState(false);
   const [isAddEmpOpen,setAddEmpOpen]=useState(false);
@@ -31,12 +32,16 @@ export default function EmployeeSummery(props){
 
     function addEmployee(){
       console.log("addEmployee Clicked")
+      setEmpSummeryShow(false);
       setAddEmpRender(true);
       setAddEmpOpen(prv=>!prv);
     }
 
     function handleVeiw(e){
+      
+      setEmpSummeryShow(false);
       setClickViewId(e.target.value);
+      setEmpSummeryShow(false);
       console.log("handle view executed and id is= "+e.target.value)
       setViewEmpRender(true)
       setViewEmpOpen(prev=>!prev);
@@ -52,15 +57,6 @@ export default function EmployeeSummery(props){
       setModalShow(true);
       setEmpIdForDelete(e.target.value);
 
-     
-      
-      // console.log("handle delete executed and id is= "+e.target.value)
-      // Axios.delete(`http://localhost:3001/delete/${e.target.value}`).then(res=>{
-      //   if(res.status===200){
-      //     console.log(res.data);
-      //     window.location.reload();
-      //   }
-      // })
     }
 
     function confirmDelte(){
@@ -93,7 +89,7 @@ export default function EmployeeSummery(props){
     }
       
 
-    
+  <div id="employeeSummery" style={{display: isEmpSummryShow ? "block" : "none"}} >
     <div style={{display:"flex",justifyContent:"space-between"}}>
       <div ><h1>Employee Summery</h1></div>
       <div>
@@ -123,6 +119,7 @@ export default function EmployeeSummery(props){
             })}
         </tbody>
       </Table>
+  </div>
     </>
     )
 

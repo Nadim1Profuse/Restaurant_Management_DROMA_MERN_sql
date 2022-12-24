@@ -1,62 +1,116 @@
-import React from "react";
+import React ,{useState,useEffect} from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import Paper from '@mui/material/Paper';
+import EmptyListWarning from "./EmptyListWarning";
 
 export default function EmpEducationDetails(props){
+
+  const [empEducationList,setEmpEducationList]=useState([]);
+  const [modalShow, setModalShow] =useState(false);
+
+  useEffect(()=>{
+    setEmpEducationList(((props.empEducationArray).reverse()))
+  },[props.empEducationArray])
    
 function handleSubmit(e){
   e.preventDefault();
-  props.submitNext();    
+  if(empEducationList.length !==0){
+    props.submitNext();
+  }else{
+    setModalShow(true);
+  }     
+}
+
+function addToArray(e){
+  e.preventDefault();
+  props.addEducationDetailsToList();
+  console.log(empEducationList);
 }
 
 const inputs=[
-    {name:"ssc_percentage",type:"number",placeholder:"SSC Percentage/CGPA Score",value:props.ssc_percentage},
-    {name:"hsc_percentage",type:"number",placeholder:"HSC Percentage/CGPA Score",value:props.hsc_percentage},
-    {name:"graduation_Stream",type:"text",placeholder:"Graduation Stream",value:props.graduation_Stream},
-    {name:"year_of_Graduation",type:"number",placeholder:"Pasing Year Of Graduation",value:props.year_of_Graduation},
-    {name:"post_Graduation_Stream",type:"text",placeholder:"Post Graduation Stream",value:props.post_Graduation_Stream},
-    {name:"year_of_pg",type:"number",placeholder:"Pasing Year Of Post Graduation",value:props.year_of_pg},
-    {name:"college_name",type:"text",placeholder:"Name of College",value:props.college_name},
-    {name:"university_name",type:"text",placeholder:"Name of University",value:props.university_name},
-    {name:"any_diploma",type:"text",placeholder:"Any Diploma",value:props.any_diploma},
-    {name:"any_Certification",type:"text",placeholder:"Any Certification",value:props.any_Certification},   
-   
-]
+    {name:"education",type:"text",placeholder:"SSC/HSC/Degree/Diploma/Certificates",value:props.education},
+    {name:"percentage",type:"number",placeholder:"Percentage/CGPA/Grades",value:props.percentage},
+    {name:"yearOfPassing",type:"year",placeholder:"Year Of Passing",value:props.yearOfPassing},
+    {name:"instituteName",type:"text",placeholder:"Name Of School/College/University/Institute",value:props.instituteName},
+    {name:"place",type:"text",placeholder:"Place",value:props.place},   
+   ]
+
+
   return (
-    <Form onSubmit={handleSubmit}>
-    <div style={{display:"flex"}} >
-      <div style={{flex: "0 0 calc(50% - .50rem)"}}>
-      {
-        // eslint-disable-next-line array-callback-return
-        inputs.map((input,index)=>{
-          if(index<5){
-            return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
-                  </Form.Group>
-          } 
-        })
-      }
-      </div>
-      <div style={{flex: "0 0 calc(50% - .50rem)",marginLeft:"8px"}}>
-      {
-        // eslint-disable-next-line array-callback-return
-        inputs.map((input,index)=>{
-          if(index>4){
-            return<Form.Group className="mb-3" controlId="formBasicEmail">
-                   <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
-                  </Form.Group>
-          }
-        })
-      }
+  <>
+    <EmptyListWarning
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      heading="Education List Can't be Empty!!" 
+      body="Please Add atleast one Entry in Education Details List. 
+            It can't be Empty "
+    />
+
+    <Form onSubmit={addToArray}>
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: "0 0 calc(50% - .50rem)" }}>
+          {
+            // eslint-disable-next-line array-callback-return
+            inputs.map((input, index) => {
+              if (index < 3) {
+                return <Form.Group className="mb-3" controlId="formBasicEmail">
+                         <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
+                       </Form.Group>;
+              }
+            })}
+        </div>
+        <div style={{ flex: "0 0 calc(50% - .50rem)", marginLeft: "8px" }}>
+          {
+            // eslint-disable-next-line array-callback-return
+            inputs.map((input, index) => {
+              if (index > 2) {
+                return <Form.Group className="mb-3" controlId="formBasicEmail">
+                         <Form.Control required name={input.name} type={input.type} placeholder={input.placeholder} value={input.value} onChange={props.handleChange} />
+                       </Form.Group>;
+              }
+            })}
+
+          <div style={{ textAlign: "end", paddingRight: "9px" }}>
+            <Button style={{ margin: "17px" }} variant="outline-success" type="submit">Add Details to list</Button>
+            <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
+          </div>
+
+        </div>
+
       </div>
 
-    </div>  
-      <span>
-      <Button variant="outline-success" type="submit" >Save And Next</Button>
-      </span>
-      <span style={{marginLeft:"10px"}}>
-      <Button variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
-      </span>
+      <Button variant="outline-success" type="button" onClick={handleSubmit}>Save And Next</Button>
+
     </Form>
+    <div className="addressList">
+        <Paper style={{ textAlign: "center", margin: "14px" }}>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>#</th> <th>Education Details</th> <th>Percentage/CGPA/Grades</th><th>Year Of Passing</th>
+                <th>Name OF Institution</th> <th>Place </th>
+              </tr>
+            </thead>
+            <tbody>
+              {empEducationList.map((emp, index) => {
+                return <tr>
+                  <td>{(empEducationList.length) - index}</td><td>{emp.education}</td>
+                  <td>{emp.percentage}</td> <td>{emp.yearOfPassing}</td> <td>{emp.instituteName}</td> <td>{emp.place}</td>
+
+                </tr>;
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+    </div>
+  </>
+
+
+
+
+
+
   );
 }
