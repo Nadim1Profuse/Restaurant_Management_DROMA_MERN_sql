@@ -14,10 +14,11 @@ const router=Router();
 
 router.post("/empDetailsApi/add",body,(req,res)=>{
     const emp=req.body;
+    console.log("empPersonal Details from front end")
     console.log(emp);
     console.log("`/empDetailsApi/add` path called from empDetailApi.js")
     
-//creating a Object and putting all details in it to send it into database
+// creating a Object and putting all details in it to send it into database
     const postEmp={
         fName:emp.fName,
         mName:emp.mName,
@@ -33,7 +34,7 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
         voterIdNumber:emp.voterIdNumber,
         drivingLicenseNumber:emp.drivingLicenseNumber
     };
-//query of sql to to insert data into "employeedetails"
+// query of sql to to insert data into "employeedetails"
     const sqlQuery="INSERT INTO employeedetails SET ?";
 
 // function to send data in db by using sqlQuery,PostEmp and handling error
@@ -45,6 +46,7 @@ router.post("/empDetailsApi/add",body,(req,res)=>{
             db.query(sql,(err,emp)=>{
               if(!err){
               res.send(emp);
+            //   console.log(emp)
               }else{
               res.send(err)
               }
@@ -86,8 +88,10 @@ router.delete("/delete/:id",(req,res)=>{
         if(!err){
             console.log("Succsefully deleted from parent");
             res.send("successfully deleted employee empId="+idForDelete)
+            
         }else{
             res.send(err);
+            console.log(err)
         }
     });
 

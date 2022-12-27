@@ -14,33 +14,41 @@ const routerAdd=Router();
 //**********************INSERTING details TO TABLE EmployeeDetails*********************//
 routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
     console.log("`/empAddContApi/Add` path called" );
-    const {empAddContDetails,lastAddedEmpId}=req.body;
-    const emp=empAddContDetails
-    console.log(emp);
+    const {empAddContArray,lastAddedEmpId}=req.body;
     console.log("employee Id latest="+lastAddedEmpId);
-//creating a varriabile and putting all details in it to send it into database    
+    console.log(empAddContArray);
+   
+
+    empAddContArray.map(emp=>{
+        
+    //creating a varriabile and putting all details in it to send it into database    
     const empPost={
         empId: lastAddedEmpId,
-        address1: emp.address1,
+        address1: emp.add1,
+        apartment:emp.apartment,
         landMark: emp.landMark,
         city: emp.city,
         state: emp.state,
         pincode: 440018,
-        mobileNumber: emp.phone1,
-        alternateMobileNumber: emp.phone2,
-        landlineNumber: emp.phone3
+        mobileNumber: emp.mobNum,
+        alternateMobileNumber: emp.altMobNum,
+        
     }
-//query of sql to to insert data into "empaddcontact"
+    // query of sql to to insert data into "empaddcontact"
     const sql=("INSERT INTO empaddcontact SET ?");
     db.query(sql,empPost,err=>{
         if(!err){
             console.log("successfully added emp details in `empaddcontact` table");
-            res.send("successfully added emp details in `empaddcontact` table")
+            
         }else{
             console.log(err);
-            res.send(err)
+            
         }
     })
+
+    });
+ 
+
 });
 
 //*************************get request from FrontEnd**********************

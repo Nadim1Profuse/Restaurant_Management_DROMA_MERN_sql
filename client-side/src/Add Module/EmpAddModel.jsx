@@ -74,13 +74,13 @@ export default function EmpAddModel(props) {
 
 
 //Complte Form Details From All Section TO Sinlge Object
-  const empCompleteDetails={
-    empPersonalDetails,
-    empAddContDetails,
-    empProfDetails,
-    empEducationDetails,
-    empRefrenceDetails
-  }
+  // const empCompleteDetails={
+  //   empPersonalDetails,
+  //   empAddContDetails,
+  //   empProfDetails,
+  //   empEducationDetails,
+  //   empRefrenceDetails
+  // }
   
 
   useEffect(()=>{
@@ -147,7 +147,13 @@ export default function EmpAddModel(props) {
       return [...prev,empAddContDetails]
     });
     clearEmpAddContForm();
+
+    const empAddContListObj={empAddContArray};
+    console.log("empAddContArrayObject =");
+    console.log(empAddContListObj);
   }
+
+ 
 //******************Handling 3rd Section(Professional details)*****************
 
   // handling and saving Changes in EmployeeProfessional Details Form Data
@@ -175,6 +181,10 @@ export default function EmpAddModel(props) {
       return[...prev,empProfDetails]
     });
     clearEmpProfessionalForm();
+
+    const empProfListObj={empProfArray};
+    console.log("empProfessionalListObje=")
+    console.log(empProfListObj);
   }
 
 //******************Handling 4th Section(Education details)*****************
@@ -203,6 +213,10 @@ export default function EmpAddModel(props) {
       return[...prev,empEducationDetails]
     })
     clearEmpEducationForm();
+
+    const empEducationListObj={empProfArray};
+    console.log("empEducationListObje=")
+    console.log(empEducationListObj);
   }
 //******************Handling 5th Section(Reference Details)*****************
 
@@ -232,6 +246,10 @@ export default function EmpAddModel(props) {
       return[...prev,empRefrenceDetails]
     })
     clearEmpReferenceForm();
+
+    const empReferenceListObj={empProfArray};
+    console.log("empReferenceListObj=")
+    console.log(empReferenceListObj);
   }
 
 
@@ -239,43 +257,56 @@ export default function EmpAddModel(props) {
 //********************************Final Submission*************************************//
 function finalFullFormDetails(){
   setSubmitAllStage(true);
-  var lastAddedEmpId;
   console.log("clicked on full foem details")
-  console.log(empCompleteDetails);
+  console.log(empPersonalDetails);
+  console.log(empAddContArray);
+  console.log(empProfArray);
+  console.log(empEducationArray);
+  console.log(empReferenceArray)
+
+
+  var lastAddedEmpId;
+ 
+  
   //Sending Data To EMployeeDetails Api
-  Axios.post("http://localhost:3001/empDetailsApi/add",empPersonalDetails).then(res=>{
+  Axios.post("http://localhost:3001/empDetailsApi/add",empPersonalDetails)
+  .then(res=>{
   if(res.status===200){
     const lengthOfDataArr=(res.data).length;
     lastAddedEmpId=res.data[lengthOfDataArr-1].empId;
     console.log("successfully Added EMployeePersonal Details with empId="+lastAddedEmpId)
   
   //Sending Data To empAddCont Api   
-  Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added EmployeeAddcONT DETAILS")
-    console.log(res.data)
-  }})
+  Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContArray,...{lastAddedEmpId}}));
+  // .then(res=>{
+  // if(res.status===200){
+  //   console.log("Successfully added EmployeeAddcONT DETAILS")
+  //   console.log(res.data)
+  // }})
 
-  //Sending Data To empAddCont Api
-  Axios.post("http://localhost:3001/empProfApi/add",({empProfDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added EmpProfessional DETAILS")
-    console.log(res.data);
-  }});
+  //Sending Data To EmpProfessinal Api
+  Axios.post("http://localhost:3001/empProfApi/add",({empProfArray,...{lastAddedEmpId}}));
+  // .then(res=>{
+  // if(res.status===200){
+  //   console.log("Successfully added EmpProfessional DETAILS")
+  //   console.log(res.data);
+  // }});
   
   //Sending Data To empEducation Api
-  Axios.post("http://localhost:3001/empEduApi/add",({empEducationDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added EmpEducation DETAILS")
-    console.log(res.data)
-  }});
+  Axios.post("http://localhost:3001/empEduApi/add",({empEducationArray,...{lastAddedEmpId}}));
+  // .then(res=>{
+  // if(res.status===200){
+  //   console.log("Successfully added EmpEducation DETAILS")
+  //   console.log(res.data)
+  // }});
 
   //Sending Data To empRefrerence Api
-  Axios.post("http://localhost:3001/empReferApi/add",({empRefrenceDetails,...{lastAddedEmpId}})).then(res=>{
-  if(res.status===200){
-    console.log("Successfully added empRefrenceDetails DETAILS")
-    console.log(res.data)
-  }});
+  Axios.post("http://localhost:3001/empReferApi/add",({empReferenceArray,...{lastAddedEmpId}}));
+  // .then(res=>{
+  // if(res.status===200){
+  //   console.log("Successfully added empRefrenceDetails DETAILS")
+  //   console.log(res.data)
+  // }});
 
  
 

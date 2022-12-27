@@ -15,39 +15,36 @@ const body=app.use(bodyParser.json());
    //***************INSERTING/Adding details TO emp_education_details TABLE**************//
 
 routerEmpEdu.post("/empEduApi/add",body,(req,res)=>{
-    const {empEducationDetails,lastAddedEmpId}=req.body;
-    const emp=empEducationDetails;
-    console.log("empProfApi is called with id="+lastAddedEmpId)
-    console.log(emp);
+    const {empEducationArray,lastAddedEmpId}=req.body;
     
-//creating a Object and putting all details in it to send it into database
+    console.log("empProfApi is called with id="+lastAddedEmpId)
+    
+    console.log(empEducationArray);
+
+    empEducationArray.map(emp=>{
+    //creating a Object and putting all details in it to send it into database
     const post={
         empId:lastAddedEmpId,
-        ssc_percentage:emp.ssc_percentage,
-        hsc_percentage:emp.hsc_percentage,
-        graduation_Stream:emp.graduation_Stream,
-        year_of_Graduation:emp.year_of_Graduation,
-        post_Graduation_Stream:emp.post_Graduation_Stream,
-        year_of_pg:emp.year_of_pg,
-        college_name:emp.college_name,
-        university_name:emp.university_name,
-        any_diploma:emp.any_diploma,
-        any_Certification:emp.any_Certification
+        education:emp.education,
+        percentage:emp.percentage,
+        yearOfPassing:emp.yearOfPassing,
+        instituteName:emp.instituteName,
+        place:emp.place
     }
 
    //Sql Query String
-    const sql=("INSERT INTO emp_education_details SET ?");
+   const sql=("INSERT INTO emp_education_details SET ?");
 
-    //Sql Function To perform Db Operations
+    // Sql Function To perform Db Operations
     db.query(sql,post,err=>{
         if(!err){
-            console.log("successfully added doc in `emp_education_details` table");
-            res.send("successfully added doc in `emp_education_details` table");
+            console.log("successfully added doc in `emp_education_details` table");   
         }else{
-            console.log(err);
-            res.send(err);
+            console.log(err);    
         }
     })
+    })
+    
 
 })
 

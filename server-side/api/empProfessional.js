@@ -12,15 +12,17 @@ const body=app.use(bodyParser.json());
 
 //**********************INSERTING details TO TABLE EmployeeDetails*********************//
 routerEmpProf.post("/empProfApi/add",body,(req,res)=>{
-    const {empProfDetails,lastAddedEmpId}=req.body;
-    const emp=empProfDetails
-    console.log("empProfApi is caleed with id="+lastAddedEmpId)
-    console.log(emp);
+    const {empProfArray,lastAddedEmpId}=req.body;
+    console.log("empProfApi is caleed with id="+lastAddedEmpId);
+    console.log(empProfArray);
 
-//creating a varriabile and putting all details in it to send it into database
+    empProfArray.map(emp=>{
+
+    //creating a varriabile and putting all details in it to send it into database
     const post={
         empId:lastAddedEmpId,
         company_Name:emp.company_Name,
+        isCurrent:emp.isCurrent,
         designation:emp.designation,
         joining_Date:emp.joining_Date,
         ending_Date:emp.ending_Date,
@@ -28,19 +30,20 @@ routerEmpProf.post("/empProfApi/add",body,(req,res)=>{
         salary:emp.salary
     }
 
-//query of sql to to insert data into "employeement_professional_details"
- const sql=("INSERT INTO employeement_professional_details SET ?");
+    //query of sql to to insert data into "employeement_professional_details"
+    const sql=("INSERT INTO employeement_professional_details SET ?");
 
     db.query(sql,post,err=>{
         if(!err){
-            console.log("successfully inserted docs into `employeement_professional_details` table");
-            res.send("successfully inserted docs into `employeement_professional_details` table");
-            
+            console.log("successfully inserted docs into `employeement_professional_details` table");   
         }else{
-            console.log(err);
-            res.send(err);
+            console.log(err);     
         }
     });
+
+    })
+
+
 });
 
 //{2}*************************get request from FrontEnd**********************{2}//
