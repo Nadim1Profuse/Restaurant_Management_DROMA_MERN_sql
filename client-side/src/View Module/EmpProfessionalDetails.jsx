@@ -26,32 +26,55 @@ import Axios from "axios"
     console.log(sortedEmp);
 
     return(
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-    <Table striped bordered hover style={{border:"2px solid #198754",borderRadius:"2rem",textAlign:"center"}}>
-      <thead style={{backgroundColor:"#1976d2",color:"whitesmoke",borderRadius:"1rem"}}>
-        <tr>
-          <th>Employee Id</th> <th>Previous Company Name</th> <th>Designation</th> 
-          <th>Joining Date</th> <th>Resign Date</th> <th>Reason Of Resignation</th> <th>Salary</th> 
+    // <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    // <Table striped bordered hover style={{border:"2px solid #198754",borderRadius:"2rem",textAlign:"center"}}>
+    //   <thead style={{backgroundColor:"#1976d2",color:"whitesmoke",borderRadius:"1rem"}}>
+    //     <tr>
+    //       <th>Employee Id</th> <th>Previous Company Name</th> <th>Designation</th> 
+    //       <th>Joining Date</th> <th>Resign Date</th> <th>Reason Of Resignation</th> <th>Salary</th> 
           
-        </tr>
-      </thead>
-      <tbody >
-        {
-          sortedEmp.map(emp=>{
-            return <tr>
-                    <td>{emp.empId}</td>
-                    <td>{emp.company_Name}</td>
-                    <td>{emp.designation}</td>
-                    <td>{emp.joining_Date}</td>
-                    <td>{emp.ending_Date}</td>
-                    <td>{emp.reasonOfResign}</td>
-                    <td>{emp.salary}</td> 
-                   </tr>
-          })
-          }
-      </tbody>
-    </Table>
-    </Paper>
+    //     </tr>
+    //   </thead>
+    //   <tbody >
+    //     {
+    //       sortedEmp.map(emp=>{
+    //         return <tr>
+    //                 <td>{emp.empId}</td>
+    //                 <td>{emp.company_Name}</td>
+    //                 <td>{emp.designation}</td>
+    //                 <td>{emp.joining_Date}</td>
+    //                 <td>{emp.ending_Date}</td>
+    //                 <td>{emp.reasonOfResign}</td>
+    //                 <td>{emp.salary}</td> 
+    //                </tr>
+    //       })
+    //       }
+    //   </tbody>
+    // </Table>
+    // </Paper>
+
+    <div className="addressList">
+      <Paper  style={{margin:"14px 14px 5px 14px"}}><h2>Professional Summery</h2></Paper>
+      <Paper elevation={8} style={{ textAlign: "center", margin: "14px" }}>
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>Employee Id</th> <th>Company Name</th> <th>Is It Current Company</th><th>Designation</th>
+              <th>Joininig Date</th> <th>Date Of Resign</th> <th>Reason Of Resignation</th> <th>Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedEmp.map((emp, index) => {
+              return <tr>
+                <td>{emp.empId}</td><td>{emp.company_Name}</td> <td>{emp.isCurrent}</td>
+                <td>{emp.designation}</td>  <td>{emp.joining_Date}</td> <td>{emp.ending_Date}</td> 
+                <td>{emp.reasonOfResign}</td> <td>{emp.salary}</td>
+              </tr>;
+            })}
+          </tbody>
+        </Table>
+      </Paper>
+    </div>
     )
 
 

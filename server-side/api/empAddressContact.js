@@ -24,14 +24,14 @@ routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
     //creating a varriabile and putting all details in it to send it into database    
     const empPost={
         empId: lastAddedEmpId,
-        address1: emp.add1,
+        address1: emp.address1,
         apartment:emp.apartment,
         landMark: emp.landMark,
         city: emp.city,
         state: emp.state,
         pincode: 440018,
-        mobileNumber: emp.mobNum,
-        alternateMobileNumber: emp.altMobNum,
+        mobileNumber: emp.mobileNumber,
+        alternateMobileNumber: emp.alternateMobileNumber,
         
     }
     // query of sql to to insert data into "empaddcontact"
@@ -58,10 +58,40 @@ routerAdd.get("/empAddContApi/get",(req,res)=>{
     const sql="SELECT * FROM empaddcontact"
     db.query(sql,(err,emp)=>{
         if(!err){
-            console.log(emp)
+            // console.log(emp)
             res.send(emp);
         }else{
             console.log(err)
+        }
+    })
+});
+
+//getting A Specefic Data Of EmployeeAddressContact By Employee Id
+
+routerAdd.get("/empAddContApi/get/:empId",(req,res)=>{
+    const empId=req.params.empId;
+    const sql=`select * from empaddcontact where empId=${empId} `
+    db.query(sql,(err,emp)=>{
+        if(!err){
+            res.send(emp);
+            // console.log(emp);
+            console.log("empAddressContactFor id="+empId)
+        }else{
+            console.log(err);
+        }
+    })
+});
+
+//deleting old and updating new addressContact By EMployee Id
+routerAdd.post("/empAddContact/delete/:id",(req,res)=>{
+    const empIdForDelete=req.params.id;
+    const sql=`delete from empaddcontact where empId=${empIdForDelete}`
+    db.query(sql,err=>{
+        if(!err){
+            res.send("successfully deleted address contact for empId="+empIdForDelete)
+            console.log("successfully deleted All Address Contact of empId="+empIdForDelete);
+        }else{
+            console.log(err);
         }
     })
 });

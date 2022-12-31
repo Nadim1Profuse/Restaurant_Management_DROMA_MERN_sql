@@ -3,12 +3,12 @@ import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-import EmptyListWarning from "./EmptyListWarning";
+// import EmptyListWarning from "./EmptyListWarning";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 
-export default function EmpRefrenceForm(props){
+export default function EmpRefrenceUpdate(props){
 
   const [empReferenceList,setEmpReferenceList]=useState([]);
   const [modalShow, setModalShow] =useState(false);
@@ -17,15 +17,6 @@ export default function EmpRefrenceForm(props){
     setEmpReferenceList((props.emRefrnceArray).reverse())
   },[props.emRefrnceArray]);
 
-   
-function handleSubmit(e){
-  e.preventDefault();
-  if(empReferenceList.length !==0){
-    props.submitNext();
-  }else{
-    setModalShow(true)
-  }
-}
 
 function addToArray(e){
   e.preventDefault();
@@ -43,13 +34,13 @@ const inputs=[
 ]
   return (
   <>
-    <EmptyListWarning
+    {/* <EmptyListWarning
       show={modalShow}
       onHide={() => setModalShow(false)}
       heading="Reference List Can't be Empty!!" 
       body="Please Add atleast one Entry in Reference Details List. 
             It can't be Empty "
-    />
+    /> */}
     <Form onSubmit={addToArray}>
     <div style={{display:"flex"}} >
       <div style={{flex: "0 0 calc(50% - .50rem)"}}>
@@ -77,12 +68,12 @@ const inputs=[
       <div style={{display:"flex",justifyContent:"space-between"}}>
         <div style={{textAlign: "start"}}>
         <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.prevSection}><KeyboardDoubleArrowLeftIcon/>Previous Section</Button>
-        <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={handleSubmit}>Next Section<DoubleArrowIcon/></Button>
+        {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.submitNext}>Next Section<DoubleArrowIcon/></Button> */}
         </div>
 
         <div style={{textAlign: "end"}} >
-        <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add Reference</Button>
-        <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
+        <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update Details</Button>
+        {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button> */}
         </div>
       </div>
 

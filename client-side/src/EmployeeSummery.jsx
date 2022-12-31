@@ -7,18 +7,22 @@ import Button from "react-bootstrap/esm/Button";
 import EmpDelteAlert from "./DeleteAlertModel";
 import EmpAddModel from "./Add Module/EmpAddModel";
 import EmpViewModel from "./View Module/EmpViewModel";
+import EmpUpdateModel from "./Update Module/EmpUpdateModel";
+
 
 
 export default function EmployeeSummery(props){
 
   const [employees,setEmployees]=useState([]);
   const [isEmpSummryShow,setEmpSummeryShow]=useState(true)
-  const [isDeleteConfirmed,setDeleteConfirmed]=useState(false)
   const [isAddEmpRender,setAddEmpRender]=useState(false);
   const [isAddEmpOpen,setAddEmpOpen]=useState(false);
   const [isViewEmpOpen,setViewEmpOpen]=useState(false);
   const [isViewEmpRender,setViewEmpRender]=useState(false)
+  const [isUpdateEmpOpen,setUpdateEmpOpen]=useState(false);
+  const [isUpdateEmpRender,setUpdateEmpRender]=useState(false);
   const [clickedViewId,setClickViewId]=useState();
+  const [clickedUpdateId,setClickUpdateId]=useState();
   const [modalShow, setModalShow] = useState(false);
   const [empIdForDelete,setEmpIdForDelete]=useState();
 
@@ -41,14 +45,17 @@ export default function EmployeeSummery(props){
       
       setEmpSummeryShow(false);
       setClickViewId(e.target.value);
-      setEmpSummeryShow(false);
       console.log("handle view executed and id is= "+e.target.value)
       setViewEmpRender(true)
       setViewEmpOpen(prev=>!prev);
-
     }
 
     function handleUpdate(e){
+
+      setEmpSummeryShow(false);
+      setClickUpdateId(e.target.value);
+      setUpdateEmpRender(true);
+      setUpdateEmpOpen(prev=>!prev);
       console.log("handle updtate executed and id is= "+e.target.value);
 
     }
@@ -56,7 +63,6 @@ export default function EmployeeSummery(props){
     function handleDelte(e){
       setModalShow(true);
       setEmpIdForDelete(e.target.value);
-
     }
 
     function confirmDelte(){
@@ -86,6 +92,14 @@ export default function EmployeeSummery(props){
                         viewEmpId={clickedViewId}
                         closeViewModule={()=>setViewEmpRender(false)}
                         /> : null
+    }
+    {
+      isUpdateEmpRender ? <EmpUpdateModel
+                          empUpdateModelStatus={isUpdateEmpOpen}
+                          empIdForUpdate={clickedUpdateId}
+                          closeUpdateModel={()=>setUpdateEmpRender(false)}
+                          
+      /> : null
     }
       
 

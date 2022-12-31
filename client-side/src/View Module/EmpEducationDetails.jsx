@@ -26,37 +26,28 @@ import Axios from "axios"
     console.log(sortedEmp);
 
     return(
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-    <Table striped bordered hover style={{border:"2px solid #198754",borderRadius:"2rem",textAlign:"center"}}>
-      <thead style={{backgroundColor:"#1976d2",color:"whitesmoke",borderRadius:"1rem"}}>
-        <tr>
-          <th>Employee Id</th> <th>Percentage/CGPA SSC</th> <th>Percentage/CGPA HSC</th> 
-          <th>Graduation Stream</th> <th>Year Of Graduate</th> <th>Post Graduation In</th> <th>Year Of PG</th>
-          <th>College Name</th> <th>University Name</th> <th>Any Diploma</th> <th>Any Certificates</th>
-          
-        </tr>
-      </thead>
-      <tbody >
-        {
-          sortedEmp.map(emp=>{
-            return <tr>
-                    <td>{emp.empId}</td>
-                    <td>{emp.ssc_percentage}</td>
-                    <td>{emp.hsc_percentage}</td>
-                    <td>{emp.graduation_Stream}</td>
-                    <td>{emp.year_of_Graduation}</td>
-                    <td>{emp.post_Graduation_Stream}</td>
-                    <td>{emp.year_of_pg}</td> 
-                    <td>{emp.college_name}</td>
-                    <td>{emp.university_name}</td> 
-                    <td>{emp.any_diploma}</td>
-                    <td>{emp.any_Certification}</td>
-                   </tr>
-          })
-          }
-      </tbody>
-    </Table>
-    </Paper>
+    <div className="addressList">
+    <Paper  style={{margin:"14px 14px 5px 14px"}}><h2>Education Summery</h2></Paper>
+        <Paper elevation={8} style={{ textAlign: "center", margin: "14px" }}>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Employee ID</th> <th>Education Details</th> <th>Percentage/CGPA/Grades</th><th>Year Of Passing</th>
+                <th>Name OF Institution</th> <th>Place </th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedEmp.map((emp, index) => {
+                return <tr>
+                  <td>{emp.empId}</td><td>{emp.education}</td>
+                  <td>{emp.percentage}</td> <td>{emp.yearOfPassing}</td> <td>{emp.instituteName}</td> <td>{emp.place}</td>
+
+                </tr>;
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+    </div>
     )
 
 

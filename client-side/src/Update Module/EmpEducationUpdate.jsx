@@ -3,12 +3,11 @@ import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-import EmptyListWarning from "./EmptyListWarning";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 
-export default function EmpEducationDetails(props){
+export default function EmpEducationUpdate(props){
 
   const [empEducationList,setEmpEducationList]=useState([]);
   const [modalShow, setModalShow] =useState(false);
@@ -17,14 +16,14 @@ export default function EmpEducationDetails(props){
     setEmpEducationList(((props.empEducationArray).reverse()))
   },[props.empEducationArray])
    
-function handleSubmit(e){
-  e.preventDefault();
-  if(empEducationList.length !==0){
-    props.submitNext();
-  }else{
-    setModalShow(true);
-  }     
-}
+// function handleSubmit(e){
+//   e.preventDefault();
+//   if(empEducationList.length !==0){
+//     props.submitNext();
+//   }else{
+//     setModalShow(true);
+//   }     
+// }
 
 function addToArray(e){
   e.preventDefault();
@@ -43,13 +42,13 @@ const inputs=[
 
   return (
   <>
-    <EmptyListWarning
+    {/* <EmptyListWarning
       show={modalShow}
       onHide={() => setModalShow(false)}
       heading="Education List Can't be Empty!!" 
       body="Please Add atleast one Entry in Education Details List. 
             It can't be Empty "
-    />
+    /> */}
 
     <Form onSubmit={addToArray}>
       <div style={{ display: "flex" }}>
@@ -78,12 +77,12 @@ const inputs=[
           <div style={{display:"flex",justifyContent:"space-between"}}>
             <div style={{textAlign: "start"}}>
             <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.prevSection}><KeyboardDoubleArrowLeftIcon/>Previous Section</Button>
-            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={handleSubmit}>Next Section<DoubleArrowIcon/></Button>
+            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.submitNext}>Next Section<DoubleArrowIcon/></Button>
             </div>
 
             <div style={{textAlign: "end"}} >
-            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add Education</Button>
-            <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
+            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update Details</Button>
+            {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button> */}
             </div>
           </div>
 

@@ -1,36 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import CancelIcon from '@mui/icons-material/Cancel';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import EmpDetailsForm from './EmpDetailsForm';
-import EmpAddContForm from './EmpAddContForm';
-import EmpProfDetails from './EmpProfForm';
-import EmpEducationDetails from './EmpEducationForm';
-import EmpRefrenceForm from './EmpReferenceForm';
-import EmpFullFormDetails from './EmpFullFormDetails';
-import CloseAddModel from './CloseAddModel';
+import EmpDetailsUpdate from './EmpDetailsUpdate';
+import EmpAddContUpdate from './EmpAddContUpdate';
+import EmpProfUpdate from './EmpProfUpdate';
+import EmpEducationUpdate from './EmpEducationUpdate';
+import EmpRefrenceUpdate from './EmpReferenceUpdate';
+// import CloseAddModel from './CloseAddModel';
 import Axios from "axios";
+import UpdateSummeryPopUp from './UpdateSummeryPopup';
 
 
 
 
-export default function EmpAddModel(props) {
-  const [isEmpAddOpen,setEmpAddOpen]=useState(true);
+export default function EmpUpdateModel(props) {
+  const [isEmpUpdateOpen,setEmpUpdateOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
-  const [sectionDisabled,setSectionDisabled]=useState({
-    personalDetails:false,
-    addContDetails:true,
-    professionalDetails:true,
-    educationDetails:true,
-    referenceDetails:true,
-    finalSubmit:true
-  });
   const [modalShow, setModalShow] = useState(false);
-  const [submitAllStage,setSubmitAllStage]=useState(false);
+  const [firstLoad,setFirstLoad]=useState(true)
+  
 
 //******************Initailasing The State Of Every Form SecTion******************//
   const [empPersonalDetails,setEmpPersonalDetails]=useState({
@@ -40,11 +32,12 @@ export default function EmpAddModel(props) {
 
   //------------------States Fro Employee Address/Contact Section----------//
   const[empAddContDetails,setEmpAddContDetails]=useState({
-    add1:"", apartment:"", landMark:"", city:"",
-    state:"", pincode:"", mobNum:"", altMobNum:""
+    address1:"", apartment:"", landMark:"", city:"",
+    state:"", pincode:"", mobileNumber:"", alternateMobileNumber:""
   });
 
   const [empAddContArray,setEmpAddContArray]=useState([]);
+  
 
   //------------------States Fro Employee Professional Section----------//
 
@@ -75,15 +68,42 @@ export default function EmpAddModel(props) {
 
 
   useEffect(()=>{
-    setEmpAddOpen(true);
-  },[props.empAddModelOpen]);
+    setEmpUpdateOpen(true);
+  },[props.empUpdateModelStatus]);
+
+  const empIdForUpdate=props.empIdForUpdate;
+  console.log(empIdForUpdate);
+ 
+  useEffect(()=>{
+    if(firstLoad){
+      setFirstLoad(false);
+      Axios.get(`http://localhost:3001/empDetailsApi/get/${empIdForUpdate}`).then((res)=>{
+        setEmpPersonalDetails(res.data[0]);
+        console.log(res.data[0]);
+      });
+
+      
+    }
+    console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
+  },[]);
+
+  useEffect(()=>{
+    Axios.get(`http://localhost:3001/empAddContApi/get/${empIdForUpdate}`).then(res=>{
+        setEmpAddContArray(res.data)
+        console.log(res.data);
+        console.log("empUpdateModue UseEffect for addresscontcat api");
+      })
+
+  },[])
+
+  
 
   const radios = [
-    { name: 'Personal Details', value: 'personalDetailsClicked', isDisabled:sectionDisabled.personalDetails},
-    { name: 'Address/Contact Details', value: 'addContClicked', isDisabled:sectionDisabled.addContDetails },
-    { name: 'Professonal Details', value: 'profClicked', isDisabled:sectionDisabled.professionalDetails },
-    { name: 'Education Details', value: 'educationClicked', isDisabled:sectionDisabled.educationDetails },
-    { name: 'Reference Details', value: 'referenceClicked', isDisabled:sectionDisabled.referenceDetails} 
+    { name: 'Personal Details', value: 'personalDetailsClicked'},
+    { name: 'Address/Contact Details', value: 'addContClicked' },
+    { name: 'Professonal Details', value: 'profClicked' },
+    { name: 'Education Details', value: 'educationClicked' },
+    { name: 'Reference Details', value: 'referenceClicked'} 
   ];
 
   //*************Handling 1st Section(Personal Details)***********
@@ -109,6 +129,23 @@ export default function EmpAddModel(props) {
     })
   }
 
+//Updating Section
+
+  function empPersonalDetailsUpdate(){
+    setRadioValue('addContClicked');
+    // console.log(empPersonalDetails);
+
+    const empUpdatedPersonalDetails={
+      updatedEmpPersonalDetails:empPersonalDetails,
+      empIdForUpdate:empIdForUpdate
+    }
+    // Calling Api to serverSide
+    console.log(empUpdatedPersonalDetails);
+    Axios.post("http://localhost:3001/empDetailsApi/update",empUpdatedPersonalDetails).then(res=>{
+      console.log(res.data)
+    })
+  }
+
 //******************Handling 2nd Section(Address and Contact details)*****************
 
   // handling and saving Changes in EmployeeAddressContact Details Form Data
@@ -125,23 +162,63 @@ export default function EmpAddModel(props) {
   //Clearing EmployeeAddressContact Form Feild On clicking Clear Button 
   function clearEmpAddContForm(){
     setEmpAddContDetails({
-      add1:"", apartment:"", landMark:"", city:"",
-      state:"", pincode:"", mobNum:"", altMobNum:""
+      address1:"", apartment:"", landMark:"", city:"",
+      state:"", pincode:"", mobileNumber:"", alternateMobileNumber:""
     })
   }
 
   //Adding Address/contact details In Table List 
-
   function addDetailsToArray(){
-    
     setEmpAddContArray(prev=>{
       return [...prev,empAddContDetails]
     });
     clearEmpAddContForm();
+  }
 
-    const empAddContListObj={empAddContArray};
-    console.log("empAddContArrayObject =");
-    console.log(empAddContListObj);
+// Handling CallBack Function For Update and Delete of Employee address contact
+  const [indexValueOfClickedAddCont,setIndexValueOfClickedAddCont]=useState();
+  // const empId=useRef(empAddContArray[0].empId);
+  
+  function updateEmpAddCont(e){
+    setIndexValueOfClickedAddCont(e.target.value);
+    console.log("update index of addresscontactArray="+e.target.value);
+    console.log(empAddContArray[e.target.value])
+    setEmpAddContDetails(empAddContArray[e.target.value])
+
+  }
+
+  function updateExistingAddCont(){
+    console.log("updating exixting address contact details for index value="+indexValueOfClickedAddCont);
+    const updatedEmpAddressContactArray=empAddContArray.map((emp,i)=>{
+      if(i==indexValueOfClickedAddCont){
+        return empAddContDetails;
+      }else{
+        return emp;
+      }
+    })
+    setEmpAddContArray(updatedEmpAddressContactArray);
+    console.log(updatedEmpAddressContactArray)
+    // empId.current=updatedEmpAddressContactArray[0].empId;
+    console.log("employee id for update="+empIdForUpdate);
+  }
+
+  function updateAddContSummery(){
+    setModalShow(true);
+    console.log("updateAddContSummery callback Function Latest Updated Summry=");
+    console.log(empAddContArray);
+    console.log("employee Id For Update EMployee Summery ="+empIdForUpdate)
+    Axios.post(`http://localhost:3001/empAddContact/delete/${empIdForUpdate}`).then(res=>{
+      console.log(res.data);
+      Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContArray,...{lastAddedEmpId:empIdForUpdate}})).then(res=>{
+        console.log("successfully Added Update Employee Address/Contact Summery");
+        
+      });
+    })
+   }
+
+  function deleteEmpAddCont(e){
+    console.log("delete index of addresscontactArray="+e.target.value)
+
   }
 
  
@@ -245,56 +322,15 @@ export default function EmpAddModel(props) {
 
 
 
-//********************************Final Submission*************************************//
-function finalFullFormDetails(){
-  setSubmitAllStage(true);
-  console.log("clicked on full foem details")
-  console.log(empPersonalDetails);
-  console.log(empAddContArray);
-  console.log(empProfArray);
-  console.log(empEducationArray);
-  console.log(empReferenceArray)
+//****************************Updating EmpPersonal Details*************************************//
 
-
-  var lastAddedEmpId;
- 
-  
-  //Sending Data To EMployeeDetails Api
-  Axios.post("http://localhost:3001/empDetailsApi/add",empPersonalDetails)
-  .then(res=>{
-  if(res.status===200){
-    const lengthOfDataArr=(res.data).length;
-    lastAddedEmpId=res.data[lengthOfDataArr-1].empId;
-    console.log("successfully Added EMployeePersonal Details with empId="+lastAddedEmpId)
-  
-  //Sending Data To empAddCont Api   
-  Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContArray,...{lastAddedEmpId}}));
- 
-
-  //Sending Data To EmpProfessinal Api
-  Axios.post("http://localhost:3001/empProfApi/add",({empProfArray,...{lastAddedEmpId}}));
- 
-  
-  //Sending Data To empEducation Api
-  Axios.post("http://localhost:3001/empEduApi/add",({empEducationArray,...{lastAddedEmpId}}));
- 
-  //Sending Data To empRefrerence Api
-  Axios.post("http://localhost:3001/empReferApi/add",({empReferenceArray,...{lastAddedEmpId}}));
-  
- 
-
-}}); 
-console.log("Full Data of employee is Compltely Saved In Data BAse")
-}
+// function updateEmpPersonnalDetails(){};
 
     
   return ( 
     <>
-    <div style={{ display: isEmpAddOpen ? "block" : "none" }}>
-    <CloseAddModel
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
+    <div style={{ display: isEmpUpdateOpen ? "block" : "none" }}>
+   
     <div style={{display: "flex",justifyContent: "space-between", margin:"7px"}}>
     <ButtonGroup>
         <ToggleButton
@@ -307,11 +343,11 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
             onChange={(e) => setRadioValue(e.currentTarget.value)}
             disabled
         >
-            Adding Employee Details
+            Updating Employee Details
         </ToggleButton>
     </ButtonGroup>
 
-    <Button onClick={() =>{if(submitAllStage){window.location.reload()}else{setModalShow(true)}}} variant="outline-danger"><CancelIcon/></Button>
+    <Button onClick={() =>{setEmpUpdateOpen(false); props.closeUpdateModel(); window.location.reload()}} variant="outline-danger"><CancelIcon/></Button>
 
     </div>
     
@@ -335,20 +371,7 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                </ToggleButton>
               </>
             ))}
-            <ToggleButton
-                key={1}
-                id={`1`}
-                type="radio"
-                variant={'outline-dark'}
-                name="radio"
-                value={"completed"}
-                checked={radioValue === "completed"}    
-                onChange={(e) => setRadioValue(e.currentTarget.value)}
-                disabled={sectionDisabled.finalSubmit}
-                >
-               <div >Final Submition</div>
-               <VerifiedIcon/> 
-            </ToggleButton>
+            
           </ButtonGroup>
         </Card.Header>
         <Card.Body>
@@ -357,12 +380,21 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
             <Card.Text style={{marginBottom:"0%"}} >
               {
                 radioValue==="personalDetailsClicked" ? 
-                <EmpDetailsForm 
-                  submitNext={()=>{setRadioValue('addContClicked');
-                  setSectionDisabled(prev=>{return{...prev,addContDetails:false}})}
-                  }
+                <>
+                <UpdateSummeryPopUp
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                heading="Successfully Updated Employee" 
+                body="Successfully Updated Employee Address/Contact Summery. 
+                      Click On Close Button "
+
+                />
+                
+                <EmpDetailsUpdate 
+                  submitNext={empPersonalDetailsUpdate}
                   handleChange={handleChangeEmpDetailsForm}
                   handleClear={clearEmpDetailsForm}
+                  // updateEmpDetails={updateEmpPersonnalDetails}
                   fName={empPersonalDetails.fName}
                   mName={empPersonalDetails.mName}
                   lName={empPersonalDetails.lName}
@@ -375,36 +407,45 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                   adharNumber={empPersonalDetails.adharNumber}
                   pancardNumber={empPersonalDetails.pancardNumber}
                   drivingLicenseNumber={empPersonalDetails.drivingLicenseNumber}
-                />:null
+                /> </> : null
+                
               }
               {
                 radioValue==="addContClicked" ? 
-                <EmpAddContForm
-                  submitNext={()=>{setRadioValue('profClicked');
-                  setSectionDisabled(prev=>{return{...prev,professionalDetails:false}})}
-                  }
+                <>
+                <UpdateSummeryPopUp
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                heading="Successfully Updated Employee" 
+                body="Successfully Updated Employee Address/Contact Summery. 
+                      Click On Close Button "
+
+                />
+                <EmpAddContUpdate
+                  submitNext={()=>{setRadioValue('profClicked')}}
                   prevSection={()=>setRadioValue('personalDetailsClicked')}
                   empAddArray={empAddContArray}
                   addDetailsToList={addDetailsToArray}
                   handleChange={handleChangeEmpAddContForm}
-                  handleClear={clearEmpAddContForm} 
-                  add1={empAddContDetails.add1}
+                  updateExistingAddCont={updateExistingAddCont}
+                  updateAddCont={updateEmpAddCont}
+                  deleteAddCont={deleteEmpAddCont} 
+                  updateAddContSummery={updateAddContSummery}
+                  address1={empAddContDetails.address1}
                   apartment={empAddContDetails.apartment}
                   landMark={empAddContDetails.landMark}
                   city={empAddContDetails.city}
                   state={empAddContDetails.state}
                   pincode={empAddContDetails.pincode}
-                  mobNum={empAddContDetails.mobNum}
-                  altMobNum={empAddContDetails.altMobNum}
+                  mobileNumber={empAddContDetails.mobileNumber}
+                  alternateMobileNumber={empAddContDetails.alternateMobileNumber}
 
-                /> : null
+                /></> : null
               }
               {
                 radioValue==="profClicked" ? 
-                <EmpProfDetails
-                 submitNext={()=>{setRadioValue(`educationClicked`);
-                 setSectionDisabled(prev=>{return{...prev,educationDetails:false}})}
-                 }
+                <EmpProfUpdate
+                 submitNext={()=>{setRadioValue(`educationClicked`)}}
                  prevSection={()=>setRadioValue('addContClicked')}
                  empProfArray={empProfArray}
                  addProfDetailsToList={addProfDetailsToArray}
@@ -421,10 +462,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               }
               {
                 radioValue==="educationClicked" ? 
-                <EmpEducationDetails
-                submitNext={()=>{setRadioValue('referenceClicked');
-                setSectionDisabled(prev=>{return{...prev,referenceDetails:false}})}
-                }
+                <EmpEducationUpdate
+                submitNext={()=>{setRadioValue('referenceClicked')}}
                 prevSection={()=>setRadioValue('profClicked')}
                 empEducationArray={empEducationArray}
                 addEducationDetailsToList={addEducationDetailToArray}
@@ -439,10 +478,8 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
               }
               {
                 radioValue==="referenceClicked" ? 
-                <EmpRefrenceForm
-                submitNext={()=>{setRadioValue('completed');
-                setSectionDisabled(prev=>{return{...prev,finalSubmit:false}})}
-                }
+                <EmpRefrenceUpdate
+                submitNext={()=>{setRadioValue('personalDetailsClicked')}}
                 prevSection={()=>setRadioValue('educationClicked')}
                 emRefrnceArray={empReferenceArray}
                 addRefrnceDetailsToList={addReferenceDetailsToArray}
@@ -457,13 +494,6 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
                 /> :null
               }
              
-              {
-                radioValue==="completed" ? 
-                <EmpFullFormDetails 
-                reviewIt={()=>setRadioValue('personalDetailsClicked')}
-                finalSubmit={finalFullFormDetails}
-                /> : null
-              }
             </Card.Text>
             
         </Card.Body>

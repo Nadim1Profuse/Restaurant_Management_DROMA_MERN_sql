@@ -3,41 +3,41 @@ import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-import EmptyListWarning from "./EmptyListWarning";
+import EmptyListWarning from "./UpdateSummeryPopup";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 
-export default function EmpAddContForm(props){
+export default function EmpAddContUpdate(props){
 
 const inputs=[
-    {name:"add1",type:"text",placeholder:"Address1",value:props.add1},
+    {name:"address1",type:"text",placeholder:"Address1",value:props.address1},
     {name:"apartment",type:"text",placeholder:"Apartment,suit etc",value:props.apartment},
     {name:"landMark",type:"text",placeholder:"Land Mark",value:props.landMark},
     {name:"city",type:"text",placeholder:"City",value:props.city},
     {name:"state",type:"text",placeholder:"State",value:props.state},
     {name:"pincode", type:"number", placeholder:"Pincode", value:props.pincode},
-    {name:"mobNum",type:"number",placeholder:"Mobile Number",value:props.mobNum},
-    {name:"altMobNum",type:"number",placeholder:"Alternate Mobile Number",value:props.altMobNum},
+    {name:"mobileNumber",type:"number",placeholder:"Mobile Number",value:props.mobileNumber},
+    {name:"alternateMobileNumber",type:"number",placeholder:"Alternate Mobile Number",value:props.alternateMobileNumber},
   ];
   const [empAddList,setEmpAddList]=useState([]);
   const [modalShow, setModalShow] =useState(false);
   
 
   useEffect(()=>{
-    setEmpAddList((props.empAddArray).reverse())
+    setEmpAddList((props.empAddArray))
   },[props.empAddArray]);
   
 
-  function handleSubmit(e){
-    e.preventDefault();
-    if(empAddList.length !==0){
-      props.submitNext();
-    }else{
-      setModalShow(true);
-    }
+  // function handleSubmit(e){
+  //   e.preventDefault();
+  //   if(empAddList.length !==0){
+  //     props.submitNext();
+  //   }else{
+  //     setModalShow(true);
+  //   }
     
-  }
+  // }
 
   function addToArray(e){
     e.preventDefault();
@@ -49,9 +49,9 @@ const inputs=[
     <EmptyListWarning
       show={modalShow}
       onHide={() => setModalShow(false)}
-      heading="Address and Contact List Can't Empty!!" 
-      body="Please Add atleast one Entry in Address and contact List. 
-            It can't be Empty "
+      heading="Successfully Updated Employee" 
+      body="Successfully Updated Employee Address/Contact Summery. 
+            Click On Close Button "
 
     />
     <Form onSubmit={addToArray}>
@@ -78,12 +78,12 @@ const inputs=[
             <div style={{display:"flex",justifyContent:"space-between"}}>
               <div style={{textAlign: "start"}}>
               <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.prevSection}><KeyboardDoubleArrowLeftIcon/>Previous Section</Button>
-              <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={handleSubmit}>Next Section<DoubleArrowIcon/></Button>
+              <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.submitNext}>Next Section<DoubleArrowIcon/></Button>
               </div>
 
               <div style={{textAlign: "end"}} >
-              <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add Address/Contact</Button>
-              <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button>
+              <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
+              <Button style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingAddCont}>Update this</Button>
               </div>
             </div>
             
@@ -93,22 +93,30 @@ const inputs=[
         </div>
         
         <div className="addressList">
-          <Paper  style={{margin:"14px 14px 5px 14px"}}><h2>Address/Contact Summery</h2></Paper>
+          <Paper  style={{margin:"14px 14px 5px 14px"}}>
+          <div style={{display:"flex", justifyContent:"space-between", padding:"3px"}}>
+          <h2>Address/Contact Summery</h2>
+          <Button variant="outline-primary" type="button" onClick={props.updateAddContSummery}>Update Complete Summery As Below</Button>
+          </div>
+          
+          </Paper>
           <Paper elevation={8} style={{ textAlign: "center", margin: "14px" }}>
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
                   <th>#</th> <th>Address1</th> <th>Apartment,suit etc</th><th>Land Mark</th>
                   <th>City</th> <th>State</th> <th>Pincode</th> <th>Mobile Number</th>
-                  <th>Alternate Mobile Number</th>
+                  <th>Alternate Mobile Number</th> <th>Update</th> <th>Update</th>
                 </tr>
               </thead>
               <tbody>
                 {empAddList.map((empAdd, index) => {
                   return <tr>
-                    <td>{(empAddList.length) - index}</td><td>{empAdd.add1}</td> <td>{empAdd.apartment}</td>
+                    <td>{index+1}</td><td>{empAdd.address1}</td> <td>{empAdd.apartment}</td>
                     <td>{empAdd.landMark}</td> <td>{empAdd.city}</td> <td>{empAdd.state}</td>
-                    <td>{empAdd.pincode}</td> <td>{empAdd.mobNum}</td> <td>{empAdd.altMobNum}</td>
+                    <td>{empAdd.pincode}</td> <td>{empAdd.mobileNumber}</td> <td>{empAdd.alternateMobileNumber}</td>
+                    <td><Button onClick={props.updateAddCont} variant="outline-primary" value={index}>Update</Button></td>
+                    <td><Button onClick={props.deleteAddCont} variant="outline-danger" value={index}>Delete</Button></td>
                   </tr>;
                 })}
               </tbody>

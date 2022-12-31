@@ -42,7 +42,7 @@ export default function EmpFullFormDetails(props) {
       <Alert.Heading>Hey, you have Submited All Details Of Employee</Alert.Heading>
       <p>
         Successfully Saved All Details<br/>
-        Click On <b>Close Add Employee</b>
+        Click On <b>Close Icon on Top</b>
       </p>
       
     </Alert>

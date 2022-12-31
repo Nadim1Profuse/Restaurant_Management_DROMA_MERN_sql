@@ -26,19 +26,21 @@ import Axios from "axios"
     console.log(sortedEmp);
 
     return(
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-    <Table striped bordered hover style={{border:"2px solid #198754",borderRadius:"2rem",textAlign:"center"}}>
-      <thead style={{backgroundColor:"#1976d2",color:"whitesmoke",borderRadius:"1rem"}}>
-        <tr>
-          <th>Employee Id</th> <th>First Name</th> <th>Middle Name</th> <th>Last Name</th>
-          <th>Age </th> <th>Gender</th> <th>Blood Group</th> <th>PWD Status</th><th>Department</th> 
-          <th>Designation</th> <th>Adhar Number</th> <th>PanCard Number</th> <th>Driving License Number</th>
-        </tr>
-      </thead>
-      <tbody >
-        {
-          sortedEmp.map(emp=>{
-            return <tr>
+   
+    <div className="addressList">
+    <Paper  style={{margin:"14px 14px 5px 14px"}}><h2>General Details</h2></Paper>
+      <Paper elevation={8} style={{ textAlign: "center", margin: "14px" }}>
+        <Table striped bordered hover size="sm">
+          <thead>
+          <tr>
+           <th>Employee Id</th> <th>First Name</th> <th>Middle Name</th> <th>Last Name</th>
+           <th>Age </th> <th>Gender</th> <th>Blood Group</th> <th>PWD Status</th><th>Department</th> 
+           <th>Designation</th> <th>Adhar Number</th> <th>PanCard Number</th> <th>Driving License Number</th>
+          </tr>
+          </thead>
+          <tbody>
+            {sortedEmp.map((emp) => {
+              return <tr>
                     <td>{emp.empId}</td>
                     <td>{emp.fName}</td>
                     <td>{emp.mName}</td>
@@ -53,11 +55,11 @@ import Axios from "axios"
                     <td>{emp.pancardNumber}</td>
                     <td>{emp.drivingLicenseNumber}</td>
                    </tr>
-          })
-          }
-      </tbody>
-    </Table>
-    </Paper>
+            })}
+          </tbody>
+        </Table>
+      </Paper>
+    </div>
     )
 
 

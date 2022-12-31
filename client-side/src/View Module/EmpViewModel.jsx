@@ -30,8 +30,6 @@ export default function EmpViewModel(props){
         
       ];
 
-     
-
 
     return(
         <>
