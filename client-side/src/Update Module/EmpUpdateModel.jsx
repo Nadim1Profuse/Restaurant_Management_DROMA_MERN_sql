@@ -13,6 +13,8 @@ import EmpRefrenceUpdate from './EmpReferenceUpdate';
 // import CloseAddModel from './CloseAddModel';
 import Axios from "axios";
 import UpdateSummeryPopUp from './UpdateSummeryPopup';
+import DeleteItemFromSummeryPopUp from './UpdateSummeryPopup'
+import UpdatedListItemPopUp from './UpdateSummeryPopup'
 
 
 
@@ -21,6 +23,10 @@ export default function EmpUpdateModel(props) {
   const [isEmpUpdateOpen,setEmpUpdateOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
   const [modalShow, setModalShow] = useState(false);
+  const [modalShowDeleteItem,setModalShowDeleteItem]=useState(false);
+  const [modalShowUpdateItem,setModalShowpdateItem]=useState(false);
+  const [isUpdateBtnDisable,setUpdateBtnDisable]=useState(true);
+  const [isAddNewBtnDisable,setAddNewBtnDisable]=useState(false);
   const [firstLoad,setFirstLoad]=useState(true)
   
 
@@ -179,12 +185,14 @@ export default function EmpUpdateModel(props) {
   const [indexValueOfClickedAddCont,setIndexValueOfClickedAddCont]=useState();
   // const empId=useRef(empAddContArray[0].empId);
   
-  function updateEmpAddCont(e){
+  function handleUpdateEmpAddContList(e){
     setIndexValueOfClickedAddCont(e.target.value);
     console.log("update index of addresscontactArray="+e.target.value);
     console.log(empAddContArray[e.target.value])
     setEmpAddContDetails(empAddContArray[e.target.value])
-
+    setUpdateBtnDisable(false);
+    setAddNewBtnDisable(true);
+  
   }
 
   function updateExistingAddCont(){
@@ -200,6 +208,11 @@ export default function EmpUpdateModel(props) {
     console.log(updatedEmpAddressContactArray)
     // empId.current=updatedEmpAddressContactArray[0].empId;
     console.log("employee id for update="+empIdForUpdate);
+    setUpdateBtnDisable(true);
+    setAddNewBtnDisable(false);
+    setModalShowpdateItem(true);
+    clearEmpAddContForm();
+
   }
 
   function updateAddContSummery(){
@@ -217,7 +230,13 @@ export default function EmpUpdateModel(props) {
    }
 
   function deleteEmpAddCont(e){
-    console.log("delete index of addresscontactArray="+e.target.value)
+    console.log("succsesfully deleted addresscontact from array where index="+e.target.value)
+    setEmpAddContArray(prev=>{
+      return prev.filter((addCont,index)=>{
+        return (index!=e.target.value)
+      })
+    });
+    setModalShowDeleteItem(true);
 
   }
 
@@ -321,14 +340,24 @@ export default function EmpUpdateModel(props) {
   }
 
 
-
-//****************************Updating EmpPersonal Details*************************************//
-
-// function updateEmpPersonnalDetails(){};
-
     
   return ( 
     <>
+    <UpdatedListItemPopUp
+    show={modalShowUpdateItem}
+                onHide={() => setModalShowpdateItem(false)}
+                heading="Successfully Updated this List Item From Summery list" 
+                body="Click On  'Update Complete Summery'  To Finalized Updete "
+
+    />
+
+    <DeleteItemFromSummeryPopUp
+    show={modalShowDeleteItem}
+                onHide={() => setModalShowDeleteItem(false)}
+                heading="Successfully Deleted From Summery" 
+                body="Click On  'Update Complete Summery'  To Finalized Updete "
+
+    />
     <div style={{ display: isEmpUpdateOpen ? "block" : "none" }}>
    
     <div style={{display: "flex",justifyContent: "space-between", margin:"7px"}}>
@@ -418,7 +447,7 @@ export default function EmpUpdateModel(props) {
                 onHide={() => setModalShow(false)}
                 heading="Successfully Updated Employee" 
                 body="Successfully Updated Employee Address/Contact Summery. 
-                      Click On Close Button "
+                      Click On 'Next Section' If Wan't to Update More "
 
                 />
                 <EmpAddContUpdate
@@ -428,9 +457,11 @@ export default function EmpUpdateModel(props) {
                   addDetailsToList={addDetailsToArray}
                   handleChange={handleChangeEmpAddContForm}
                   updateExistingAddCont={updateExistingAddCont}
-                  updateAddCont={updateEmpAddCont}
+                  updateAddCont={handleUpdateEmpAddContList}
                   deleteAddCont={deleteEmpAddCont} 
                   updateAddContSummery={updateAddContSummery}
+                  isUpdateBtnDisable={isUpdateBtnDisable}
+                  isAddNewBtnDisable={isAddNewBtnDisable}
                   address1={empAddContDetails.address1}
                   apartment={empAddContDetails.apartment}
                   landMark={empAddContDetails.landMark}

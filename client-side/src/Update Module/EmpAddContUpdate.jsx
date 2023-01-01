@@ -82,8 +82,8 @@ const inputs=[
               </div>
 
               <div style={{textAlign: "end"}} >
-              <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
-              <Button style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingAddCont}>Update this</Button>
+              <Button disabled={props.isAddNewBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
+              <Button disabled={props.isUpdateBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingAddCont} >Update this</Button>
               </div>
             </div>
             
