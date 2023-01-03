@@ -3,7 +3,6 @@ import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-import EmptyListWarning from "./UpdateSummeryPopup";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
@@ -20,24 +19,15 @@ const inputs=[
     {name:"mobileNumber",type:"number",placeholder:"Mobile Number",value:props.mobileNumber},
     {name:"alternateMobileNumber",type:"number",placeholder:"Alternate Mobile Number",value:props.alternateMobileNumber},
   ];
-  const [empAddList,setEmpAddList]=useState([]);
-  const [modalShow, setModalShow] =useState(false);
-  
 
+  const [empAddList,setEmpAddList]=useState([]);
+  
   useEffect(()=>{
     setEmpAddList((props.empAddArray))
   },[props.empAddArray]);
   
 
-  // function handleSubmit(e){
-  //   e.preventDefault();
-  //   if(empAddList.length !==0){
-  //     props.submitNext();
-  //   }else{
-  //     setModalShow(true);
-  //   }
-    
-  // }
+ 
 
   function addToArray(e){
     e.preventDefault();
@@ -46,14 +36,6 @@ const inputs=[
 
   return (
   <>
-    <EmptyListWarning
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-      heading="Successfully Updated Employee" 
-      body="Successfully Updated Employee Address/Contact Summery. 
-            Click On Close Button "
-
-    />
     <Form onSubmit={addToArray}>
         <div style={{ display: "flex" }}>
           <div style={{ flex: "0 0 calc(50% - .50rem)" }}>
@@ -83,22 +65,17 @@ const inputs=[
 
               <div style={{textAlign: "end"}} >
               <Button disabled={props.isAddNewBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
-              <Button disabled={props.isUpdateBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingAddCont} >Update this</Button>
+              <Button disabled={props.isUpdateBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingAddCont} >Update</Button>
               </div>
             </div>
             
-
           </div>
 
         </div>
         
         <div className="addressList">
-          <Paper  style={{margin:"14px 14px 5px 14px"}}>
-          <div style={{display:"flex", justifyContent:"space-between", padding:"3px"}}>
+          <Paper  style={{margin:"14px 14px 5px 14px",padding:"3px"}}>
           <h2>Address/Contact Summery</h2>
-          <Button variant="outline-primary" type="button" onClick={props.updateAddContSummery}>Update Complete Summery As Below</Button>
-          </div>
-          
           </Paper>
           <Paper elevation={8} style={{ textAlign: "center", margin: "14px" }}>
             <Table striped bordered hover size="sm">

@@ -11,7 +11,7 @@ export default function EmpDetailsUpdate(props) {
   
   function handleSubmit(e){
     e.preventDefault();
-    props.submitNext();
+    props.updateEmpDetails();
   }
  
   const inputs=[
@@ -71,13 +71,11 @@ export default function EmpDetailsUpdate(props) {
 
           <div style={{display:"flex",justifyContent:"space-between"}}>
             <div style={{textAlign: "start"}}>
-            {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.prevSection}><KeyboardDoubleArrowLeftIcon/>Previous Section</Button> */}
             <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="button" onClick={props.submitNext}>Next Section<DoubleArrowIcon/></Button>
             </div>
 
             <div style={{textAlign: "end"}} >
-            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update Details</Button>
-            {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button> */}
+            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update</Button>
             </div>
           </div>
 
@@ -85,11 +83,6 @@ export default function EmpDetailsUpdate(props) {
       </div>
 
     </div>  
-      
-      {/* <div style={{textAlign: "end"}}>
-      <Button style={{margin:"0 5px 0 5px"}} variant="outline-success" type="submit" >Save and Next<DoubleArrowIcon/></Button>
-      <Button style={{margin:"0 5px 0 5px"}} variant="outline-warning" type="button" onClick={props.handleClear}>Clear All</Button>
-      </div> */}
       
     </Form>
   );

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -10,11 +11,10 @@ import EmpAddContUpdate from './EmpAddContUpdate';
 import EmpProfUpdate from './EmpProfUpdate';
 import EmpEducationUpdate from './EmpEducationUpdate';
 import EmpRefrenceUpdate from './EmpReferenceUpdate';
-// import CloseAddModel from './CloseAddModel';
 import Axios from "axios";
-import UpdateSummeryPopUp from './UpdateSummeryPopup';
 import DeleteItemFromSummeryPopUp from './UpdateSummeryPopup'
 import UpdatedListItemPopUp from './UpdateSummeryPopup'
+
 
 
 
@@ -22,15 +22,17 @@ import UpdatedListItemPopUp from './UpdateSummeryPopup'
 export default function EmpUpdateModel(props) {
   const [isEmpUpdateOpen,setEmpUpdateOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
-  const [modalShow, setModalShow] = useState(false);
+  // const [modalShow, setModalShow] = useState(false);
   const [modalShowDeleteItem,setModalShowDeleteItem]=useState(false);
-  const [modalShowUpdateItem,setModalShowpdateItem]=useState(false);
+  const [updateDoneModelShow,setUpdateDoneModelShow]=useState(false);
   const [isUpdateBtnDisable,setUpdateBtnDisable]=useState(true);
   const [isAddNewBtnDisable,setAddNewBtnDisable]=useState(false);
-  const [firstLoad,setFirstLoad]=useState(true)
+ 
   
 
 //******************Initailasing The State Of Every Form SecTion******************//
+ 
+//------------------States For Employee Personal Details Section----------//
   const [empPersonalDetails,setEmpPersonalDetails]=useState({
     fName:"",    mName:"",      lName:"",age:"", gender:"",bloodGroup:"",department:"",
     pwdStatus:"",adharNumber:"",pancardNumber:"",drivingLicenseNumber:"",designation:""
@@ -43,16 +45,16 @@ export default function EmpUpdateModel(props) {
   });
 
   const [empAddContArray,setEmpAddContArray]=useState([]);
-  
+  const [addrIdFromList,setaddrIdFromList]=useState();
 
   //------------------States Fro Employee Professional Section----------//
-
   const[empProfDetails,setEmpProfDetails]=useState({
     company_Name:"", isCurrent:"",designation:"", joining_Date:"",
     ending_Date:"", reasonOfResign:"",salary:""
     });
 
   const [empProfArray,setEmpProfArray]= useState([]);
+  const [profIdFromList,setProfIdFromList]=useState();
 
   //------------------States Fro Employee Education Section----------//  
 
@@ -62,15 +64,16 @@ export default function EmpUpdateModel(props) {
     });
 
   const [empEducationArray,setEmpEducationArray]=useState([]);
+  const [educationIdFromList,setEducationIdFromList]=useState();
   
   //------------------States Fro Employee Reference Section----------//
-
   const[empRefrenceDetails,setEmpRefrenceDetails]=useState({
     referenceName:"",  relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     }); 
 
   const [empReferenceArray,setEmpReferenceArray]=useState([])
+  
 
 
   useEffect(()=>{
@@ -80,30 +83,6 @@ export default function EmpUpdateModel(props) {
   const empIdForUpdate=props.empIdForUpdate;
   console.log(empIdForUpdate);
  
-  useEffect(()=>{
-    if(firstLoad){
-      setFirstLoad(false);
-      Axios.get(`http://localhost:3001/empDetailsApi/get/${empIdForUpdate}`).then((res)=>{
-        setEmpPersonalDetails(res.data[0]);
-        console.log(res.data[0]);
-      });
-
-      
-    }
-    console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
-  },[]);
-
-  useEffect(()=>{
-    Axios.get(`http://localhost:3001/empAddContApi/get/${empIdForUpdate}`).then(res=>{
-        setEmpAddContArray(res.data)
-        console.log(res.data);
-        console.log("empUpdateModue UseEffect for addresscontcat api");
-      })
-
-  },[])
-
-  
-
   const radios = [
     { name: 'Personal Details', value: 'personalDetailsClicked'},
     { name: 'Address/Contact Details', value: 'addContClicked' },
@@ -137,22 +116,47 @@ export default function EmpUpdateModel(props) {
 
 //Updating Section
 
-  function empPersonalDetailsUpdate(){
-    setRadioValue('addContClicked');
-    // console.log(empPersonalDetails);
+//Calling Api For Employee Personal Details To Show On Update Form
+useEffect(()=>{
+  Axios.get(`http://localhost:3001/empDetailsApi/get/${empIdForUpdate}`)
+  .then((res)=>{
+    setEmpPersonalDetails(res.data[0]);
+    console.log(res.data[0]);
+  });    
+console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
+},[]);
 
+  function updateEmpPersonnalDetails(){
+    
     const empUpdatedPersonalDetails={
       updatedEmpPersonalDetails:empPersonalDetails,
       empIdForUpdate:empIdForUpdate
     }
-    // Calling Api to serverSide
+    // Calling Api to Update Employee Perosnal Details To DataBAse
     console.log(empUpdatedPersonalDetails);
-    Axios.post("http://localhost:3001/empDetailsApi/update",empUpdatedPersonalDetails).then(res=>{
+    Axios.post("http://localhost:3001/empDetailsApi/update",empUpdatedPersonalDetails)
+    .then(res=>{
       console.log(res.data)
+      setUpdateDoneModelShow(true);
+      setRadioValue('addContClicked');
     })
   }
 
 //******************Handling 2nd Section(Address and Contact details)*****************
+
+  // Declearing States For Changing Upadting Table List
+  const [isNewAddrContAdded,setNewAddrContAdded]=useState(false);
+  const [isAddrContUpdated,setAddrContUpdated]=useState(false);
+  const [isAddrContDeleted,setAddrContDeleted]=useState(false);
+
+  // calling Api For Address/Contact Details
+  useEffect(()=>{
+    Axios.get(`http://localhost:3001/empAddContApi/get/${empIdForUpdate}`)
+    .then(res=>{
+      setEmpAddContArray(res.data)
+      console.log("empUpdateModue UseEffect for addresscontcat api");
+    })
+  },[isAddrContUpdated,isAddrContDeleted,isNewAddrContAdded]); 
 
   // handling and saving Changes in EmployeeAddressContact Details Form Data
   function handleChangeEmpAddContForm(e){
@@ -173,22 +177,23 @@ export default function EmpUpdateModel(props) {
     })
   }
 
-  //Adding Address/contact details In Table List 
-  function addDetailsToArray(){
-    setEmpAddContArray(prev=>{
-      return [...prev,empAddContDetails]
+  //Adding New Address/contact details In Table List As Well as Database
+  function addNewAddrCont(){
+    Axios.post("http://localhost:3001/empAddContApi/Add",
+    {empAddContArray:[empAddContDetails],lastAddedEmpId:empIdForUpdate})
+    .then(res=>{
+      console.log(res.data);
+      setNewAddrContAdded(prev=>!prev);
+      clearEmpAddContForm();
     });
-    clearEmpAddContForm();
+    
   }
 
-// Handling CallBack Function For Update and Delete of Employee address contact
-  const [indexValueOfClickedAddCont,setIndexValueOfClickedAddCont]=useState();
-  // const empId=useRef(empAddContArray[0].empId);
-  
+  //Updating of Employee address contact 
   function handleUpdateEmpAddContList(e){
-    setIndexValueOfClickedAddCont(e.target.value);
     console.log("update index of addresscontactArray="+e.target.value);
-    console.log(empAddContArray[e.target.value])
+    console.log("addresId="+empAddContArray[e.target.value]);
+    setaddrIdFromList(empAddContArray[e.target.value].addrId);
     setEmpAddContDetails(empAddContArray[e.target.value])
     setUpdateBtnDisable(false);
     setAddNewBtnDisable(true);
@@ -196,52 +201,54 @@ export default function EmpUpdateModel(props) {
   }
 
   function updateExistingAddCont(){
-    console.log("updating exixting address contact details for index value="+indexValueOfClickedAddCont);
-    const updatedEmpAddressContactArray=empAddContArray.map((emp,i)=>{
-      if(i==indexValueOfClickedAddCont){
-        return empAddContDetails;
-      }else{
-        return emp;
-      }
+    console.log("emp addreId from list to update="+addrIdFromList)
+    Axios.post(`http://localhost:3001/empAddrCont/update/${addrIdFromList}`,(empAddContDetails))
+    .then(res=>{
+      console.log(res.data);
+      setAddrContUpdated(prev=>!prev);
+      setUpdateBtnDisable(true);
+      setAddNewBtnDisable(false);
+      setUpdateDoneModelShow(true);
+      clearEmpAddContForm();
     })
-    setEmpAddContArray(updatedEmpAddressContactArray);
-    console.log(updatedEmpAddressContactArray)
-    // empId.current=updatedEmpAddressContactArray[0].empId;
-    console.log("employee id for update="+empIdForUpdate);
-    setUpdateBtnDisable(true);
-    setAddNewBtnDisable(false);
-    setModalShowpdateItem(true);
-    clearEmpAddContForm();
 
   }
 
-  function updateAddContSummery(){
-    setModalShow(true);
-    console.log("updateAddContSummery callback Function Latest Updated Summry=");
-    console.log(empAddContArray);
-    console.log("employee Id For Update EMployee Summery ="+empIdForUpdate)
-    Axios.post(`http://localhost:3001/empAddContact/delete/${empIdForUpdate}`).then(res=>{
-      console.log(res.data);
-      Axios.post("http://localhost:3001/empAddContApi/Add",({empAddContArray,...{lastAddedEmpId:empIdForUpdate}})).then(res=>{
-        console.log("successfully Added Update Employee Address/Contact Summery");
-        
-      });
-    })
-   }
+  //Deleting From List and Database
 
   function deleteEmpAddCont(e){
-    console.log("succsesfully deleted addresscontact from array where index="+e.target.value)
-    setEmpAddContArray(prev=>{
-      return prev.filter((addCont,index)=>{
-        return (index!=e.target.value)
-      })
+    const empAddContIdForDelete={
+      empId:empIdForUpdate,
+      addrId:empAddContArray[e.target.value].addrId
+    };
+    console.log(`addrId and empId of clicked addressContact= `);
+    console.log(empAddContIdForDelete);
+
+    Axios.post("http://localhost:3001/empAddContact/delete",empAddContIdForDelete)
+    .then(res=>{
+      console.log(res.data)
+      setModalShowDeleteItem(true);
+      setAddrContDeleted(prev=>!prev);
     });
-    setModalShowDeleteItem(true);
 
   }
 
  
 //******************Handling 3rd Section(Professional details)*****************
+
+  // Declearing States For Changing Upadting Table List
+  const [isNewProfDetailAdded,setNewProfDetailAdded]=useState(false);
+  const [isProfDetailUpdated,setProfDetailUpdated]=useState(false);
+  const [isProfDetailDeleted,setProfDetailDeleted]=useState(false);
+
+  // calling Api For Professonal Details
+  useEffect(()=>{
+    Axios.get(`http://localhost:3001/empProfApi/get/${empIdForUpdate}`)
+    .then(res=>{
+      setEmpProfArray(res.data)
+      console.log("Emp Update Module  api Professonal Details");
+    })
+  },[isNewProfDetailAdded,isProfDetailUpdated,isProfDetailDeleted]);
 
   // handling and saving Changes in EmployeeProfessional Details Form Data
   function handleChangeEmpProfessionalForm(e){
@@ -263,18 +270,75 @@ export default function EmpUpdateModel(props) {
   }
 
   //Adding Professional details In Table List 
-  function addProfDetailsToArray(){
-    setEmpProfArray(prev=>{
-      return[...prev,empProfDetails]
+  function addNewProfDetails(){
+    Axios.post("http://localhost:3001/empProfApi/add",
+    {empProfArray:[empProfDetails],lastAddedEmpId:empIdForUpdate})
+    .then(res=>{
+      console.log(res.data);
+      setNewProfDetailAdded(prev=>!prev);
+      clearEmpProfessionalForm();
     });
-    clearEmpProfessionalForm();
 
-    const empProfListObj={empProfArray};
-    console.log("empProfessionalListObje=")
-    console.log(empProfListObj);
+  }
+
+  //Updating
+  function handleUpdateEmpProfDetail(e){
+    console.log("update index of EmpProfArray="+e.target.value);
+    console.log("profId="+empProfArray[e.target.value].profId);
+    setProfIdFromList(empProfArray[e.target.value].profId);
+    setEmpProfDetails(empProfArray[e.target.value])
+    setUpdateBtnDisable(false);
+    setAddNewBtnDisable(true);
+  }
+
+  function updateExistingProfDetail(){
+    console.log("emp ProfId from list to update="+profIdFromList)
+    Axios.post(`http://localhost:3001/empProfApi/update/${profIdFromList}`,(empProfDetails))
+    .then(res=>{
+      console.log(res.data);
+      setProfDetailUpdated(prev=>!prev);
+      setUpdateBtnDisable(true);
+      setAddNewBtnDisable(false);
+      setUpdateDoneModelShow(true);
+      clearEmpProfessionalForm();
+    })
+
+  }
+
+  //Deleting
+  function deleteEmpProfDetail(e){
+    const empProfIdForDelete={
+      empId:empIdForUpdate,
+      profId:empProfArray[e.target.value].profId
+    };
+    console.log(`profId and empId of clicked addressContact= `);
+    console.log(empProfIdForDelete);
+
+    Axios.post("http://localhost:3001/empProfApi/delete",empProfIdForDelete)
+    .then(res=>{
+      console.log(res.data)
+      setModalShowDeleteItem(true);
+      setProfDetailDeleted(prev=>!prev);
+    });
+
   }
 
 //******************Handling 4th Section(Education details)*****************
+
+
+  // Declearing States For Changing Upadting Table List
+  const [isNewEducationDetailAdded,setNewEducationDetailAdded]=useState(false);
+  const [isEducationDetailUpdated,setEducationDetailUpdated]=useState(false);
+  const [isEducationDetailDeleted,setEducationDetailDeleted]=useState(false);
+
+  // calling Api For Education Details
+  useEffect(()=>{
+    Axios.get(`http://localhost:3001/empEduApi/get/${empIdForUpdate}`)
+    .then(res=>{
+      setEmpEducationArray(res.data)
+      console.log("Emp Update Module  api Education Details");
+    })
+  },[isNewEducationDetailAdded,isEducationDetailUpdated,isEducationDetailDeleted]);
 
   // handling and saving Changes in EmployeeEducation Details Form Data
   function handleChangeEmpEducationForm(e){
@@ -294,16 +358,16 @@ export default function EmpUpdateModel(props) {
       instituteName:"", place:""
     })
   }
-
-  function addEducationDetailToArray(){
-    setEmpEducationArray(prev=>{
-      return[...prev,empEducationDetails]
-    })
-    clearEmpEducationForm();
-
-    const empEducationListObj={empProfArray};
-    console.log("empEducationListObje=")
-    console.log(empEducationListObj);
+  
+  //Adding New Education Details To Table List And DataBase
+  function addNewEducationDetail(){
+    Axios.post("http://localhost:3001/empEduApi/add",
+    {empEducationArray:[empEducationDetails],lastAddedEmpId:empIdForUpdate})
+    .then(res=>{
+      console.log(res.data);
+      setNewEducationDetailAdded(prev=>!prev);
+      clearEmpEducationForm();
+    });
   }
 //******************Handling 5th Section(Reference Details)*****************
 
@@ -344,18 +408,19 @@ export default function EmpUpdateModel(props) {
   return ( 
     <>
     <UpdatedListItemPopUp
-    show={modalShowUpdateItem}
-                onHide={() => setModalShowpdateItem(false)}
-                heading="Successfully Updated this List Item From Summery list" 
-                body="Click On  'Update Complete Summery'  To Finalized Updete "
+    show={updateDoneModelShow}
+                onHide={() => setUpdateDoneModelShow(false)}
+                heading="Successfully Updated." 
+                body="Succesfully Updated Corresponding Employee Details.
+                      Click On 'Next Section' If Wan't to Update More "
 
     />
 
     <DeleteItemFromSummeryPopUp
     show={modalShowDeleteItem}
                 onHide={() => setModalShowDeleteItem(false)}
-                heading="Successfully Deleted From Summery" 
-                body="Click On  'Update Complete Summery'  To Finalized Updete "
+                heading="Successfully Deleted.." 
+                body="Successfully Deleted Corresponding Employee Detail. "
 
     />
     <div style={{ display: isEmpUpdateOpen ? "block" : "none" }}>
@@ -410,20 +475,11 @@ export default function EmpUpdateModel(props) {
               {
                 radioValue==="personalDetailsClicked" ? 
                 <>
-                <UpdateSummeryPopUp
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                heading="Successfully Updated Employee" 
-                body="Successfully Updated Employee Address/Contact Summery. 
-                      Click On Close Button "
-
-                />
-                
                 <EmpDetailsUpdate 
-                  submitNext={empPersonalDetailsUpdate}
+                  submitNext={()=>{setRadioValue('addContClicked')}}
                   handleChange={handleChangeEmpDetailsForm}
                   handleClear={clearEmpDetailsForm}
-                  // updateEmpDetails={updateEmpPersonnalDetails}
+                  updateEmpDetails={updateEmpPersonnalDetails}
                   fName={empPersonalDetails.fName}
                   mName={empPersonalDetails.mName}
                   lName={empPersonalDetails.lName}
@@ -442,24 +498,16 @@ export default function EmpUpdateModel(props) {
               {
                 radioValue==="addContClicked" ? 
                 <>
-                <UpdateSummeryPopUp
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                heading="Successfully Updated Employee" 
-                body="Successfully Updated Employee Address/Contact Summery. 
-                      Click On 'Next Section' If Wan't to Update More "
-
-                />
+                
                 <EmpAddContUpdate
                   submitNext={()=>{setRadioValue('profClicked')}}
                   prevSection={()=>setRadioValue('personalDetailsClicked')}
                   empAddArray={empAddContArray}
-                  addDetailsToList={addDetailsToArray}
+                  addDetailsToList={addNewAddrCont}
                   handleChange={handleChangeEmpAddContForm}
                   updateExistingAddCont={updateExistingAddCont}
                   updateAddCont={handleUpdateEmpAddContList}
                   deleteAddCont={deleteEmpAddCont} 
-                  updateAddContSummery={updateAddContSummery}
                   isUpdateBtnDisable={isUpdateBtnDisable}
                   isAddNewBtnDisable={isAddNewBtnDisable}
                   address1={empAddContDetails.address1}
@@ -479,9 +527,14 @@ export default function EmpUpdateModel(props) {
                  submitNext={()=>{setRadioValue(`educationClicked`)}}
                  prevSection={()=>setRadioValue('addContClicked')}
                  empProfArray={empProfArray}
-                 addProfDetailsToList={addProfDetailsToArray}
+                 addProfDetailsToList={addNewProfDetails}
                  handleChange={handleChangeEmpProfessionalForm}
                  handleClear={clearEmpProfessionalForm}
+                 updateProfDetail={handleUpdateEmpProfDetail}
+                 updateExistingProfDetail={updateExistingProfDetail}
+                 deleteProfDetail={deleteEmpProfDetail} 
+                 isUpdateBtnDisable={isUpdateBtnDisable}
+                 isAddNewBtnDisable={isAddNewBtnDisable}
                  company_Name={empProfDetails.company_Name}
                  isCurrent={empProfDetails.isCurrent}
                  designation={empProfDetails.designation}
@@ -496,10 +549,12 @@ export default function EmpUpdateModel(props) {
                 <EmpEducationUpdate
                 submitNext={()=>{setRadioValue('referenceClicked')}}
                 prevSection={()=>setRadioValue('profClicked')}
-                empEducationArray={empEducationArray}
-                addEducationDetailsToList={addEducationDetailToArray}
                 handleChange={handleChangeEmpEducationForm}
                 handleClear={clearEmpEducationForm}
+                empEducationArray={empEducationArray}
+                addEducationDetailsToList={addNewEducationDetail}
+                isUpdateBtnDisable={isUpdateBtnDisable}
+                isAddNewBtnDisable={isAddNewBtnDisable}
                 education={empEducationDetails.education}
                 percentage={empEducationDetails.percentage}
                 yearOfPassing={empEducationDetails.yearOfPassing}
@@ -526,7 +581,7 @@ export default function EmpUpdateModel(props) {
               }
              
             </Card.Text>
-            
+          
         </Card.Body>
     </Card>
 

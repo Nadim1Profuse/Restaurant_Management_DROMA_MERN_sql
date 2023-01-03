@@ -43,7 +43,9 @@ routerEmpEdu.post("/empEduApi/add",body,(req,res)=>{
             console.log(err);    
         }
     })
-    })
+    });
+
+    res.send(`successfully added doc in "emp_education_details" table where empId=${lastAddedEmpId}`)
     
 
 })
@@ -58,6 +60,21 @@ routerEmpEdu.get("/empEduApi/get",(req,res)=>{
             res.send(emp);
         }else{
             res.send(err);
+            console.log(err);
+        }
+    })
+});
+
+//getting A Specefic Data By Employee Id Of `emp_education_details` Table
+
+routerEmpEdu.get("/empEduApi/get/:empId",(req,res)=>{
+    const empId=req.params.empId;
+    const sql=`select * from emp_Education_Details where empId=${empId} `
+    db.query(sql,(err,emp)=>{
+        if(!err){
+            res.send(emp);
+            console.log("emp_Education_Details Details For id="+empId)
+        }else{
             console.log(err);
         }
     })

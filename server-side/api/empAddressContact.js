@@ -47,12 +47,13 @@ routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
     })
 
     });
+    res.send("SuccesFully added AddressCOntact Details to Database empId= "+lastAddedEmpId)
  
 
 });
 
 //*************************get request from FrontEnd**********************
-//geting data from `empaddcontact` Table in DB  And Sending back to ClientSide
+//geting All data from `empaddcontact` Table in DB  And Sending back to ClientSide
 
 routerAdd.get("/empAddContApi/get",(req,res)=>{
     const sql="SELECT * FROM empaddcontact"
@@ -82,14 +83,37 @@ routerAdd.get("/empAddContApi/get/:empId",(req,res)=>{
     })
 });
 
-//deleting old and updating new addressContact By EMployee Id
-routerAdd.post("/empAddContact/delete/:id",(req,res)=>{
-    const empIdForDelete=req.params.id;
-    const sql=`delete from empaddcontact where empId=${empIdForDelete}`
+
+//*************************Update request from FrontEnd**********************
+//Updating `empaddcontact` Details
+
+routerAdd.post("/empAddrCont/update/:addrId",(req,res)=>{
+    const addrId=req.params.addrId;
+    const updatedAddrCont=req.body;
+    console.log(updatedAddrCont);
+    console.log("update addr cont method in backend addrId="+addrId);
+
+    const sql=`UPDATE empaddcontact SET address1= '${updatedAddrCont.address1}', landMark='${updatedAddrCont.landMark}', city='${updatedAddrCont.city}', state='${updatedAddrCont.state}', apartment='${updatedAddrCont.apartment}', pincode=${updatedAddrCont.pincode}, mobileNumber=${updatedAddrCont.mobileNumber}, alternateMobileNumber=${updatedAddrCont.alternateMobileNumber} WHERE (empId = ${updatedAddrCont.empId}) AND (addrId=${addrId}) `;
     db.query(sql,err=>{
         if(!err){
-            res.send("successfully deleted address contact for empId="+empIdForDelete)
-            console.log("successfully deleted All Address Contact of empId="+empIdForDelete);
+            console.log(`succesfully updated employee address/contact where empId=${updatedAddrCont.empId} and addrId=${addrId}`);
+            res.send(`succesfully updated employee address/contact where empId=${updatedAddrCont.empId} and addrId=${addrId}`)
+        }else{
+            console.log(err);
+        }
+    })
+
+});
+
+//deleting Employee Address Contact Details by Emplyee Id And AddrId
+routerAdd.post("/empAddContact/delete",(req,res)=>{
+    const {empId,addrId}=req.body;
+    const sql=`delete from empaddcontact where (empId=${empId}) AND (addrId=${addrId})`;
+    console.log(sql);
+    db.query(sql,err=>{
+        if(!err){
+            res.send(`suceesfully deleted the addressContact of emp whre empId=${empId} and addrId=${addrId} `)
+            console.log(`suceesfully deleted the addressContact of emp whre empId=${empId} and addrId=${addrId} `);
         }else{
             console.log(err);
         }

@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Paper from '@mui/material/Paper';
-// import EmptyListWarning from "./EmptyListWarning";
+
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
@@ -11,21 +11,11 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 export default function EmpProfUpdate(props){
 
 const [empProfessionalList,setEmpProfessionalList]=useState([]);
-const [modalShow, setModalShow] =useState(false);
-
 
 useEffect(()=>{
-  setEmpProfessionalList((props.empProfArray.reverse()))
+  setEmpProfessionalList(props.empProfArray)
 },[props.empProfArray]);
 
-// function handleSubmit(e){
-//   e.preventDefault();
-//   if((empProfessionalList.length) !==0){
-//     props.submitNext();
-//   }else{
-//     setModalShow(true);
-//   }  
-// }
 
 function addToArray(e){
   e.preventDefault();
@@ -36,14 +26,6 @@ function addToArray(e){
 
   return (
   <>  
-    {/* <EmptyListWarning
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-      heading="Professional List Can't be Empty!!" 
-      body="Please Add atleast one Entry in Professional Details List. 
-            It can't be Empty "
-    /> */}
-
     <Form onSubmit={addToArray}>
     <div style={{display:"flex"}} >
       <div style={{flex: "0 0 calc(50% - .50rem)"}}>
@@ -95,8 +77,8 @@ function addToArray(e){
           </div>
 
           <div style={{textAlign: "end"}} >
-          <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update Details</Button>
-          {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button> */}
+          <Button disabled={props.isAddNewBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
+          <Button disabled={props.isUpdateBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingProfDetail} >Update</Button>
           </div>
         </div>
       
@@ -116,14 +98,17 @@ function addToArray(e){
             <tr>
               <th>#</th> <th>Company Name</th> <th>Is It Current Company</th><th>Designation</th>
               <th>Joininig Date</th> <th>Date Of Resign</th> <th>Reason Of Resignation</th> <th>Salary</th>
+              <th>Update</th> <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {empProfessionalList.map((emp, index) => {
               return <tr>
-                <td>{(empProfessionalList.length) - index}</td><td>{emp.company_Name}</td> <td>{emp.isCurrent}</td>
+                <td>{index+1}</td><td>{emp.company_Name}</td> <td>{emp.isCurrent}</td>
                 <td>{emp.designation}</td>  <td>{emp.joining_Date}</td> <td>{emp.ending_Date}</td> 
                 <td>{emp.reasonOfResign}</td> <td>{emp.salary}</td>
+                <td><Button onClick={props.updateProfDetail} variant="outline-primary" value={index}>Update</Button></td>
+                <td><Button onClick={props.deleteProfDetail} variant="outline-danger" value={index}>Delete</Button></td>
               </tr>;
             })}
           </tbody>

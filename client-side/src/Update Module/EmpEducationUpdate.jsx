@@ -10,20 +10,13 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 export default function EmpEducationUpdate(props){
 
   const [empEducationList,setEmpEducationList]=useState([]);
-  const [modalShow, setModalShow] =useState(false);
+
 
   useEffect(()=>{
-    setEmpEducationList(((props.empEducationArray).reverse()))
+    setEmpEducationList(props.empEducationArray)
   },[props.empEducationArray])
    
-// function handleSubmit(e){
-//   e.preventDefault();
-//   if(empEducationList.length !==0){
-//     props.submitNext();
-//   }else{
-//     setModalShow(true);
-//   }     
-// }
+
 
 function addToArray(e){
   e.preventDefault();
@@ -42,14 +35,6 @@ const inputs=[
 
   return (
   <>
-    {/* <EmptyListWarning
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-      heading="Education List Can't be Empty!!" 
-      body="Please Add atleast one Entry in Education Details List. 
-            It can't be Empty "
-    /> */}
-
     <Form onSubmit={addToArray}>
       <div style={{ display: "flex" }}>
         <div style={{ flex: "0 0 calc(50% - .50rem)" }}>
@@ -81,8 +66,8 @@ const inputs=[
             </div>
 
             <div style={{textAlign: "end"}} >
-            <Button style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Update Details</Button>
-            {/* <Button style={{margin:"0 2px 0 2px"}} variant="outline-warning" type="submit" onClick={props.handleClear}>Clear All</Button> */}
+            <Button disabled={props.isAddNewBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-success" type="submit">Add New</Button>
+            <Button disabled={props.isUpdateBtnDisable} style={{margin:"0 2px 0 2px"}} variant="outline-primary" type="button" onClick={props.updateExistingEducation} >Update</Button>
             </div>
           </div>
 
@@ -99,15 +84,17 @@ const inputs=[
             <thead>
               <tr>
                 <th>#</th> <th>Education Details</th> <th>Percentage/CGPA/Grades</th><th>Year Of Passing</th>
-                <th>Name OF Institution</th> <th>Place </th>
+                <th>Name OF Institution</th> <th>Place </th> 
+                <th>Update</th> <th>Delete</th>
               </tr>
             </thead>
             <tbody>
               {empEducationList.map((emp, index) => {
                 return <tr>
-                  <td>{(empEducationList.length) - index}</td><td>{emp.education}</td>
+                  <td>{index+1}</td><td>{emp.education}</td>
                   <td>{emp.percentage}</td> <td>{emp.yearOfPassing}</td> <td>{emp.instituteName}</td> <td>{emp.place}</td>
-
+                  <td><Button onClick={props.updateEducation} variant="outline-primary" value={index}>Update</Button></td>
+                  <td><Button onClick={props.deleteEducation} variant="outline-danger" value={index}>Delete</Button></td>
                 </tr>;
               })}
             </tbody>

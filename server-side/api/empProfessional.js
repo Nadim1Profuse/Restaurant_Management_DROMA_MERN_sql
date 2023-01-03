@@ -41,7 +41,8 @@ routerEmpProf.post("/empProfApi/add",body,(req,res)=>{
         }
     });
 
-    })
+    });
+    res.send(`Successfully Added Employee Professional Detail For EmpId=${lastAddedEmpId}`)
 
 
 });
@@ -59,7 +60,62 @@ routerEmpProf.get("/empProfApi/get",(req,res)=>{
             res.send(err);
         }
     })
-})
+});
+
+//getting A Specefic Data By Employee Id Of EmployeeProfessonal Details Table
+
+routerEmpProf.get("/empProfApi/get/:empId",(req,res)=>{
+    const empId=req.params.empId;
+    const sql=`select * from employeement_professional_details where empId=${empId} `
+    db.query(sql,(err,emp)=>{
+        if(!err){
+            res.send(emp);
+            // console.log(emp);
+            console.log("empProfessional Details For id="+empId)
+        }else{
+            console.log(err);
+        }
+    })
+});
+
+
+//*************************Update request from FrontEnd**********************
+//Updating `empaddcontact` Details
+
+routerEmpProf.post("/empProfApi/update/:profId",(req,res)=>{
+    const profId=req.params.profId;
+    const updatedProfDetail=req.body;
+    console.log(updatedProfDetail);
+    console.log("update Professional Details  in backend profId="+profId);
+
+    const sql=`UPDATE employeement_professional_details SET company_Name= '${updatedProfDetail.company_Name}', isCurrent='${updatedProfDetail.isCurrent}', designation='${updatedProfDetail.designation}', joining_Date='${updatedProfDetail.joining_Date}', ending_Date='${updatedProfDetail.ending_Date}', reasonOfResign='${updatedProfDetail.reasonOfResign}', salary=${updatedProfDetail.salary} WHERE (empId = ${updatedProfDetail.empId}) AND (profId=${profId}) `;
+    db.query(sql,err=>{
+        if(!err){
+            console.log(`succesfully updated employee Professional Detailst where empId=${updatedProfDetail.empId} and addrId=${profId}`);
+            res.send(`succesfully updated employee address/contact where empId=${updatedProfDetail.empId} and addrId=${profId}`)
+        }else{
+            console.log(err);
+        }
+    })
+
+});
+
+
+//deleting Employee Address Contact Details by Emplyee Id And AddrId
+routerEmpProf.post("/empProfApi/delete",(req,res)=>{
+    const {empId,profId}=req.body;
+    const sql=`delete from employeement_professional_details where (empId=${empId}) AND (profId=${profId})`;
+    console.log(sql);
+    db.query(sql,err=>{
+        if(!err){
+            res.send(`suceesfully deleted the employeement_professional_details of emp whre empId=${empId} and profId=${profId} `)
+            console.log(`suceesfully deleted the employeement_professional_details of emp whre empId=${empId} and profId=${profId} `);
+        }else{
+            console.log(err);
+        }
+    })
+});
+
 
 
 
