@@ -12,6 +12,7 @@ import EmpProfUpdate from './EmpProfUpdate';
 import EmpEducationUpdate from './EmpEducationUpdate';
 import EmpRefrenceUpdate from './EmpReferenceUpdate';
 import Axios from "axios";
+import AddListItemPopUp from './UpdateSummeryPopup'
 import DeleteItemFromSummeryPopUp from './UpdateSummeryPopup'
 import UpdatedListItemPopUp from './UpdateSummeryPopup'
 
@@ -22,7 +23,7 @@ import UpdatedListItemPopUp from './UpdateSummeryPopup'
 export default function EmpUpdateModel(props) {
   const [isEmpUpdateOpen,setEmpUpdateOpen]=useState(true);
   const [radioValue, setRadioValue] = useState('personalDetailsClicked');
-  // const [modalShow, setModalShow] = useState(false);
+  const [addDoneModelShow,setAddDoneModelShow]= useState(false);
   const [modalShowDeleteItem,setModalShowDeleteItem]=useState(false);
   const [updateDoneModelShow,setUpdateDoneModelShow]=useState(false);
   const [isUpdateBtnDisable,setUpdateBtnDisable]=useState(true);
@@ -68,11 +69,12 @@ export default function EmpUpdateModel(props) {
   
   //------------------States Fro Employee Reference Section----------//
   const[empRefrenceDetails,setEmpRefrenceDetails]=useState({
-    referenceName:"",  relation:"",address:"",
+    referedBy:"",  relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     }); 
 
   const [empReferenceArray,setEmpReferenceArray]=useState([])
+  const [referenceIdFromList,setReferenceIdFromList]=useState();
   
 
 
@@ -185,6 +187,7 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
       console.log(res.data);
       setNewAddrContAdded(prev=>!prev);
       clearEmpAddContForm();
+      setAddDoneModelShow(true);
     });
     
   }
@@ -277,11 +280,12 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
       console.log(res.data);
       setNewProfDetailAdded(prev=>!prev);
       clearEmpProfessionalForm();
+      setAddDoneModelShow(true);
     });
 
   }
 
-  //Updating
+  //Updating Employee Professional Details
   function handleUpdateEmpProfDetail(e){
     console.log("update index of EmpProfArray="+e.target.value);
     console.log("profId="+empProfArray[e.target.value].profId);
@@ -367,9 +371,73 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
       console.log(res.data);
       setNewEducationDetailAdded(prev=>!prev);
       clearEmpEducationForm();
+      setAddDoneModelShow(true);
     });
   }
+
+  //Updating Employee Education Details
+
+  function handleUpdateEmpEducationDetail(e){
+    console.log("update index of EmpEducationArray="+e.target.value);
+    console.log("educnId="+empEducationArray[e.target.value].educnId);
+    setEducationIdFromList(empEducationArray[e.target.value].educnId);
+    setEmpEducationDetails(empEducationArray[e.target.value])
+    setUpdateBtnDisable(false);
+    setAddNewBtnDisable(true);
+
+
+  }
+
+  function updateExistingEducationDetails(){
+    console.log("emp educnId from list to update="+educationIdFromList)
+    Axios.post(`http://localhost:3001/empEduApi/update/${educationIdFromList}`,(empEducationDetails))
+    .then(res=>{
+      console.log(res.data);
+      setEducationDetailUpdated(prev=>!prev);
+      setUpdateBtnDisable(true);
+      setAddNewBtnDisable(false);
+      setUpdateDoneModelShow(true);
+      clearEmpEducationForm();
+    })
+
+  }
+
+  //Deleting Employee Education Details educnId
+  function deleteEmpEducationDetail(e){
+    const empEducnIdForDelete={
+      empId:empIdForUpdate,
+      educnId:empEducationArray[e.target.value].educnId
+    };
+    console.log(`educnId and empId of clicked addressContact= `);
+    console.log(empEducnIdForDelete);
+
+    Axios.post("http://localhost:3001/empEduApi/delete",empEducnIdForDelete)
+    .then(res=>{
+      console.log(res.data)
+      setModalShowDeleteItem(true);
+      setEducationDetailDeleted(prev=>!prev);
+    });
+
+  }
+
+
+
 //******************Handling 5th Section(Reference Details)*****************
+
+// Declearing States For Changing Upadting Table List
+const [isNewReferenceDetailAdded,setNewReferenceDetailAdded]=useState(false);
+const [isReferenceDetailUpdated,setReferenceDetailUpdated]=useState(false);
+const [isReferenceDetailDeleted,setReferenceDetailDeleted]=useState(false);
+
+// calling Api For Reference Details
+useEffect(()=>{
+  Axios.get(`http://localhost:3001/empReferApi/get/${empIdForUpdate}`)
+  .then(res=>{
+    setEmpReferenceArray(res.data)
+    console.log("Emp Update Module  api Reference Details");
+  })
+},[isNewReferenceDetailAdded,isReferenceDetailUpdated,isReferenceDetailDeleted]);
+
 
   // handling and saving Changes in EmployeeReference Details Form Data 
 
@@ -387,32 +455,84 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
   //Clearing EmployeeRefrence Form Feild On clicking Clear Button
   function clearEmpReferenceForm(){
     setEmpRefrenceDetails({
-    referenceName:"",relation:"",address:"",
+      referedBy:"",relation:"",address:"",
     city:"",  phone1:"",  phone2:"",
     })
   }
 
-  function addReferenceDetailsToArray(){
-    setEmpReferenceArray(prev=>{
-      return[...prev,empRefrenceDetails]
-    })
-    clearEmpReferenceForm();
+  //Adding New Education Details To Table List And DataBase
+  function addNewReferenceDetail(){
+    Axios.post("http://localhost:3001/empReferApi/add",
+    {empReferenceArray:[empRefrenceDetails],lastAddedEmpId:empIdForUpdate})
+    .then(res=>{
+      console.log(res.data);
+      setNewReferenceDetailAdded(prev=>!prev);
+      clearEmpReferenceForm();
+      setAddDoneModelShow(true);
+    });
+  }
 
-    const empReferenceListObj={empProfArray};
-    console.log("empReferenceListObj=")
-    console.log(empReferenceListObj);
+  //Updating Employee Education Details
+
+  function handleUpdateEmpReferenceDetail(e){
+    console.log("update index of EmpReferenceArray="+e.target.value);
+    console.log("refId="+empReferenceArray[e.target.value].refId);
+    setReferenceIdFromList(empReferenceArray[e.target.value].refId);
+    setEmpRefrenceDetails(empReferenceArray[e.target.value])
+    setUpdateBtnDisable(false);
+    setAddNewBtnDisable(true);
+
+  }
+
+  function updateExistingReferenceDetails(){
+    console.log("emp refId from list to update="+referenceIdFromList)
+    Axios.post(`http://localhost:3001/empReferApi/update/${referenceIdFromList}`,(empRefrenceDetails))
+    .then(res=>{
+      console.log(res.data);
+      setReferenceDetailUpdated(prev=>!prev);
+      setUpdateBtnDisable(true);
+      setAddNewBtnDisable(false);
+      setUpdateDoneModelShow(true);
+      clearEmpReferenceForm();
+    })
+
+  }
+
+  //Deleting Employee reference Details educnId
+  function deleteEmpReferenceDetail(e){
+    const empRefrnceIdForDelete={
+      empId:empIdForUpdate,
+      refId:empReferenceArray[e.target.value].refId
+    };
+    console.log(`refId and empId of clicked Refrence= `);
+    console.log(empRefrnceIdForDelete);
+
+    Axios.post("http://localhost:3001/empReferApi/delete",empRefrnceIdForDelete)
+    .then(res=>{
+      console.log(res.data)
+      setModalShowDeleteItem(true);
+      setReferenceDetailDeleted(prev=>!prev);
+    });
+
   }
 
 
     
   return ( 
     <>
+    <AddListItemPopUp
+    show={addDoneModelShow}
+                onHide={() => setAddDoneModelShow(false)}
+                heading="Successfully Added New Details..." 
+                body="Succesfully Added and Updated Corresponding Employee Details."
+
+    />
     <UpdatedListItemPopUp
     show={updateDoneModelShow}
                 onHide={() => setUpdateDoneModelShow(false)}
                 heading="Successfully Updated." 
                 body="Succesfully Updated Corresponding Employee Details.
-                      Click On 'Next Section' If Wan't to Update More "
+                       "
 
     />
 
@@ -530,8 +650,8 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
                  addProfDetailsToList={addNewProfDetails}
                  handleChange={handleChangeEmpProfessionalForm}
                  handleClear={clearEmpProfessionalForm}
-                 updateProfDetail={handleUpdateEmpProfDetail}
                  updateExistingProfDetail={updateExistingProfDetail}
+                 updateProfDetail={handleUpdateEmpProfDetail}
                  deleteProfDetail={deleteEmpProfDetail} 
                  isUpdateBtnDisable={isUpdateBtnDisable}
                  isAddNewBtnDisable={isAddNewBtnDisable}
@@ -553,6 +673,9 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
                 handleClear={clearEmpEducationForm}
                 empEducationArray={empEducationArray}
                 addEducationDetailsToList={addNewEducationDetail}
+                updateEducation={handleUpdateEmpEducationDetail}
+                updateExistingEducation={updateExistingEducationDetails}
+                deleteEducation={deleteEmpEducationDetail}
                 isUpdateBtnDisable={isUpdateBtnDisable}
                 isAddNewBtnDisable={isAddNewBtnDisable}
                 education={empEducationDetails.education}
@@ -568,10 +691,15 @@ console.log("useEffectExecuted form EmpUpdate Module for empPersonalDetails")
                 submitNext={()=>{setRadioValue('personalDetailsClicked')}}
                 prevSection={()=>setRadioValue('educationClicked')}
                 emRefrnceArray={empReferenceArray}
-                addRefrnceDetailsToList={addReferenceDetailsToArray}
                 handleChange={handleChangeEmpReferenceForm}
                 handleClear={clearEmpReferenceForm} 
-                referenceName={empRefrenceDetails.referenceName}  
+                addRefrnceDetailsToList={addNewReferenceDetail}
+                updateReference={handleUpdateEmpReferenceDetail}
+                updateExistingRefrnceDetail={updateExistingReferenceDetails}
+                deleteReference={deleteEmpReferenceDetail}
+                isUpdateBtnDisable={isUpdateBtnDisable}
+                isAddNewBtnDisable={isAddNewBtnDisable}
+                referedBy={empRefrenceDetails.referedBy}  
                 relation={empRefrenceDetails.relation}
                 address={empRefrenceDetails.address}
                 city={empRefrenceDetails.city}

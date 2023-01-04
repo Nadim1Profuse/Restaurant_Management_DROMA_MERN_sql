@@ -80,7 +80,7 @@ routerEmpProf.get("/empProfApi/get/:empId",(req,res)=>{
 
 
 //*************************Update request from FrontEnd**********************
-//Updating `empaddcontact` Details
+//Updating `Professional` Details
 
 routerEmpProf.post("/empProfApi/update/:profId",(req,res)=>{
     const profId=req.params.profId;

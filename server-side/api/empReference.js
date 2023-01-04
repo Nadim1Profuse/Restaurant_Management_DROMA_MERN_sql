@@ -20,7 +20,7 @@ routerEmpRefer.post("/empReferApi/add",body,(req,res)=>{
     //creating a varriabile and putting all details in it to send it into database
     const post={
         empId:lastAddedEmpId,
-        referedBy:emp.referenceName,
+        referedBy:emp.referedBy,
         relation:emp.relation,
         address:emp.address,
         city:emp.city,
@@ -40,10 +40,8 @@ routerEmpRefer.post("/empReferApi/add",body,(req,res)=>{
         }
     });
 
-    })
-    
-
-
+    });
+    res.send("successfully inserted docs into `employeement_professional_details` table")
 });
 
 //{2}*************************get request from FrontEnd**********************{2}//
@@ -59,41 +57,64 @@ routerEmpRefer.get("/empReferApi/get",(req,res)=>{
             res.send(err);
         }
     })
-})
+});
+
+//getting A Specefic Data By Employee Id Of EmployeeProfessonal Details Table
+
+routerEmpRefer.get("/empReferApi/get/:empId",(req,res)=>{
+    const empId=req.params.empId;
+    const sql=`select * from emp_reference_details where empId=${empId} `
+    db.query(sql,(err,emp)=>{
+        if(!err){
+            res.send(emp);
+            // console.log(emp);
+            console.log("mp_reference_details For id="+empId)
+        }else{
+            console.log(err);
+        }
+    })
+});
+
 
 
 //(3)***********************Update request from FrontEnd/Postment********************{3}//
      //Updating data from `emp_reference_details` Table in DB  And Sending to ClientSide/postman
 
-routerEmpRefer.post("/empReferApi/update",(req,res)=>{
-        
-        const {feild,updateQuery,empIdForUpdate}=req.body;         //object destructing
+//Updating `Reference` Details
 
-        const sql=`UPDATE emp_reference_details SET ${feild} = '${updateQuery}' WHERE empId = ${empIdForUpdate}`;
-        db.query(sql,err=>{
-            if(!err){
-                console.log("successfully updated employee id= "+empIdForUpdate);
-            }else{
-                console.log(err);
-            }
-        })
+routerEmpRefer.post("/empReferApi/update/:refId",(req,res)=>{
+    const refId=req.params.refId;
+    const updatedRefrnceDetail=req.body;
+    console.log(updatedRefrnceDetail);
+    console.log("update emp_reference_details  in backend refId="+refId);
+
+    const sql=`UPDATE emp_reference_details SET referedBy= '${updatedRefrnceDetail.referedBy}', relation='${updatedRefrnceDetail.relation}', address='${updatedRefrnceDetail.address}', city='${updatedRefrnceDetail.city}', phone1=${updatedRefrnceDetail.phone1} WHERE (empId = ${updatedRefrnceDetail.empId}) AND (refId=${refId}) `;
+    db.query(sql,err=>{
+        if(!err){
+            console.log(`succesfully updated emp_reference_details Detailst where empId=${updatedRefrnceDetail.empId} and refId=${refId}`);
+            res.send(`succesfully updated emp_reference_details where empId=${updatedRefrnceDetail.empId} and refId=${refId}`)
+        }else{
+            console.log(err);
+        }
+    })
+
 });
 
 //(4)*************************Delete request from FrontEnd/Postment**********************{4}//
      //Deleting data from `emp_reference_details` Table in DB  And Sending to ClientSide/postman
 
-routerEmpRefer.delete("/empReferApi/:id",(req,res)=>{
-      const empIdForDel=(req.params.id)
-      const sqlQuery=`DELETE FROM emp_reference_details WHERE empId= ${empIdForDel} `;
-      console.log(sqlQuery);
-      db.query(sqlQuery,err=>{
-        if(!err){
-            console.log("Successfully Deleted Employee Of empId="+empIdForDel);
-        }else{
-            console.log(err);
-        }
-      })
-})
-
+    routerEmpRefer.post("/empReferApi/delete",(req,res)=>{
+        const {empId,refId}=req.body;
+        const sql=`delete from emp_reference_details where (empId=${empId}) AND (refId=${refId})`;
+        console.log(sql);
+        db.query(sql,err=>{
+            if(!err){
+                res.send(`suceesfully deleted the employeement_professional_details of emp whre empId=${empId} and refId=${refId} `);
+                console.log(`suceesfully deleted the emp_reference_details of emp whre empId=${empId} and refId=${refId} `);
+            }else{
+                console.log(err);
+            }
+        })
+    });
 
 export default routerEmpRefer;

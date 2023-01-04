@@ -83,38 +83,55 @@ routerEmpEdu.get("/empEduApi/get/:empId",(req,res)=>{
 //***********************Update request from FrontEnd/Postment********************{3}//
                 //Updating data from `emp_Education_Details` Table in DB  
 
-routerEmpEdu.post("/empEduApi/update",(req,res)=>{
-    const {feild,updateQuery,empIdForUpdate}=req.body;
-    const sqlQuery=`UPDATE emp_Education_Details SET ${feild}='${updateQuery}' WHERE empId=${empIdForUpdate} `;
-    db.query(sqlQuery,err=>{
+routerEmpEdu.post("/empEduApi/update/:educnId",(req,res)=>{
+    const educnId=req.params.educnId;
+    const updatedEducationDetail=req.body;
+    console.log(updatedEducationDetail);
+    console.log("update Education Details  in backend educnId="+educnId);
+                
+    const sql=`UPDATE emp_Education_Details SET education= '${updatedEducationDetail.education}', percentage=${updatedEducationDetail.percentage}, yearOfPassing=${updatedEducationDetail.yearOfPassing}, instituteName='${updatedEducationDetail.instituteName}', place='${updatedEducationDetail.place}' WHERE (empId = ${updatedEducationDetail.empId}) AND (educnId=${educnId}) `;
+        db.query(sql,err=>{
         if(!err){
-            res.send("successfully updated empId="+empIdForUpdate);
-            console.log("successfully updated empId="+empIdForUpdate);
+            console.log(`succesfully updated employee Education Detailst where empId=${updatedEducationDetail.empId} and educnId=${educnId}`);
+            res.send(`succesfully updated employee Educationt where empId=${updatedEducationDetail.empId} and educnId=${educnId}`)
         }else{
-            res.send(err);
             console.log(err);
         }
-
     })
-
+                
 });
 
 //(4)************************Delete request from FrontEnd/Postment*******************{4}//
-                  //Deleting data from `emp_Education_details` Table in DB  
+                  //Deleting data from `emp_Education_details` Table in DB 
 
-routerEmpEdu.delete("/empEduApi/delete/:id",(req,res)=>{
-    const empIdForDel=req.params.id;
-    const sqlQuery=`DELETE FROM emp_Education_details WHERE empId = ${empIdForDel} `;
-    db.query(sqlQuery,err=>{
+
+routerEmpEdu.post("/empEduApi/delete",(req,res)=>{
+    const {empId,educnId}=req.body;
+    const sql=`delete from emp_Education_Details where (empId=${empId}) AND (educnId=${educnId})`;
+    console.log(sql);
+    db.query(sql,err=>{
         if(!err){
-            res.send("successfully deleted empId="+empIdForDel);
-            console.log("successfully deleted empId="+empIdForDel);
+            res.send(`suceesfully deleted the emp_Education_Details of emp whre empId=${empId} and educnId=${educnId} `)
+            console.log(`suceesfully deleted the emp_Education_Details of emp whre empId=${empId} and educnId=${educnId} `);
         }else{
-            res.send(err);
             console.log(err);
         }
     })
-})
+});
+                
+// routerEmpEdu.delete("/empEduApi/delete/:id",(req,res)=>{
+//     const empIdForDel=req.params.id;
+//     const sqlQuery=`DELETE FROM emp_Education_details WHERE empId = ${empIdForDel} `;
+//     db.query(sqlQuery,err=>{
+//         if(!err){
+//             res.send("successfully deleted empId="+empIdForDel);
+//             console.log("successfully deleted empId="+empIdForDel);
+//         }else{
+//             res.send(err);
+//             console.log(err);
+//         }
+//     })
+// })
 
 
 
