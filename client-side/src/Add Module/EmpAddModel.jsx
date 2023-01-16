@@ -139,9 +139,9 @@ export default function EmpAddModel(props) {
     });
     clearEmpAddContForm();
 
-    const empAddContListObj={empAddContArray};
-    console.log("empAddContArrayObject =");
-    console.log(empAddContListObj);
+    // const empAddContListObj={empAddContArray};
+    // console.log("empAddContArrayObject =");
+    // console.log(empAddContListObj);
   }
 
  
@@ -173,9 +173,9 @@ export default function EmpAddModel(props) {
     });
     clearEmpProfessionalForm();
 
-    const empProfListObj={empProfArray};
-    console.log("empProfessionalListObje=")
-    console.log(empProfListObj);
+    // const empProfListObj={empProfArray};
+    // console.log("empProfessionalListObje=")
+    // console.log(empProfListObj);
   }
 
 //******************Handling 4th Section(Education details)*****************
@@ -205,9 +205,9 @@ export default function EmpAddModel(props) {
     })
     clearEmpEducationForm();
 
-    const empEducationListObj={empProfArray};
-    console.log("empEducationListObje=")
-    console.log(empEducationListObj);
+    // const empEducationListObj={empProfArray};
+    // console.log("empEducationListObje=")
+    // console.log(empEducationListObj);
   }
 //******************Handling 5th Section(Reference Details)*****************
 
@@ -238,9 +238,9 @@ export default function EmpAddModel(props) {
     })
     clearEmpReferenceForm();
 
-    const empReferenceListObj={empProfArray};
-    console.log("empReferenceListObj=")
-    console.log(empReferenceListObj);
+    // const empReferenceListObj={empProfArray};
+    // console.log("empReferenceListObj=")
+    // console.log(empReferenceListObj);
   }
 
 
