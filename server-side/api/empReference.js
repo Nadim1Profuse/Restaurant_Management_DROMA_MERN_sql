@@ -20,7 +20,7 @@ routerEmpRefer.post("/empReferApi/add",body,(req,res)=>{
     //creating a varriabile and putting all details in it to send it into database
     const post={
         empId:lastAddedEmpId,
-        referedBy:emp.referenceName,
+        referedBy:emp.referedBy,
         relation:emp.relation,
         address:emp.address,
         city:emp.city,

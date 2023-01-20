@@ -139,9 +139,6 @@ export default function EmpAddModel(props) {
     });
     clearEmpAddContForm();
 
-    // const empAddContListObj={empAddContArray};
-    // console.log("empAddContArrayObject =");
-    // console.log(empAddContListObj);
   }
 
  
@@ -173,9 +170,6 @@ export default function EmpAddModel(props) {
     });
     clearEmpProfessionalForm();
 
-    // const empProfListObj={empProfArray};
-    // console.log("empProfessionalListObje=")
-    // console.log(empProfListObj);
   }
 
 //******************Handling 4th Section(Education details)*****************
@@ -205,9 +199,6 @@ export default function EmpAddModel(props) {
     })
     clearEmpEducationForm();
 
-    // const empEducationListObj={empProfArray};
-    // console.log("empEducationListObje=")
-    // console.log(empEducationListObj);
   }
 //******************Handling 5th Section(Reference Details)*****************
 
@@ -237,10 +228,6 @@ export default function EmpAddModel(props) {
       return[...prev,empRefrenceDetails]
     })
     clearEmpReferenceForm();
-
-    // const empReferenceListObj={empProfArray};
-    // console.log("empReferenceListObj=")
-    // console.log(empReferenceListObj);
   }
 
 
@@ -304,7 +291,6 @@ console.log("Full Data of employee is Compltely Saved In Data BAse")
             variant={'outline-dark'}
             name="Add Employee Details"
             value={"personalDetailsClicked"}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
             disabled
         >
             Adding Employee Details

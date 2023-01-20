@@ -24,14 +24,14 @@ routerAdd.post("/empAddContApi/Add",body,(req,res)=>{
     //creating a varriabile and putting all details in it to send it into database    
     const empPost={
         empId: lastAddedEmpId,
-        address1: emp.add1,
+        address1: emp.address1,
         apartment:emp.apartment,
         landMark: emp.landMark,
         city: emp.city,
         state: emp.state,
         pincode: 440018,
-        mobileNumber: emp.mobNum,
-        alternateMobileNumber: emp.altMobNum,
+        mobileNumber: emp.mobileNumber,
+        alternateMobileNumber: emp.alternateMobileNumber,
         
     }
     // query of sql to to insert data into "empaddcontact"
