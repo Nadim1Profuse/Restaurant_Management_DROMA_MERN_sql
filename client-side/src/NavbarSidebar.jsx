@@ -20,7 +20,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import HomeIcon from "@mui/icons-material/Home";
 import EmployeeSummery from "./Employee_Management/EmployeeSummery";
 import Home from "./Home/Home";
-import SalaryHome from "./Salary_Management/SalaryHome";
+import SalaryManagement from "./Salary_Management/SalaryManagement";
 
 const drawerWidth = 200;
 
@@ -189,7 +189,7 @@ export default function NavbarSidebar() {
         <DrawerHeader />
         {isHomeRender && <Home />}
         {isEmpSummuryRender && <EmployeeSummery />}
-        {isSalaryHomeRender && <SalaryHome />}
+        {isSalaryHomeRender && <SalaryManagement />}
       </Main>
     </Box>
   );
