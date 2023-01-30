@@ -12,11 +12,11 @@ const SalarySummery = (props) => {
     fName:"nadim",
     lName:"Khan",
     baseSal:100000,
-    overTime:50000,
+    accession:50000,
     grossSal:150000,
     deduction:800000,
     netSal:700000,
-    payStatus:"paid",
+    payStatus:8000,
     payMode:"transfer",
   },
   {
@@ -24,11 +24,11 @@ const SalarySummery = (props) => {
     fName:"nadim",
     lName:"Khan",
     baseSal:100000,
-    overTime:50000,
+    accession:50000,
     grossSal:150000,
     deduction:800000,
     netSal:700000,
-    payStatus:"paid",
+    payStatus:0,
     payMode:"transfer",
   },
   {
@@ -36,21 +36,33 @@ const SalarySummery = (props) => {
     fName:"nadim",
     lName:"Khan",
     baseSal:100000,
-    overTime:50000,
+    accession:50000,
     grossSal:150000,
     deduction:800000,
     netSal:700000,
-    payStatus:"paid",
+    payStatus:5000,
     payMode:"transfer",
   },
 ]);
-  const handleUpdate=(e)=>{
-    console.log("update emplyee salary details clicked empId="+e.target.value);
+  const onClickAccession=(e)=>{
+    console.log("onClickAccession  empId="+e.target.value);
+  }
+
+  const onClickDeduction=(e)=>{
+    console.log("onClickDeduction  empId="+e.target.value);
+  }
+
+  const onClickPay=(e)=>{
+    console.log("onClickPay  empId="+e.target.value);
+  }
+
+  const onClickReceipts=(e)=>{
+    console.log("onClickReceipts  empId="+e.target.value);
   }
 
   return (
     <Paper elevation={24}>
-      <Table className="salSummaryTable" striped bordered hover>
+      <Table className="salSummaryTable"  bordered hover>
         <SalSummaryTableHead />
         <tbody>
           {empSalaryDetails.map((emp) => {
@@ -60,13 +72,18 @@ const SalarySummery = (props) => {
                 fName={emp.fName}
                 lName={emp.lName}
                 baseSal={emp.baseSal}
-                overTime={emp.overTime}
+                accession={emp.accession}
                 grossSal={emp.grossSal}
                 deduction={emp.deduction}
                 netSal={emp.netSal}
                 payStatus={emp.payStatus}
                 payMode={emp.payMode}
-                onClick={handleUpdate}
+                onClickAccession={onClickAccession}
+                onClickDeduction={onClickDeduction}
+                onClickPay={onClickPay}
+                onClickReceipts={onClickReceipts}
+
+
               />
             );
           })}

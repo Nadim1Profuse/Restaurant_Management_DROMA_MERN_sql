@@ -9,13 +9,13 @@ const SalSummaryTableHead = () => {
           <th>First Name</th>
           <th>Last Name</th>
           <th>Base Salary</th>
-          <th>Over Time</th>
+          <th>Accession</th>
           <th>Gross Salary</th>
           <th>Deduction</th>
           <th>Net Salary</th>
-          <th>Payment Status</th>
-          <th>Payment Mode</th>
-          <th>Update</th>
+          <th>Unpaid Amount</th>
+          <th>Pay</th>
+          <th>Payment History</th>
         </tr>
       </thead>
     

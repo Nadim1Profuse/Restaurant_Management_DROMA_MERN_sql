@@ -1,0 +1,11 @@
+.accOrDedTable {
+  text-align: center;
+}
+
+
+.addBtn {
+  display: flex;
+  justify-content: right;
+  margin-bottom: 10px;
+  margin-top: 0;
+}

@@ -21,6 +21,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import EmployeeSummery from "./Employee_Management/EmployeeSummery";
 import Home from "./Home/Home";
 import SalaryManagement from "./Salary_Management/SalaryManagement";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const drawerWidth = 200;
 
@@ -178,7 +179,7 @@ export default function NavbarSidebar() {
               }}
             >
               <ListItemIcon>
-                <GroupsIcon />
+                <CurrencyRupeeIcon />
               </ListItemIcon>
               <ListItemText primary="Salary Management" />
             </ListItemButton>
