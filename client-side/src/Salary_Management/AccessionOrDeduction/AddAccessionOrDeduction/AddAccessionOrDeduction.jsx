@@ -7,17 +7,16 @@ import Accession from "./Accession";
 import FormSelectorButton from "./FormSelectorButton";
 
 const AddAccessionOrDeduction = (props) => {
-  const [formSelection, setFormSelection] = useState("");
+  const [formSelection, setFormSelection] = useState("accession");
   console.log("formSelection=", formSelection);
 
   return (
     <>
-     <div style={{ textAlign: "right", margin: "0" }}>
-     <Button onClick={props.accessionOrDeduction} variant="outline-danger">
-              <CancelIcon />
-            </Button>
-
-     </div>
+      <div style={{ textAlign: "right", margin: "0" }}>
+        <Button onClick={props.closeAccessionOrDeductionForm} variant="outline-danger">
+          <CancelIcon />
+        </Button>
+      </div>
       <div style={{ textAlign: "center", marginBottom: "1rem" }}>
         <FormSelectorButton
           formSelection={(selectedForm) => {

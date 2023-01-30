@@ -5,7 +5,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function FormSelectorButton(props) {
-  const [alignment, setAlignment] = React.useState('disabled');
+  const [alignment, setAlignment] = React.useState('accession');
 
   function handleChange(event, newAlignment) {
     setAlignment(newAlignment)
