@@ -5,16 +5,26 @@ import Button from "react-bootstrap/Button";
 import SalarySummery from "./SalarySummary/SalarySummary";
 import AccessionOrDeuduction from "./AccessionOrDeduction/AccessionOrDeduction";
 import AddOrUpdateBasicSalary from "./AddOrUpdateBasicSalary";
-import { useState } from "react";
+import Payment from "./Payment/Payment";
+import { fetchAsynchEmployeeBasic } from "../../Redux/fetchEmployeesDetails/employeesDetailsSlice";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function SalaryManagement() {
   const [showBtn, setShowBtn] = useState(true);
   const [isBasicSalRender, setBasicSalRender] = useState(false);
+
+  const dispatch=useDispatch();
+
   const addBaseSalary = () => {
     console.log("add Base Salary ");
     setBasicSalRender(true);
     setShowBtn(false);
   };
+
+  useEffect(()=>{
+    dispatch(fetchAsynchEmployeeBasic())
+  },[dispatch])
 
   return (
     <>
@@ -40,7 +50,11 @@ function SalaryManagement() {
           <Card.Text>
             {isBasicSalRender ? (
               <AddOrUpdateBasicSalary
-                closeBasicSalary={() => {setBasicSalRender(false); setShowBtn(true)}}
+                closeBasicSalary={() => {
+                  setBasicSalRender(false);
+                  setShowBtn(true);
+                  
+                }}
               />
             ) : (
               <Tabs
@@ -61,11 +75,7 @@ function SalaryManagement() {
                     <b>Salary Summary</b>
                   </Button>
                 >
-                  {/* {isBasicSalRender ? (
-                  <AddOrUpdateBasicSalary /> */}
-                  {/* ) : ( */}
                   <SalarySummery />
-                  {/* )} */}
                 </Tab>
                 <Tab
                   eventKey="deduction"
@@ -78,6 +88,19 @@ function SalaryManagement() {
                   </Button>
                 >
                   <AccessionOrDeuduction />
+                </Tab>
+
+                <Tab
+                  eventKey="payment"
+                  title=<Button
+                    onClick={() => setShowBtn(false)}
+                    value="payment"
+                    variant="light"
+                  >
+                    <b>Payment</b>
+                  </Button>
+                >
+                  <Payment />
                 </Tab>
               </Tabs>
             )}

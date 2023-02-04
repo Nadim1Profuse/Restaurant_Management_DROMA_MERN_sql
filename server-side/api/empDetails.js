@@ -125,7 +125,7 @@ router.post("/empDetailsApi/update",(req,res)=>{
     console.log("updated data from front end to back end=")
     console.log(updatedEmpPersonalDetails);
     console.log(empIdForUpdate)
-    const sql=`UPDATE employeedetails SET fName= '${updatedEmpPersonalDetails.fName}', mName= '${updatedEmpPersonalDetails.mName}',lName= '${updatedEmpPersonalDetails.lName}',age= '${updatedEmpPersonalDetails.age}',gender= '${updatedEmpPersonalDetails.gender}',bloodGroup= '${updatedEmpPersonalDetails.bloodGroup}',pwdStatus= '${updatedEmpPersonalDetails.pwdStatus}',adharNumber= ${updatedEmpPersonalDetails.adharNumber}, pancardNumber= '${updatedEmpPersonalDetails.pancardNumber}',drivingLicenseNumber= '${updatedEmpPersonalDetails.drivingLicenseNumber}',department= '${updatedEmpPersonalDetails.department}',designation= '${updatedEmpPersonalDetails.designation}'  WHERE empId = ${empIdForUpdate}`;
+    const sql=`UPDATE employeedetails SET fName= '${updatedEmpPersonalDetails.fName}', mName= '${updatedEmpPersonalDetails.mName}',lName= '${updatedEmpPersonalDetails.lName}',age= '${updatedEmpPersonalDetails.age}',gender= '${updatedEmpPersonalDetails.gender}',bloodGroup= '${updatedEmpPersonalDetails.bloodGroup}',pwdStatus= '${updatedEmpPersonalDetails.pwdStatus}',adharNumber= ${updatedEmpPersonalDetails.adharNumber}, pancardNumber= '${updatedEmpPersonalDetails.pancardNumber}',drivingLicenseNumber= '${updatedEmpPersonalDetails.drivingLicenseNumber}',department= '${updatedEmpPersonalDetails.department}',designation= '${updatedEmpPersonalDetails.designation}',basicSalary= '${updatedEmpPersonalDetails.basicSalary}'  WHERE empId = ${empIdForUpdate}`;
     db.query(sql,err=>{
         if(!err){
             console.log("successfully updated employee id= "+empIdForUpdate);

@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { addOrUpdateBasicSalary } from "../../Redux/salaryManuplations/salaryManuplation";
+import { fetchAsynchEmployeeBasic } from "../../Redux/fetchEmployeesDetails/employeesDetailsSlice";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const AddOrUpdateBasicSalary = (props) => {
+  const dispatch = useDispatch();
   const [basicSalary, setBasicSalary] = useState({
     empId: "",
     fName: "",
@@ -17,25 +22,35 @@ const AddOrUpdateBasicSalary = (props) => {
     designation: "",
     basicSalary: "",
   });
+  const [selectedEmpUpdatedData, setSelectedEmpUpdatedData] = useState();
 
-  const employees = [
-    {
-      value: "1",
-      label: "1. Profuse Transtech",
-    },
-    {
-      value: "2",
-      label: "2.  Jatin Master",
-    },
-    {
-      value: "3",
-      label: "3. Hasan Sir",
-    },
-    {
-      value: "4",
-      label: "4. Supriya Di",
-    },
-  ];
+  const [employees] = useState(
+    useSelector((state) => state.employeesDetails.employeesPersonalDetails)
+  );
+
+  console.log("employees Data for selector=", employees);
+
+  useEffect(()=>{
+    return(()=>dispatch(fetchAsynchEmployeeBasic()))
+  },[dispatch])
+
+  const handleChangeSelector = (e) => {
+    const selectedEmployeeDetails = employees[e.target.value];
+    console.log("selectedEmployeeDetails", selectedEmployeeDetails);
+    setSelectedEmpUpdatedData(selectedEmployeeDetails);
+    setBasicSalary(() => {
+      return {
+        empId: e.target.value,
+        fName: selectedEmployeeDetails.fName,
+        mName: selectedEmployeeDetails.mName,
+        lName: selectedEmployeeDetails.lName,
+        phoneNumber: selectedEmployeeDetails.adharNumber,
+        department: selectedEmployeeDetails.department,
+        designation: selectedEmployeeDetails.designation,
+        basicSalary: selectedEmployeeDetails.basicSalary,
+      };
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,8 +60,6 @@ const AddOrUpdateBasicSalary = (props) => {
         [name]: value,
       };
     });
-
-    console.log("handele change", basicSalary);
   };
 
   const clearForm = () => {
@@ -64,7 +77,16 @@ const AddOrUpdateBasicSalary = (props) => {
 
   const submitAddBasicSalry = (e) => {
     e.preventDefault();
-    console.log("submited");
+    const finalDataToSubmit = {
+      updatedEmpPersonalDetails: {
+        ...selectedEmpUpdatedData,
+        basicSalary: basicSalary.basicSalary,
+      },
+      empIdForUpdate: selectedEmpUpdatedData.empId,
+    };
+    console.log("selectedEmpUpdatedData", finalDataToSubmit);
+    dispatch(addOrUpdateBasicSalary(finalDataToSubmit));
+    dispatch(fetchAsynchEmployeeBasic());
     clearForm();
   };
 
@@ -98,13 +120,13 @@ const AddOrUpdateBasicSalary = (props) => {
                   name="empId"
                   required
                   variant="filled"
-                  onChange={handleChange}
+                  onChange={handleChangeSelector}
                   maxRows={2}
                   value={basicSalary.empId}
                 >
-                  {employees.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {employees.map((option, index) => (
+                    <MenuItem key={option.empId} value={index}>
+                      {option.empId}. {option.fName} {option.lName}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -118,7 +140,6 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="text"
                   required
                   value={basicSalary.fName}
-                  onChange={handleChange}
                 />
 
                 <TextField
@@ -130,7 +151,6 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="text"
                   required
                   value={basicSalary.mName}
-                  onChange={handleChange}
                 />
 
                 <TextField
@@ -142,7 +162,6 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="text"
                   required
                   value={basicSalary.lName}
-                  onChange={handleChange}
                 />
 
                 <TextField
@@ -154,7 +173,6 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="number"
                   required
                   value={basicSalary.phoneNumber}
-                  onChange={handleChange}
                 />
 
                 <TextField
@@ -166,7 +184,6 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="text"
                   required
                   value={basicSalary.department}
-                  onChange={handleChange}
                 />
 
                 <TextField
@@ -178,19 +195,17 @@ const AddOrUpdateBasicSalary = (props) => {
                   type="text"
                   required
                   value={basicSalary.designation}
-                  onChange={handleChange}
                 />
 
                 <TextField
                   id="filled-multiline-flexible"
                   label="Basic Salary"
                   name="basicSalary"
-                  multiline
                   variant="filled"
                   type="number"
                   required
-                  value={basicSalary.basicSalary}
                   onChange={handleChange}
+                  value={basicSalary.basicSalary}
                 />
 
                 <span style={{ marginRight: "10rem" }}>

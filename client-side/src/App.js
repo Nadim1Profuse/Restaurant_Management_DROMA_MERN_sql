@@ -1,10 +1,13 @@
-import NavbarSidebar from "./NavbarSidebar";
+import NavbarSidebar from "./Components/NavbarSidebar";
+import { Provider } from "react-redux";
+import { store } from "./Redux/store";
 
 function App() {
   return (
     <div className="App">
-      <NavbarSidebar/>
-      
+      <Provider store={store}>
+        <NavbarSidebar />
+      </Provider>
     </div>
   );
 }

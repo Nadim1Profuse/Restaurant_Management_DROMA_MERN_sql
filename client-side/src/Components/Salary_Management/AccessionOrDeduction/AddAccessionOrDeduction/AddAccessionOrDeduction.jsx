@@ -13,19 +13,20 @@ const AddAccessionOrDeduction = (props) => {
   return (
     <>
       <div style={{ textAlign: "right", margin: "0" }}>
-        <Button onClick={props.closeAccessionOrDeductionForm} variant="outline-danger">
+        <Button
+          onClick={props.closeAccessionOrDeductionForm}
+          variant="outline-danger"
+        >
           <CancelIcon />
         </Button>
       </div>
       <div style={{ textAlign: "center", marginBottom: "1rem" }}>
         <FormSelectorButton
-          formSelection={(selectedForm) => {
-            setFormSelection(selectedForm);
-          }}
+          formSelection={(selectedForm) => setFormSelection(selectedForm)}
         />
       </div>
-      {formSelection === "accession" ? <Accession /> : null}
-      {formSelection === "deduction" ? <Deduction /> : null}
+      {formSelection === "accession" && <Accession />}
+      {formSelection === "deduction" && <Deduction />}
     </>
   );
 };

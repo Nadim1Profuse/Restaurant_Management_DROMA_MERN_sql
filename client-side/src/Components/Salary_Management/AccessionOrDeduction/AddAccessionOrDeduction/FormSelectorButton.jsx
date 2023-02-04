@@ -21,9 +21,9 @@ export default function FormSelectorButton(props) {
       onChange={handleChange}
       aria-label="Platform"
     >
-      <ToggleButton value="accession">Accession<ArrowDropUpIcon/></ToggleButton>
+      <ToggleButton value="accession"><b>Accession</b><ArrowDropUpIcon/></ToggleButton>
       <ToggleButton disabled value="disabled"></ToggleButton>
-      <ToggleButton value="deduction"><ArrowDropDownIcon/>Deduction</ToggleButton>
+      <ToggleButton value="deduction"><ArrowDropDownIcon/><b>Deduction</b></ToggleButton>
     </ToggleButtonGroup>
   );
 }

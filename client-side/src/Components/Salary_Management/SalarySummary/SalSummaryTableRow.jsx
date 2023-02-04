@@ -12,25 +12,9 @@ const SalSummaryTableRow = (props) => {
       <td>{props.grossSal}</td>
       <td>{props.deduction}</td>
       <td>{props.netSal}</td>
-      <td>{props.payStatus}</td>
-      <td>
-        <Button
-          onClick={props.onClickPay}
-          variant="outline-success"
-          value={props.empId}
-        >
-          Make Payment
-        </Button>
-      </td>
-      <td>
-        <Button
-          onClick={props.onClickReceipts}
-          variant="outline-primary"
-          value={props.empId}
-        >
-          Print Receipts
-        </Button>
-      </td>
+      <td>{props.balanceAmount}</td>
+      <td>{props.paidAmount}</td>
+      <td>{props.paymentMode}</td>
     </tr>
   );
 };

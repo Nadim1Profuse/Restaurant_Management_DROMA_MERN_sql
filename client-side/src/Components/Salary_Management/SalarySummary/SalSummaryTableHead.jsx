@@ -13,9 +13,9 @@ const SalSummaryTableHead = () => {
           <th>Gross Salary</th>
           <th>Deduction</th>
           <th>Net Salary</th>
-          <th>Unpaid Amount</th>
-          <th>Pay</th>
-          <th>Payment History</th>
+          <th>Balance Amount</th>
+          <th>Paid Amount</th>
+          <th>Payment Mode</th>
         </tr>
       </thead>
     

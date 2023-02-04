@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import GroupsIcon from "@mui/icons-material/Groups";
 import HomeIcon from "@mui/icons-material/Home";
 import EmployeeSummery from "./Employee_Management/EmployeeSummery";
-import Home from "./Home/Home";
+import Home from "./Home/Home"
 import SalaryManagement from "./Salary_Management/SalaryManagement";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
