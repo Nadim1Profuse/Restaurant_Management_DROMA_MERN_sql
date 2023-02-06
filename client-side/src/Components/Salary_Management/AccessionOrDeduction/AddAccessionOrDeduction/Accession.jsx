@@ -4,34 +4,25 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import { useSelector,useDispatch} from "react-redux";
+import { addAccession } from "../../../../Redux/salaryManuplations/salaryManuplation";
 
 const Accession = () => {
+
+  const dispatch=useDispatch()
+  const [employees] = useState(
+    useSelector((state) => state.employeesDetails.employeesPersonalDetails)
+  );
+  const [selectedEmployee, setSelectedEmployee] = useState();
+
   const [accession, setAccession] = useState({
-    empId: "",
+    selectorId: "",
     date: new Date().toLocaleDateString("en-IN"),
     accessionType: "",
     reasonOfAccession: "",
     amount: "",
   });
 
-  const employees = [
-    {
-      value: "1",
-      label: "1. Profuse Transtech",
-    },
-    {
-      value: "2",
-      label: "2.  Jatin Master",
-    },
-    {
-      value: "3",
-      label: "3. Hasan Sir",
-    },
-    {
-      value: "4",
-      label: "4. Supriya Di",
-    },
-  ];
 
   const accessionType = [
     {
@@ -48,6 +39,18 @@ const Accession = () => {
     },
   ];
 
+  const handleChangeSelector = (e) => {
+    setSelectedEmployee(employees[e.target.value]);
+    setAccession((prevVal) => {
+      return {
+        ...prevVal,
+        selectorId: e.target.value,
+      };
+    });
+    console.log("handelChangeSelector", e.target);
+    console.log("selectedEMployee", selectedEmployee);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAccession((prevValue) => {
@@ -55,6 +58,7 @@ const Accession = () => {
       return {
         ...prevValue,
         [name]: value,
+        empId: selectedEmployee.empId,
       };
     });
     console.log(accession);
@@ -62,7 +66,7 @@ const Accession = () => {
 
   const clearForm = () => {
     setAccession({
-      empId: "",
+      selectorId: "",
       date: new Date().toLocaleDateString("en-IN"),
       accessionType: "",
       reasonOfAccession: "",
@@ -70,10 +74,11 @@ const Accession = () => {
     });
   };
 
-  const handleDeductionSubmit = (event) => {
+  const handleSubmitDeduction = (event) => {
     event.preventDefault();
-    console.log("handleSubmit");
-    console.log(accession);
+    delete accession.selectorId;
+    dispatch(addAccession(accession));
+    console.log("accession", accession);
     clearForm();
   };
 
@@ -90,23 +95,24 @@ const Accession = () => {
               }}
               Validate
               autoComplete="off"
-              onSubmit={handleDeductionSubmit}
+              onSubmit={handleSubmitDeduction}
             >
               <div>
                 <TextField
                   id="filled-select-currency"
                   select
                   label="Select Employee By Id And Full Name"
-                  name="empId"
+                  name="selectorId"
                   required
                   variant="filled"
-                  onChange={handleChange}
+                  onChange={handleChangeSelector}
                   maxRows={2}
-                  value={accession.empId}
+                  value={accession.selectorId}
                 >
-                  {employees.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {employees.map((option, index) => (
+                    <MenuItem key={index} value={index}>
+                      {option.empId}. {option.fName} {option.mName}{" "}
+                      {option.lName}
                     </MenuItem>
                   ))}
                 </TextField>

@@ -86,7 +86,6 @@ const AddOrUpdateBasicSalary = (props) => {
     };
     console.log("selectedEmpUpdatedData", finalDataToSubmit);
     dispatch(addOrUpdateBasicSalary(finalDataToSubmit));
-    dispatch(fetchAsynchEmployeeBasic());
     clearForm();
   };
 

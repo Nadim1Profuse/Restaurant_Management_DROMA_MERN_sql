@@ -5,10 +5,9 @@ import router from "./api/empDetails.js";
 import routerAddCont from "./api/empAddressContact.js";
 import routerEmpEdu from "./api/empEducation.js";
 import routerEmpProf from "./api/empProfessional.js";
-import routerSalOvrtm from "./api/empSalaryOvertime.js";
-import routerSalAdvPenlty from "./api/empSalaryDeduction.js";
-import routerSalMaster from "./api/empSalMaster.js";
 import routerEmpRefer from "./api/empReference.js";
+import routerEmpSalaryAccession from "./api/empSalaryAccession.js";
+import routerEmpSalaryDeduction from "./api/empSalaryDeduction.js";
 
 
 const app=express();
@@ -25,14 +24,13 @@ app.use("/",routerAddCont);
 app.use("/",routerEmpEdu);
 // declaring a default path for router from empProfApi.js
 app.use("/",routerEmpProf);
-// declaring a default path for router from empSalOvrTm.js
-app.use("/",routerSalOvrtm);
-// declaring a default path for router from empSalAdvPenalty.js
-app.use("/",routerSalAdvPenlty);
-// declaring a default path for router from salMasterApi.js
-app.use("/",routerSalMaster);
 // declaring a default path for router from empReference.js
 app.use("/",routerEmpRefer);
+// declaring a default path for router from empSalaryAccession.js
+app.use('/',routerEmpSalaryAccession);
+// declaring a default path for router from empSalaryDeduction.js
+app.use('/',routerEmpSalaryDeduction);
+
 
 
 app.listen(3001,()=>{

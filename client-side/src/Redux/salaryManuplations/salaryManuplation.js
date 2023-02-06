@@ -19,9 +19,27 @@ const salaryManuplationsSlice=createSlice({
                 basicSalary:payload.basicSalary
             }
 
+        },
+        addAccession:(state,{payload})=>{
+            console.log("we are in redux salaryManuplation.js addAccession reducer payload=",payload)
+            employeeApi.post('empSalaryAccession/add',payload)
+            return{
+                ...state,
+                accession:payload.amount
+            }
+
+        },
+        addDeduction:(state,{payload})=>{
+            console.log('addDeduction From Redux AddDeduction reducers payload=',payload);
+            employeeApi.post('empSalaryDeduction/add',payload)
+            return{
+                ...state,
+                deduction:payload.amount
+            }
+
         }
     }
 })
 
-export const {addOrUpdateBasicSalary} = salaryManuplationsSlice.actions;
+export const {addOrUpdateBasicSalary,addAccession,addDeduction} = salaryManuplationsSlice.actions;
 export default salaryManuplationsSlice.reducer;
