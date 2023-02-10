@@ -11,10 +11,29 @@ export const fetchAsynchEmployeeBasic = createAsyncThunk(
   }
 );
 
+export const fetchAsynchEmpAccession=createAsyncThunk(
+  "employee/accession",
+  async ()=> {
+    console.log("fetchAsynchAccession data of summ of all accession of every employee")
+    const response=await employeeApi.get("empAccession/get/sum");
+    console.log(response);
+    return(response.data);
+  }
+)
+
+export const fetchAsynchDeduction=createAsyncThunk(
+  "employee/deduction",
+  async ()=>{
+    const response=await employeeApi.get("empDeduction/get/sum")
+    console.log("response from fectchAsynchDeduction=",response);
+    return( response.data);
+  }
+)
+
 const initialState = {
   employeesPersonalDetails: [],
-  employeesAccession:[],
-  employeesDeduction:[],
+  employessAccessionDetails:[],
+  employessDeductionDetails:[],
   status: "",
 };
 
@@ -46,6 +65,38 @@ const employeeDetailsSlice = createSlice({
         status: "rejected",
       };
     },
+
+    [fetchAsynchEmpAccession.pending]:(state)=>{
+      console.log("extraReducer empAccession pending");
+      return{
+        ...state,
+        status:"pending"
+      }
+    },
+    [fetchAsynchEmpAccession.fulfilled]:(state,{payload})=>{
+      console.log("extraReducer empAccession pending");
+      return{
+        ...state,
+        employessAccessionDetails:payload
+      }
+
+
+    },
+
+    [fetchAsynchDeduction.pending]:(state)=>{
+      console.log("extraReducer empDeduction pending");
+      return{
+        ...state,
+        status:"pending"
+      }
+    },
+    [fetchAsynchDeduction.fulfilled]:(state,{payload})=>{
+      console.log("extraReducer empAccession fullfiled");
+      return{
+        ...state,
+        employessDeductionDetails:payload
+      }
+    }
   },
 });
 

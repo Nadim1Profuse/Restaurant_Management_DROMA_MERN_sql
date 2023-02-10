@@ -6,7 +6,7 @@ import SalarySummery from "./SalarySummary/SalarySummary";
 import AccessionOrDeuduction from "./AccessionOrDeduction/AccessionOrDeduction";
 import AddOrUpdateBasicSalary from "./AddOrUpdateBasicSalary";
 import Payment from "./Payment/Payment";
-import { fetchAsynchEmployeeBasic } from "../../Redux/fetchEmployeesDetails/employeesDetailsSlice";
+import { fetchAsynchEmployeeBasic,fetchAsynchEmpAccession,fetchAsynchDeduction} from "../../Redux/fetchEmployeesDetails/employeesDetailsSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -24,6 +24,8 @@ function SalaryManagement() {
 
   useEffect(()=>{
     dispatch(fetchAsynchEmployeeBasic())
+    dispatch(fetchAsynchEmpAccession())
+    dispatch(fetchAsynchDeduction())
   },[dispatch])
 
   return (

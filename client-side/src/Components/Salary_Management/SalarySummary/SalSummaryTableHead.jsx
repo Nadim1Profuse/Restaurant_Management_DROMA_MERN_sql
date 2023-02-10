@@ -9,6 +9,8 @@ const SalSummaryTableHead = () => {
           <th>First Name</th>
           <th>Last Name</th>
           <th>Base Salary</th>
+          <th>Attendance</th>
+          <th>Actual Salary</th>
           <th>Accession</th>
           <th>Gross Salary</th>
           <th>Deduction</th>

@@ -1,5 +1,7 @@
 import mysql from "mysql2";
 
+console.log("connection.js is running");
+
 // Create connection configuration
 
 const db=mysql.createConnection({
@@ -12,7 +14,8 @@ const db=mysql.createConnection({
 
 // Connect to the server
 
-const connect=db.connect(err=>{
+db.connect(err=>{
+    console.log("connesction.js Executed db.connect");
     if(!err){
         console.log("Successfully connected to mysql server");
 
@@ -21,4 +24,4 @@ const connect=db.connect(err=>{
     }
 });
 
-export {db,connect};
+export {db};

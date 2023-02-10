@@ -37,4 +37,22 @@ routerEmpSalaryDeduction.post("/empSalaryDeduction/add", (req, res) => {
   });
 });
 
+
+
+
+//(2)*******************Get request from FrontEnd/Postment*******************{2}//
+//**********Getting Sum of all deduction of Every Employee From DeductionTable*****************//
+
+routerEmpSalaryDeduction.get("/empDeduction/get/sum", (req, res) => {
+  const sql =
+    "SELECT empId, SUM(amount) as sum_deduction FROM salary_deduction GROUP BY empId";
+  db.query(sql, (err, accession) => {
+    if (!err) {
+      res.send(accession);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 export default routerEmpSalaryDeduction;

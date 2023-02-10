@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import AddAccessionOrDeduction from "./AddAccessionOrDeduction/AddAccessionOrDeduction";
 import { Paper } from "@mui/material";
 import "./AccessionOrDeduction.css";
+import { useSelector } from "react-redux";
 
 const AccessionOrDeuduction = (props) => {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -16,41 +17,10 @@ const AccessionOrDeuduction = (props) => {
   const [showDeductionList, setShowDeductionList] = useState(false);
   const [accessionsOfEmployee, setAccessionsOfEmployee] = useState([]);
   const [deductionsOfEmployee, setDeductionOfEmployee] = useState([]);
-  const [employees, setEmployees] = useState([
-    {
-      empId: 1,
-      fName: "Mark",
-      lName: "Henery",
-      overTime: 1000,
-      bonus: 5000,
-      splAward: 2000,
-      salAdv: 1000,
-      penalties: 2000,
-      loan: 10000,
-    },
-    {
-      empId: 2,
-      fName: "Mark",
-      lName: "Henery",
-      overTime: 1000,
-      bonus: 5000,
-      splAward: 2000,
-      salAdv: 1000,
-      penalties: 2000,
-      loan: 10000,
-    },
-    {
-      empId: 3,
-      fName: "Mark",
-      lName: "Henery",
-      overTime: 1000,
-      bonus: 5000,
-      splAward: 2000,
-      salAdv: 1000,
-      penalties: 2000,
-      loan: 10000,
-    },
-  ]);
+  const [employees, setEmployees] = useState(
+    useSelector((state) => state.employeesDetails.employeesPersonalDetails)
+  );
+  console.log(employees);
 
   const dayWiseAccession = (e) => {
     console.log("dayWiseAccession for Employee id=", e.target.value);

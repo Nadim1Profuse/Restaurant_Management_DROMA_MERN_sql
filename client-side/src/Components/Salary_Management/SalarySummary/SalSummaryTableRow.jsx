@@ -8,6 +8,8 @@ const SalSummaryTableRow = (props) => {
       <td>{props.fName}</td>
       <td>{props.lName}</td>
       <td>{props.baseSal}</td>
+      <td>{props.attendance}</td>
+      <td>{props.actualSal}</td>
       <td>{props.accession}</td>
       <td>{props.grossSal}</td>
       <td>{props.deduction}</td>
