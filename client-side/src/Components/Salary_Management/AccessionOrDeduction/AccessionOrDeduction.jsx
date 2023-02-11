@@ -17,10 +17,32 @@ const AccessionOrDeuduction = (props) => {
   const [showDeductionList, setShowDeductionList] = useState(false);
   const [accessionsOfEmployee, setAccessionsOfEmployee] = useState([]);
   const [deductionsOfEmployee, setDeductionOfEmployee] = useState([]);
+
+  //getting employees Personal Details
   const [employees, setEmployees] = useState(
     useSelector((state) => state.employeesDetails.employeesPersonalDetails)
   );
   console.log(employees);
+
+  //getting employees Accession of tpye OverTime
+  const overTime=useSelector(state=>state.accessionByType.overTime)
+  console.log("Overtime details in AccessonOrDeduction.jsx=",overTime);
+
+  //getting employees Accession of tpye Bonus
+  const bonus=useSelector(state=>state.accessionByType.bonus)
+  console.log("Bonus details in AccessonOrDeduction.jsx=",bonus);
+
+  //getting employees Accession of tpye SpecialAward
+  const awards=useSelector(state=>state.accessionByType.specialAward)
+  console.log("specialAward details in AccessonOrDeduction.jsx=",awards);
+
+
+
+
+
+
+
+  
 
   const dayWiseAccession = (e) => {
     console.log("dayWiseAccession for Employee id=", e.target.value);

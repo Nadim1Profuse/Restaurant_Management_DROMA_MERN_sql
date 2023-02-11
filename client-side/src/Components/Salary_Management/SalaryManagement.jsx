@@ -9,6 +9,7 @@ import Payment from "./Payment/Payment";
 import { fetchAsynchEmployeeBasic,fetchAsynchEmpAccession,fetchAsynchDeduction} from "../../Redux/fetchEmployeesDetails/employeesDetailsSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { fetchAsyncBonus, fetchAsynchSpecialAward, fethcAsyncOverTime } from "../../Redux/fetchEmployeesDetails/accessionByType";
 
 function SalaryManagement() {
   const [showBtn, setShowBtn] = useState(true);
@@ -26,7 +27,10 @@ function SalaryManagement() {
     dispatch(fetchAsynchEmployeeBasic())
     dispatch(fetchAsynchEmpAccession())
     dispatch(fetchAsynchDeduction())
-  },[dispatch])
+    dispatch(fetchAsyncBonus());
+    dispatch(fethcAsyncOverTime());
+    dispatch(fetchAsynchSpecialAward());
+  },)
 
   return (
     <>

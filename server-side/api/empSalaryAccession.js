@@ -8,7 +8,7 @@ const routerEmpSalaryAccession = Router();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//(1)***********************POST request from FrontEnd/Postment**********************{1}//
+//(1)***********************POST request from FrontEnd**********************{1}//
 //***********INSERTING/Adding Salary Accession to salary_accession table**************//
 
 routerEmpSalaryAccession.post("/empSalaryAccession/add", (req, res) => {
@@ -36,7 +36,7 @@ routerEmpSalaryAccession.post("/empSalaryAccession/add", (req, res) => {
   });
 });
 
-//(2)*******************Get request from FrontEnd/Postment*******************{2}//
+//(2)*******************Get request from FrontEnd*******************{2}//
 //**********Getting Sum of all accesion of Every Employee From AccessionTable*****************//
 
 routerEmpSalaryAccession.get("/empAccession/get/sum", (req, res) => {
@@ -47,6 +47,49 @@ routerEmpSalaryAccession.get("/empAccession/get/sum", (req, res) => {
       res.send(accession);
     } else {
       res.send(err);
+    }
+  });
+});
+
+//**********Getting Sum of Bonus of Every Employee From AccessionTable*****************//
+routerEmpSalaryAccession.get("/empAccession/get/bonus", (req, res) => {
+  console.log("empAccession/get/overTime server side executed");
+  const sql =
+    `SELECT empId, SUM(amount) as sum_bonus FROM salary_accession where accessionType='bonus' GROUP BY empId`;
+
+  db.query(sql, (err, accessionBonus) => {
+    if (!err) {
+      res.send(accessionBonus);
+    } else {
+      console.log(err);
+    }
+  });
+});
+
+//**********Getting Sum of OverTime of Every Employee From AccessionTable*****************//
+routerEmpSalaryAccession.get("/empAccession/get/overTime", (req, res) => {
+  console.log("/empAccession/get/overTime executed server side");
+  const sql =
+    `SELECT empId, SUM(amount) as sum_overTime FROM salary_accession where accessionType='overTime' GROUP BY empId`;
+  db.query(sql, (err, accessionOverTime) => {
+    if (!err) {
+      res.send(accessionOverTime);
+    } else {
+      console.log(err);
+    }
+  });
+});
+
+//**********Getting Sum of SpecialAward of Every Employee From AccessionTable*****************//
+routerEmpSalaryAccession.get("/empAccession/get/specialAward", (req, res) => {
+  console.log("/empAccession/get/specialAward executed serSide");
+  const sql =
+    `SELECT empId, SUM(amount) as sum_awards FROM salary_accession where accessionType='awards' GROUP BY empId`;
+  db.query(sql, (err, accessionAward) => {
+    if (!err) {
+      res.send(accessionAward);
+    } else {
+      console.log(err);
     }
   });
 });
